@@ -22,12 +22,12 @@ package frc.robot;
 public final class Constants {
 
     public final class DriveConstants {
-        public static final int FrontLeft = 8;
+        public static final int FrontLeft = 2;
         public static final int FrontRight = 1;
-        public static final int BackLeft = 9;
-        public static final int BackRight = 1;
-        public static final int IntakeRight = 3;
-        public static final int IntakeLeft = 4;
+        public static final int BackLeft = 4;
+        public static final int BackRight = 3;
+        public static final int IntakeRight = 5;
+       // public static final int IntakeLeft = 4;
     }
     public final class OIConstants {
         public static final int RYStick = 5;

@@ -8,25 +8,27 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.NEO;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
- public final WPI_TalonSRX IntakeRight;
-  public final WPI_TalonSRX IntakeLeft;
+ public final NEO IntakeRight;
+  //public final NEO IntakeLeft;
   /**  
    * Creates a new Intake.
    */
   public Intake() {
-  IntakeRight = new WPI_TalonSRX(Constants.DriveConstants.IntakeRight);
-  IntakeLeft = new WPI_TalonSRX(Constants.DriveConstants.IntakeLeft);
-  IntakeRight.follow(IntakeLeft);
+  IntakeRight = new NEO(Constants.DriveConstants.IntakeRight, MotorType.kBrushless);
+  //IntakeLeft = new NEO(Constants.DriveConstants.IntakeLeft, MotorType.kBrushless);
   }
 
   public void runIntake(double speed) {
   IntakeRight.set(speed);
+  //IntakeLeft.set(speed);
   }
 
   @Override

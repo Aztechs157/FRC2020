@@ -37,8 +37,8 @@ public class RobotContainer {
   
   public final static Joystick joystick = new Joystick(5);
   private final JoystickButton Joystickbutton = new JoystickButton(joystick, Constants.OIConstants.Ybutton);
-  public static final Encoder driveLeftQuad = new Encoder(0, 1, true, EncodingType.k4X);
-  public static final Encoder driveRightQuad = new Encoder(2, 3, false, EncodingType.k4X);
+ // public static final Encoder driveLeftQuad = new Encoder(0, 1, true, EncodingType.k4X);
+ // public static final Encoder driveRightQuad = new Encoder(2, 3, false, EncodingType.k4X);
   public static AnalogGyro  driveGyro = new AnalogGyro(0);
 
   /**
