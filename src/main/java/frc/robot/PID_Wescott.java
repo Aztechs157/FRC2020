@@ -7,16 +7,16 @@ package frc.robot;
 */
 
 import java.util.ArrayList;
-import edu.wpi.first.wpilibj.Joystick;
+// import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+// import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class PID_Wescott {
     protected PIDParameters[] optionSets;
     private double lastTime;
     private double lastPosition; // Last position input
     private double sigma; // Integrator state
-    private int count;
+    // private int count;
     public static ArrayList<PIDParameters[]> allParameters =  new ArrayList<PIDParameters[]>();
     double Highestvelocity = 0;//find highest velocity
     

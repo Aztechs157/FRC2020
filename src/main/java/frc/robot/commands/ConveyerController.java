@@ -7,20 +7,21 @@
 
 package frc.robot.commands;
 
-import java.lang.module.ModuleDescriptor.Requires;
+// import java.lang.module.ModuleDescriptor.Requires;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
-import frc.robot.subsystems.Conveyer;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
+// import frc.robot.Robot;
+import frc.robot.RobotContainer;
+// import frc.robot.subsystems.Conveyer;
 
 public class ConveyerController extends CommandBase {
   /**
    * Creates a new ConveyerMotor.
    */
   public ConveyerController() {
-    addRequirements(Robot.conveyer);
+    addRequirements(RobotContainer.conveyer);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

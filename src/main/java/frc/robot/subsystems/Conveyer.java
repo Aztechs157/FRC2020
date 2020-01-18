@@ -11,9 +11,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.NEO;
-import frc.robot.OI;
-import frc.robot.Robot;
-import frc.robot.commands.ConveyerController;
+// import frc.robot.Robot;
+import frc.robot.RobotContainer;
+// import frc.robot.commands.ConveyerController;
 
 public class Conveyer extends SubsystemBase {
   public NEO conveyerMotor;
@@ -26,8 +26,8 @@ public class Conveyer extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println(Robot.m_oi.controller1.getRawAxis(2));
-    Robot.conveyer.conveyerMotor.set(Robot.m_oi.controller1.getRawAxis(2));
+    System.out.println(RobotContainer.controller1.getRawAxis(2));
+    RobotContainer.conveyer.conveyerMotor.set(RobotContainer.controller1.getRawAxis(2));
     // This method will be called once per scheduler run
   }
 
