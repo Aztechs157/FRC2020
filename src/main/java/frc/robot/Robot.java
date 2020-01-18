@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.VisionPrintout;
+import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.VisionTest;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.VisionTest;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static Conveyer conveyer = new Conveyer();
   public static Intake intake = new Intake();
   public static VisionTest vision = new VisionTest();
   public static Shooter shooter = new Shooter(); 

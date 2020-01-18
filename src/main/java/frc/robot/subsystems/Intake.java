@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.NEO;
 //import frc.robot.NEO;
 import frc.robot.commands.IntakeTrigger;
 
@@ -18,9 +19,9 @@ import frc.robot.commands.IntakeTrigger;
  * An example subsystem.  You can replace me with your own Subsystem.
  */
 public class Intake extends Subsystem {
-//public NEO Intake;
+public NEO Intake;
 public Intake() {
- // Intake = new NEO(4, MotorType.kBrushless);
+  //Intake = new NEO(4, MotorType.kBrushless);
 }
 
   // Put methods for controlling this subsystem

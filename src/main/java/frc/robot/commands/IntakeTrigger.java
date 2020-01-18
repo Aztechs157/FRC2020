@@ -27,7 +27,7 @@ public class IntakeTrigger extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  //Robot.intake.Intake.set(Robot.m_oi.controller1.getRawAxis(2));
+ // Robot.intake.Intake.set(Robot.m_oi.controller1.getRawAxis(2));
   }
 
   // Make this return true when this Command no longer needs to run execute()

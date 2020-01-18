@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.CheckVision;
+import frc.robot.commands.ConveyerController;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.TrackTarget;
 import frc.robot.commands.VisionPrintout;
@@ -48,24 +49,29 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
   public Joystick controller1;
   public Joystick controller2;
-  public JoystickButton x;
-  public JoystickButton b;
-  public JoystickButton y;
   public JoystickButton a;
+  public JoystickButton b;
+  public JoystickButton x;
+  public JoystickButton y;
   public JoystickButton a2;
   public JoystickButton b2;
   public JoystickButton x2;
   public JoystickButton y2;
 
   public OI (){
-    //controller1 = new Joystick(3);
+    controller1 = new Joystick(3);
     controller2 = new Joystick(2);
-    a = new JoystickButton(controller2, 1);
-    b = new JoystickButton(controller2, 2);
-    x = new JoystickButton(controller2, 3);
-    y = new JoystickButton(controller2, 4); 
-    a.whenPressed(new TrackTarget());
-    b.whenPressed(new LaserFire(true));
-    b.whenReleased(new LaserFire(false));
+    a = new JoystickButton(controller1, 1);
+    b = new JoystickButton(controller1, 2);
+    x = new JoystickButton(controller1, 3);
+    y = new JoystickButton(controller1, 4);
+    a2 = new JoystickButton(controller2, 1);
+    b2 = new JoystickButton(controller2, 2);
+    x2 = new JoystickButton(controller2, 3);
+    y2 = new JoystickButton(controller2, 4);
+    //a.whenPressed(new ConveyerController()); 
+    a2.whenPressed(new TrackTarget());
+    b2.whenPressed(new LaserFire(true));
+    b2.whenReleased(new LaserFire(false));
   }
 }
