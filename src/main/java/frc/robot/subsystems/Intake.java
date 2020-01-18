@@ -7,21 +7,28 @@
 
 package frc.robot.subsystems;
 
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.NEO;
-// import frc.robot.commands.IntakeTrigger;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
-  /**
-   * Creates a new Intake2.
+ public final NEO IntakeRight;
+  //public final NEO IntakeLeft;
+  /**  
+   * Creates a new Intake.
    */
-  
-  public NEO motor;
   public Intake() {
-    //motor = new NEO(4, MotorType.kBrushless);
-    //setDefaultCommand(new IntakeTrigger());
+  IntakeRight = new NEO(Constants.DriveConstants.IntakeRight, MotorType.kBrushless);
+  //IntakeLeft = new NEO(Constants.DriveConstants.IntakeLeft, MotorType.kBrushless);
+  }
+
+  public void runIntake(double speed) {
+  IntakeRight.set(speed);
+  //IntakeLeft.set(speed);
   }
 
   @Override
@@ -29,3 +36,5 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 }
+
+// Y is button 4

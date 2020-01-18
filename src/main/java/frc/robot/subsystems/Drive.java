@@ -10,39 +10,47 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-// import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.NEO;
 import frc.robot.PID_Wescott;
-// import frc.robot.Robot;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.SlewRate;
+import frc.robot.commands.Autonomous;
 
-// import com.ctre.phoenix.motorcontrol.InvertType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANDigitalInput.LimitSwitch;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
 public class Drive extends SubsystemBase {
 public Drive drive;
 
-public static WPI_TalonSRX frontLeft;
-public static WPI_TalonSRX frontRight;
-private static WPI_TalonSRX backLeft;
-private static WPI_TalonSRX backRight;
-public static final Encoder driveLeftQuad = new Encoder(0, 1, true, EncodingType.k4X);
-public static final Encoder driveRightQuad = new Encoder(2, 3, false, EncodingType.k4X);
-public static AnalogGyro  driveGyro = new AnalogGyro(0);
+public static NEO frontLeft;
+public static NEO frontRight;
+private static NEO backLeft;
+private static NEO backRight;
+private static AnalogGyro driveGyro;
 public static PID_Wescott drivePID;
-
+public static PID_Wescott gyroDrivePID;
+public static SlewRate slew;
   public Drive() {
-    frontLeft = new WPI_TalonSRX(Constants.DriveConstants.FrontLeft);
-    frontRight = new WPI_TalonSRX(Constants.DriveConstants.FrontRight);
-    backLeft = new WPI_TalonSRX(Constants.DriveConstants.BackLeft);
-    backRight = new WPI_TalonSRX(Constants.DriveConstants.BackRight);
-    backRight.follow(frontRight);
-    backLeft.follow(frontLeft);
-    driveGyro.setSensitivity(0.007);
-    drivePID = new PID_Wescott(.0625, 0, 0, 100, 0, 100, 0, 2, -2);
-    
+    frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
+    frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
+    backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
+    backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+    gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+    drivePID = new PID_Wescott(.1, 0, 0, 100, 0, 100, 0, 2, -2);
+    slew = new SlewRate(0.5);
+    frontRight.tare();
+    frontLeft.tare();
+    driveGyro = new AnalogGyro(0);
    // frontRight.setInverted(InvertType.InvertMotorOutput);
     //1backRight.setInverted(InvertType.FollowMaster);
   }
@@ -65,7 +73,9 @@ public static PID_Wescott drivePID;
    //left y axis= 1, right y axis= 5
     frontLeft.set(-RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
     frontRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
-    System.out.println("driveLeftQuad = " + driveLeftQuad.getDistance() +"driveRightQuad = " + driveRightQuad.getDistance());
+    // System.out.println("drivepower = " + Autonomous.drivepower + " frontRight = " + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
+    backLeft.set(-RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
+    backRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
 // 12 ft = leftquad = 2717.5  Rightquad = 1430.72 
 // 12 ft = leftquad = 2711.5  Rightquad = 1259.00
 // 12 ft = leftquad = 2727.25 Rightquad = 1347.75
@@ -76,12 +86,14 @@ public static PID_Wescott drivePID;
 }
 
 public static double getLeftEncoder() {
-  return driveLeftQuad.getDistance();
+  //return RobotContainer.driveLeftQuad.getDistance();
+  return frontLeft.getPosition();
 
 }
 
 public static double getRightEncoder() {
-	return driveRightQuad.getDistance();
+//	return RobotContainer.driveRightQuad.getDistance();
+return frontLeft.getPosition();
 }
 
 public static double getAngle() {

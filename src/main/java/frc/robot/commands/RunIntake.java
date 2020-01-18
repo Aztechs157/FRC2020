@@ -28,7 +28,7 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.intake.motor.set(1.0);  
+    RobotContainer.intake.IntakeRight.set(1.0);  
   }
 
   // Called once the command ends or is interrupted.

@@ -68,10 +68,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    Drive.driveRightQuad.reset();
-    Drive.driveLeftQuad.reset();
-    
-    
+    //RobotContainer.driveRightQuad.reset();
+    // RobotContainer.driveLeftQuad.reset();
+    // drive.frontRight.tare();
+    // drive.backRight.tare();
+
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

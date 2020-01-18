@@ -6,18 +6,15 @@ package frc.robot;
     Modified to work in Java and match previous PID code.
 */
 
-import java.util.ArrayList;
-// import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-// import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.PIDParameters;
 
 public class PID_Wescott {
-    protected PIDParameters[] optionSets;
+    private PIDParameters[] optionSets;
     private double lastTime;
     private double lastPosition; // Last position input
     private double sigma; // Integrator state
-    // private int count;
-    public static ArrayList<PIDParameters[]> allParameters =  new ArrayList<PIDParameters[]>();
+	private int count;
     double Highestvelocity = 0;//find highest velocity
     
     /**
@@ -28,8 +25,7 @@ public class PID_Wescott {
 		this.optionSets = optionSets;
 		this.lastTime = Timer.getFPGATimestamp();
 		this.lastPosition = 0;
-        this.sigma = 0;
-        allParameters.add(this.optionSets);
+		this.sigma = 0;
 	}
 	/**
 	 * Overload for backwords compatability
@@ -42,11 +38,9 @@ public class PID_Wescott {
 		};
 		this.lastTime = Timer.getFPGATimestamp();
 		this.lastPosition = 0;
-        this.sigma = 0;
-        allParameters.add(this.optionSets);
+		this.sigma = 0;
+	}
 
-    }
-    
 	/**
 	 * Overload for backwords compatability
 	 * If no optionIndex is passed assume it's 0

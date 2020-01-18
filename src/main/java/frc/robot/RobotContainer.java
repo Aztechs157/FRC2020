@@ -73,7 +73,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     Joystickbutton.whileHeld(runIntakeCommand);
-    Joystickbutton.whenReleased(() -> RobotContainer.intake.motor.set(0.0));
+    Joystickbutton.whenReleased(() -> RobotContainer.intake.IntakeRight.set(0.0));
     
     a.whenPressed((Command) new TrackTarget());
     b.whenPressed((Command) new LaserFire(true));

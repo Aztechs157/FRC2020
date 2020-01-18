@@ -13,7 +13,6 @@ public class PIDParameters {
     public double rangeDEnd;
     public double minI;
     public double maxI;
-    public String name = "";
     /**
      * 
      * @param kP
