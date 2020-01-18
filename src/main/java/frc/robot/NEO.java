@@ -38,6 +38,4 @@ public class NEO {
     public void setIdleMode(IdleMode mode){
         motor.setIdleMode(mode);
     }
-
-
 }

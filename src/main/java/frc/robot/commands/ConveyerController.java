@@ -7,17 +7,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-// import frc.robot.subsystems.Intake;
+// import java.lang.module.ModuleDescriptor.Requires;
 
-public class RunIntake extends CommandBase {
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
+// import frc.robot.Robot;
+import frc.robot.RobotContainer;
+// import frc.robot.subsystems.Conveyer;
+
+public class ConveyerController extends CommandBase {
   /**
-   * Creates a new RunIntake.
+   * Creates a new ConveyerMotor.
    */
-  public RunIntake() {
+  public ConveyerController() {
+    addRequirements(RobotContainer.conveyer);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +33,7 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.intake.IntakeRight.set(1.0);  
+    //Robot.conveyer.conveyerMotor.set(1);
   }
 
   // Called once the command ends or is interrupted.

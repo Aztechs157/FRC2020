@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -35,6 +36,7 @@ public static NEO frontLeft;
 public static NEO frontRight;
 private static NEO backLeft;
 private static NEO backRight;
+private static AnalogGyro driveGyro;
 public static PID_Wescott drivePID;
 public static PID_Wescott gyroDrivePID;
 public static SlewRate slew;
@@ -48,6 +50,7 @@ public static SlewRate slew;
     slew = new SlewRate(0.5);
     frontRight.tare();
     frontLeft.tare();
+    driveGyro = new AnalogGyro(0);
    // frontRight.setInverted(InvertType.InvertMotorOutput);
     //1backRight.setInverted(InvertType.FollowMaster);
   }
@@ -94,13 +97,12 @@ return frontLeft.getPosition();
 }
 
 public static double getAngle() {
-	return RobotContainer.driveGyro.getAngle();
+	return driveGyro.getAngle();
 }
 
 public static void AutoDrive(double leftPower, double rightPower) {
   frontLeft.set(leftPower);
   frontRight.set(rightPower);
-
 }
 
 

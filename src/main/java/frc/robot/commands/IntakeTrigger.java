@@ -8,16 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
-// import frc.robot.subsystems.Intake;
 
-public class RunIntake extends CommandBase {
+public class IntakeTrigger extends CommandBase {
   /**
-   * Creates a new RunIntake.
+   * Creates a new IntakeTrigger2.
    */
-  public RunIntake() {
+  public IntakeTrigger() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
+    addRequirements((Subsystem) RobotContainer.intake);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +28,7 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.intake.IntakeRight.set(1.0);  
+    //Robot.intake.Intake.set(Robot.m_oi.controller1.getRawAxis(2));
   }
 
   // Called once the command ends or is interrupted.

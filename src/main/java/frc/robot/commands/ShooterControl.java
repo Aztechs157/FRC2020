@@ -8,16 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
-// import frc.robot.subsystems.Intake;
 
-public class RunIntake extends CommandBase {
+public class ShooterControl extends CommandBase {
+  double count = 0;
   /**
-   * Creates a new RunIntake.
+   * Creates a new ShooterControl2.
    */
-  public RunIntake() {
+  public ShooterControl() {
+    addRequirements((Subsystem)RobotContainer.shooter);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +29,23 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.intake.IntakeRight.set(1.0);  
+    double joyValx;
+    double Scale;
+   
+
+    count++;
+    if (count == 12) {
+      System.out.println(RobotContainer.shooter.LeftRight.getPosition());
+      count = 0;
+    }
+    
+
+
+    joyValx = -RobotContainer.controller2.getRawAxis(4);
+    Scale = 0.1;
+    RobotContainer.shooter.moveShooter(joyValx * Scale);
+    //RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));
+    //RobotContainer.shooter.LeftRight.set(RobotContainer.m_oi.controller2.getRawAxis(4));
   }
 
   // Called once the command ends or is interrupted.

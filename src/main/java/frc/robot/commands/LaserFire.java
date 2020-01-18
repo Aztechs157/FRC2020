@@ -7,17 +7,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-// import frc.robot.subsystems.Intake;
 
-public class RunIntake extends CommandBase {
+public class LaserFire extends CommandBase {
+  private boolean on;
+
   /**
-   * Creates a new RunIntake.
+   * Creates a new LaserFire2.
    */
-  public RunIntake() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.intake);
+  public LaserFire(boolean on) {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    this.on = on;
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +31,14 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.intake.IntakeRight.set(1.0);  
+    if (on)
+    {
+      RobotContainer.vision.laser.set(Value.kForward);
+    }
+    else
+    {
+      RobotContainer.vision.laser.set(Value.kOff);
+    }
   }
 
   // Called once the command ends or is interrupted.
