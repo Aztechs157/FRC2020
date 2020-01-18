@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,50 +8,47 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Relay.Value;
-import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 
-public class LaserFire extends Command {
+public class LaserFire extends CommandBase {
   private boolean on;
 
+  /**
+   * Creates a new LaserFire2.
+   */
   public LaserFire(boolean on) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     this.on = on;
   }
 
-  // Called just before this Command runs the first time
+  // Called when the command is initially scheduled.
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 
-  // Called repeatedly when this Command is scheduled to run
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  protected void execute() {
+  public void execute() {
     if (on)
     {
-      Robot.vision.laser.set(Value.kForward);
+      RobotContainer.vision.laser.set(Value.kForward);
     }
     else
     {
-      Robot.vision.laser.set(Value.kOff);
+      RobotContainer.vision.laser.set(Value.kOff);
     }
   }
 
-  // Make this return true when this Command no longer needs to run execute()
+  // Called once the command ends or is interrupted.
   @Override
-  protected boolean isFinished() {
-    return true;
+  public void end(boolean interrupted) {
   }
 
-  // Called once after isFinished returns true
+  // Returns true when the command should end.
   @Override
-  protected void end() {
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public boolean isFinished() {
+    return false;
   }
 }

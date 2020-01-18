@@ -11,23 +11,18 @@ import java.util.ArrayList;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.NEO;
 import frc.robot.PID_Wescott;
 import frc.robot.Pixy2Controller;
 import frc.robot.Pixy2Controller.Target;
-//import frc.robot.Pixy2Controller;
 
-/**
- * An example subsystem. You can replace with me with your own subsystem.
- */
-public class VisionTest extends Subsystem {
+public class Vision extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   Pixy2Controller pixy;
@@ -40,7 +35,7 @@ public class VisionTest extends Subsystem {
   public double UD = 0.5;
 
 
-  public VisionTest() {
+  public Vision() {
     pixy = new Pixy2Controller(Port.kOnboard, 0x55);
     LRControl = new NEO(7, MotorType.kBrushless);
     UDServo = new Servo(2);
@@ -62,12 +57,6 @@ public class VisionTest extends Subsystem {
     UD = pos;
     UDServo.set(UD);
   }
-  @Override
-  protected void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-
-  }
 
   public Target[] getBlocks() {
     ArrayList<Target> retval = new ArrayList<Target>();
@@ -84,4 +73,8 @@ public class VisionTest extends Subsystem {
     pixyLight.set((lightOn)?Value.kForward:Value.kOff);
   }
 
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }

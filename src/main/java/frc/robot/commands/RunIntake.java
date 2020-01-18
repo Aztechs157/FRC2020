@@ -7,19 +7,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Intake;
 
-public class ShooterUD extends Command {
-  private double pos;
-
+public class RunIntake extends CommandBase {
   /**
-   * Creates a new ShooterUD.
+   * Creates a new RunIntake.
    */
-  public ShooterUD(double pos) {
-    this.pos = pos;
+  public RunIntake() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.intake);
   }
 
   // Called when the command is initially scheduled.
@@ -30,23 +28,17 @@ public class ShooterUD extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.shooter.UpDown.set(pos);
+    RobotContainer.intake.motor.set(1.0);  
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end() {
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
-  @Override
-  public void interrupted() {
-
-  
-  }
-
 }

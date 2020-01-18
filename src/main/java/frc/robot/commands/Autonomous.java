@@ -7,18 +7,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
+//import frc.robot.RobotContainer;
+//import frc.robot.subsystems.Drive;
 
-public class ShooterLR extends Command {
-  private double pos;
-
+public class Autonomous extends CommandBase {
   /**
-   * Creates a new ShooterLR.
+   * Creates a new Autonomous.
    */
-  public ShooterLR(double pos) {
-    this.pos = pos;
+  public Autonomous() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -30,21 +27,20 @@ public class ShooterLR extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.shooter.LeftRight.set(pos);
+  /*  if(RobotContainer.driveLeftQuad.getDistance() <= 2718.75 ){
+      Drive.frontLeft.set(Drive.drivePID.pidCalculate(2718.75, RobotContainer.driveLeftQuad.getDistance())*0.25);
+      Drive.frontRight.set(-Drive.drivePID.pidCalculate(2718.75, RobotContainer.driveLeftQuad.getDistance())*0.35);
+    } */
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end() {
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
-  }
-  @Override
-  public void interrupted() {
-
+    return false;
   }
 }

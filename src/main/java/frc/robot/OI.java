@@ -9,10 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.CheckVision;
 import frc.robot.commands.LaserFire;
-import frc.robot.commands.TrackTarget;
-import frc.robot.commands.VisionPrintout;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -47,25 +44,10 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public Joystick controller1;
-  public Joystick controller2;
-  public JoystickButton x;
-  public JoystickButton b;
-  public JoystickButton y;
-  public JoystickButton a;
-  public JoystickButton a2;
-  public JoystickButton b2;
-  public JoystickButton x2;
-  public JoystickButton y2;
+  
 
   public OI (){
     //controller1 = new Joystick(3);
-    controller2 = new Joystick(2);
-    a = new JoystickButton(controller2, 1);
-    b = new JoystickButton(controller2, 2);
-    x = new JoystickButton(controller2, 3);
-    y = new JoystickButton(controller2, 4); 
-    a.whenPressed(new TrackTarget());
-    b.whenPressed(new LaserFire(true));
-    b.whenReleased(new LaserFire(false));
+    
   }
 }
