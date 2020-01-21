@@ -13,52 +13,50 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterControl extends CommandBase {
-  double count = 0;
-  private Shooter shooter;
-  /**
-   * Creates a new ShooterControl2.
-   */
-  public ShooterControl(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);// (Subsystem)believe taken this out gets rid of null pointer exceptions
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+    double count = 0;
+    private Shooter shooter;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    double joyValx;
-    double Scale;
-   
-
-    count++;
-    if (count == 12) {
-      System.out.println(shooter.LeftRight.getPosition());
-      count = 0;
+    /**
+     * Creates a new ShooterControl2.
+     */
+    public ShooterControl(Shooter shooter) {
+        this.shooter = shooter;
+        addRequirements(shooter);// (Subsystem)believe taken this out gets rid of null pointer exceptions
+        // Use addRequirements() here to declare subsystem dependencies.
     }
-    
 
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+    }
 
-    joyValx = -RobotContainer.joystick.getRawAxis(4);
-    Scale = 0.1;
-    shooter.moveShooter(joyValx * Scale);
-    //RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));
-    //RobotContainer.shooter.LeftRight.set(RobotContainer.m_oi.controller2.getRawAxis(4));
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        double joyValx;
+        double Scale;
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
+        count++;
+        if (count == 12) {
+            System.out.println(shooter.LeftRight.getPosition());
+            count = 0;
+        }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+        joyValx = -RobotContainer.joystick.getRawAxis(4);
+        Scale = 0.1;
+        shooter.moveShooter(joyValx * Scale);
+        // RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));
+        // RobotContainer.shooter.LeftRight.set(RobotContainer.m_oi.controller2.getRawAxis(4));
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
