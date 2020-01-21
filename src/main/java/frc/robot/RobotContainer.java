@@ -7,22 +7,16 @@
 
 package frc.robot;
 
-// import java.util.ResourceBundle.Control;
-
-// import edu.wpi.first.wpilibj.AnalogGyro;
-// import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Conveyer;
-// import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.RunIntake;
@@ -54,7 +48,6 @@ public class RobotContainer {
     public JoystickButton b2;
     public JoystickButton x2;
     public JoystickButton y2;
-    private final JoystickButton Joystickbutton = new JoystickButton(joystick, Constants.OIConstants.Ybutton);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.

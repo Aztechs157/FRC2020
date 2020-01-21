@@ -8,25 +8,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.NEO;
 import frc.robot.util.PID_Wescott;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.util.SlewRate;
-import frc.robot.commands.Autonomous;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANDigitalInput.LimitSwitch;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Drive extends SubsystemBase {
     public Drive drive;
