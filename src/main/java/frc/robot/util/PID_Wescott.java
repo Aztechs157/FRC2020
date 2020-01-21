@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.util;
 /*
     Original code by Tim Wescott
     Source: https://www.wescottdesign.com/articles/pid/pidWithoutAPhd.pdf
@@ -7,19 +7,18 @@ package frc.robot;
 */
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.PIDParameters;
+import frc.robot.util.PIDParameters;
 
 public class PID_Wescott {
     private PIDParameters[] optionSets;
     private double lastTime;
     private double lastPosition; // Last position input
     private double sigma; // Integrator state
-    private int count;
     double Highestvelocity = 0;// find highest velocity
 
     /**
      * Object to caculate PID
-     * 
+     *
      * @param optionSets a array of PIDParameters
      */
     public PID_Wescott(PIDParameters[] optionSets) {
@@ -45,7 +44,7 @@ public class PID_Wescott {
     /**
      * Overload for backwords compatability If no optionIndex is passed assume it's
      * 0
-     * 
+     *
      * @param desiredPosition Where you want to go
      * @param currentPosition Where you are now
      * @return Calculated power output
@@ -56,7 +55,7 @@ public class PID_Wescott {
 
     /**
      * Calculate a power output using pid
-     * 
+     *
      * @param desiredPosition Where you want to go
      * @param currentPosition Where you are now
      * @param optionIndex     Which option set to use

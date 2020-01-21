@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.NEO;
-import frc.robot.PID_Wescott;
-import frc.robot.Pixy2Controller;
-import frc.robot.Pixy2Controller.Target;
+import frc.robot.util.NEO;
+import frc.robot.util.PID_Wescott;
+import frc.robot.util.Pixy2Controller;
+import frc.robot.util.Pixy2Controller.Target;
 
 public class Vision extends SubsystemBase {
     // Put methods for controlling this subsystem

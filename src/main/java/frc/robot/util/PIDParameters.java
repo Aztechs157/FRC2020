@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.util;
 
 /**
  * Passed to a PID class
@@ -15,7 +15,7 @@ public class PIDParameters {
     public double maxI;
 
     /**
-     * 
+     *
      * @param kP
      * @param kI
      * @param kD

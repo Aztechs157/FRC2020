@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
-import frc.robot.Pixy2Controller.Target;
+import frc.robot.util.Pixy2Controller.Target;
 import frc.robot.subsystems.Shooter;
 
 public class TrackTarget extends CommandBase {

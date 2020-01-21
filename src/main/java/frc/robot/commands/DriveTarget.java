@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
-import frc.robot.PID_Wescott;
+import frc.robot.util.PID_Wescott;
 import frc.robot.Robot;
-import frc.robot.SlewRate;
+import frc.robot.util.SlewRate;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.Timer;
 

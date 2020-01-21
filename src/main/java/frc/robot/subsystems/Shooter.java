@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.NEO;
+import frc.robot.util.NEO;
 import frc.robot.commands.ShooterControl;
 
 public class Shooter extends SubsystemBase {
