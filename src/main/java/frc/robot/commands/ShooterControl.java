@@ -10,14 +10,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 
 public class ShooterControl extends CommandBase {
   double count = 0;
+  private Shooter shooter;
   /**
    * Creates a new ShooterControl2.
    */
-  public ShooterControl() {
-    addRequirements((Subsystem)RobotContainer.shooter);
+  public ShooterControl(Shooter shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);// (Subsystem)believe taken this out gets rid of null pointer exceptions
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -35,15 +38,15 @@ public class ShooterControl extends CommandBase {
 
     count++;
     if (count == 12) {
-      System.out.println(RobotContainer.shooter.LeftRight.getPosition());
+      System.out.println(shooter.LeftRight.getPosition());
       count = 0;
     }
     
 
 
-    joyValx = -RobotContainer.controller2.getRawAxis(4);
+    joyValx = -RobotContainer.joystick.getRawAxis(4);
     Scale = 0.1;
-    RobotContainer.shooter.moveShooter(joyValx * Scale);
+    shooter.moveShooter(joyValx * Scale);
     //RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));
     //RobotContainer.shooter.LeftRight.set(RobotContainer.m_oi.controller2.getRawAxis(4));
   }

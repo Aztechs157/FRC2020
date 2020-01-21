@@ -40,16 +40,15 @@ public class RobotContainer {
   public static Drive  drive = new Drive();
   public static Intake intake = new Intake();
   public static Command runIntakeCommand = new RunIntake();
+
   public static Vision vision = new Vision();
-  public static Shooter shooter = new Shooter(); 
+  private static Shooter shooter = new Shooter(); // reference throwing null pointer
   
   public final static Joystick joystick = new Joystick(5);
-  public static Joystick controller1 = new Joystick(3);
-  public static Joystick controller2 = new Joystick(2);
-  public JoystickButton x = new JoystickButton(controller2, 3);
-  public JoystickButton b = new JoystickButton(controller2, 2);
-  public JoystickButton y = new JoystickButton(controller2, 4);
-  public JoystickButton a = new JoystickButton(controller2, 1);
+  public JoystickButton x = new JoystickButton(joystick, 3);
+  public JoystickButton b = new JoystickButton(joystick, 2);
+  public JoystickButton y = new JoystickButton(joystick, 4);
+  public JoystickButton a = new JoystickButton(joystick, 1);
   public JoystickButton a2;
   public JoystickButton b2;
   public JoystickButton x2;
@@ -72,10 +71,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    Joystickbutton.whileHeld(runIntakeCommand);
-    Joystickbutton.whenReleased(() -> RobotContainer.intake.IntakeRight.set(0.0));
+   // Joystickbutton.whileHeld(runIntakeCommand);
+    //Joystickbutton.whenReleased(() -> RobotContainer.intake.IntakeRight.set(0.0));
     
-    a.whenPressed((Command) new TrackTarget());
+    a.whenPressed((Command) new TrackTarget(shooter));
     b.whenPressed((Command) new LaserFire(true));
     b.whenReleased((Command) new LaserFire(false));
   }

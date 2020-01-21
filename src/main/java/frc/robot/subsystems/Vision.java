@@ -28,7 +28,7 @@ public class Vision extends SubsystemBase {
   Pixy2Controller pixy;
   Relay pixyLight;
   //Servo LRServo;
-  NEO LRControl;
+  //NEO LRControl;
   Servo UDServo;
   public Relay laser;
   public PID_Wescott pid = new PID_Wescott(0.1, 0, 0, 100, 0, 100, 0, 10, -10);
@@ -37,7 +37,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     pixy = new Pixy2Controller(Port.kOnboard, 0x55);
-    LRControl = new NEO(7, MotorType.kBrushless);
+    //LRControl = new NEO(7, MotorType.kBrushless);
     UDServo = new Servo(2);
 
     laser = new Relay(1);
@@ -49,7 +49,7 @@ public class Vision extends SubsystemBase {
   public void setHorizontal(double pos)
   {
     //LR = pos;
-    LRControl.set(pos);
+    //LRControl.set(pos);
   }
 
   public void setVertical(double pos)

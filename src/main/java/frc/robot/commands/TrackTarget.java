@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 import frc.robot.Pixy2Controller.Target;
+import frc.robot.subsystems.Shooter;
 
 public class TrackTarget extends CommandBase {
   double map(double x, double in_min, double in_max, double out_min, double out_max)
@@ -21,12 +22,15 @@ public class TrackTarget extends CommandBase {
   //private final double UDMUL = 0.004;
   private final double LRTARGET = 158;
   int count = 0;
+  private final Shooter shooter;
   /**
    * Creates a new TrackTarget2.
    */
-  public TrackTarget() {
+  public TrackTarget(Shooter shooter) {
+    this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements((Subsystem) RobotContainer.vision);
+    addRequirements(RobotContainer.vision);//(Subsystem)
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -44,7 +48,7 @@ public class TrackTarget extends CommandBase {
     {
       count = 0;
       //System.out.println(RobotContainer.vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
-      RobotContainer.shooter.moveShooter(RobotContainer.vision.pid.pidCalculate(LRTARGET, targets[0].x)*0.1);
+      shooter.moveShooter(RobotContainer.vision.pid.pidCalculate(LRTARGET, targets[0].x)*0.1);
       RobotContainer.vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
 
     }
@@ -69,7 +73,7 @@ public class TrackTarget extends CommandBase {
     boolean retVal = true;
     double joyValx;
     
-    joyValx = RobotContainer.controller2.getRawAxis(4);
+    joyValx = RobotContainer.joystick.getRawAxis(4);
 
     if (joyValx > -0.01 && joyValx < 0.01) {
       retVal = false;

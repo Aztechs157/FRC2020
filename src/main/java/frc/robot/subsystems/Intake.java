@@ -16,19 +16,16 @@ import frc.robot.NEO;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
- public final NEO IntakeRight;
-  //public final NEO IntakeLeft;
+ //public final NEO IntakeRight;
   /**  
    * Creates a new Intake.
    */
   public Intake() {
-  IntakeRight = new NEO(Constants.DriveConstants.IntakeRight, MotorType.kBrushless);
-  //IntakeLeft = new NEO(Constants.DriveConstants.IntakeLeft, MotorType.kBrushless);
+  //IntakeRight = new NEO(Constants.RobotConstants.IntakeRight, MotorType.kBrushless);
   }
 
   public void runIntake(double speed) {
-  IntakeRight.set(speed);
-  //IntakeLeft.set(speed);
+  //IntakeRight.set(speed);
   }
 
   @Override

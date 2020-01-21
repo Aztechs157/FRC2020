@@ -21,13 +21,14 @@ package frc.robot;
  */
 public final class Constants {
 
-    public final class DriveConstants {
+    public final class RobotConstants {
         public static final int FrontLeft = 2;
         public static final int FrontRight = 1;
         public static final int BackLeft = 4;
         public static final int BackRight = 3;
-        public static final int IntakeRight = 5;
-       // public static final int IntakeLeft = 4;
+        //public static final int IntakeRight = 5;
+        public static final int ConveyerMotorID = 6;
+        public static final int TurretMotorID = 7;
     }
     public final class OIConstants {
         public static final int RYStick = 5;
@@ -36,7 +37,7 @@ public final class Constants {
         public static final int LXStick = 0;
         public static final int Ybutton = 4;   
 
-    }
+    } 
 }
 
 
