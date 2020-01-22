@@ -5,11 +5,11 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class NEO {
-    private CANSparkMax motor;
+    private final CANSparkMax motor;
     private double ticks;
     private double offset;
 
-    public NEO(int port, MotorType type) {
+    public NEO(final int port, final MotorType type) {
         motor = new CANSparkMax(port, type);
         ticks = 0;
         offset = 0;
@@ -25,7 +25,7 @@ public class NEO {
         offset = ticks;
     }
 
-    public void setPosition(double position) {
+    public void setPosition(final double position) {
         ticks = motor.getEncoder().getPosition();
         offset = ticks - position;
     }
@@ -34,15 +34,15 @@ public class NEO {
         return motor.getEncoder().getVelocity();
     }
 
-    public void set(double speed) {
+    public void set(final double speed) {
         motor.set(speed);
     }
 
-    public void setInverted(boolean bool) {
+    public void setInverted(final boolean bool) {
         motor.setInverted(bool);
     }
 
-    public void setIdleMode(IdleMode mode) {
+    public void setIdleMode(final IdleMode mode) {
         motor.setIdleMode(mode);
     }
 }

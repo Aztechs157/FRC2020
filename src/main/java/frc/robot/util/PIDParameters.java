@@ -24,8 +24,8 @@ public class PIDParameters {
      * @param rangeDStart Furthest from desiredPosition
      * @param rangeDEnd   Closest to desiredPosition
      */
-    public PIDParameters(double kP, double kI, double kD, double rangeIStart, double rangeIEnd, double rangeDStart,
-            double rangeDEnd) {
+    public PIDParameters(final double kP, final double kI, final double kD, final double rangeIStart,
+            final double rangeIEnd, final double rangeDStart, final double rangeDEnd) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
@@ -35,8 +35,9 @@ public class PIDParameters {
         this.rangeDEnd = rangeDEnd;
     }
 
-    public PIDParameters(double kP, double kI, double kD, double rangeIStart, double rangeIEnd, double rangeDStart,
-            double rangeDEnd, double minI, double maxI) {
+    public PIDParameters(final double kP, final double kI, final double kD, final double rangeIStart,
+            final double rangeIEnd, final double rangeDStart, final double rangeDEnd, final double minI,
+            final double maxI) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;

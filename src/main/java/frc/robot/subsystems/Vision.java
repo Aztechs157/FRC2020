@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.PID_Wescott;
+import frc.robot.util.PID;
 import frc.robot.util.Pixy2Controller;
 import frc.robot.util.Pixy2Controller.Target;
 
 public class Vision extends SubsystemBase {
 
     public final Relay laser;
-    public final PID_Wescott pid = new PID_Wescott(0.1, 0, 0, 100, 0, 100, 0, 10, -10);
+    public final PID pid = new PID(0.1, 0, 0, 100, 0, 100, 0, 10, -10);
 
     private final Pixy2Controller pixy;
     private final Relay pixyLight;

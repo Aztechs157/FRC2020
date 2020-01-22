@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import frc.robot.util.PID_Wescott;
+import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,8 +13,8 @@ public class DriveTarget {
     private boolean slewCut;
     private double encoder;
     private double drivePower;
-    private final PID_Wescott drivePID;
-    private final PID_Wescott gyroDrivePID;
+    private final PID drivePID;
+    private final PID gyroDrivePID;
     private SlewRate slewRate;
     private double leftPower;
     private double rightPower;
@@ -29,8 +29,8 @@ public class DriveTarget {
         this.targetAngle = targetAngle;
         this.tolerance = tolerance;
         slewCut = false;
-        drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.8);
         firstIteration = true;
     }
@@ -42,8 +42,8 @@ public class DriveTarget {
         this.targetAngle = targetAngle;
         this.slewCut = slew;
         this.tolerance = tolerance;
-        drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.5);
         slewCut = !slew;
         firstIteration = true;
@@ -56,8 +56,8 @@ public class DriveTarget {
         this.targetAngle = targetAngle;
         this.slewCut = slew;
         this.tolerance = tolerance;
-        drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.5);
         slewCut = !slew;
         firstIteration = true;

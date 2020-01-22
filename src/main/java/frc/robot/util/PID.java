@@ -9,8 +9,8 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.PIDParameters;
 
-public class PID_Wescott {
-    private PIDParameters[] optionSets;
+public class PID {
+    private final PIDParameters[] optionSets;
     private double lastTime;
     private double lastPosition; // Last position input
     private double sigma; // Integrator state
@@ -21,7 +21,7 @@ public class PID_Wescott {
      *
      * @param optionSets a array of PIDParameters
      */
-    public PID_Wescott(PIDParameters[] optionSets) {
+    public PID(final PIDParameters[] optionSets) {
         this.optionSets = optionSets;
         this.lastTime = Timer.getFPGATimestamp();
         this.lastPosition = 0;
@@ -32,8 +32,8 @@ public class PID_Wescott {
      * Overload for backwords compatability Check PIDParameters for usage of these
      * params
      */
-    public PID_Wescott(double kP, double kI, double kD, double rangeIStart, double rangeIEnd, double rangeDStart,
-            double rangeDEnd, double integratMax, double integratMin) {
+    public PID(final double kP, final double kI, final double kD, final double rangeIStart, final double rangeIEnd,
+            final double rangeDStart, final double rangeDEnd, final double integratMax, final double integratMin) {
         this.optionSets = new PIDParameters[] { new PIDParameters(kP, kI, kD, rangeIStart, rangeIEnd, rangeDStart,
                 rangeDEnd, integratMax, integratMin), };
         this.lastTime = Timer.getFPGATimestamp();
@@ -49,7 +49,7 @@ public class PID_Wescott {
      * @param currentPosition Where you are now
      * @return Calculated power output
      */
-    public double pidCalculate(double desiredPosition, double currentPosition) {
+    public double pidCalculate(final double desiredPosition, final double currentPosition) {
         return pidCalculate(desiredPosition, currentPosition, 0);
     }
 
@@ -61,17 +61,17 @@ public class PID_Wescott {
      * @param optionIndex     Which option set to use
      * @return Calculated power output
      */
-    public double pidCalculate(double desiredPosition, double CurrentPosition, int optionIndex) {
-        double kP = optionSets[optionIndex].kP; // LEAVE HERE, DISCUSS WITH STUDENTS
-        double kI = optionSets[optionIndex].kI;
-        double kD = optionSets[optionIndex].kD;
-        double integratMin = optionSets[optionIndex].minI;
-        double integratMax = optionSets[optionIndex].maxI;
+    public double pidCalculate(final double desiredPosition, final double CurrentPosition, final int optionIndex) {
+        final double kP = optionSets[optionIndex].kP; // LEAVE HERE, DISCUSS WITH STUDENTS
+        final double kI = optionSets[optionIndex].kI;
+        final double kD = optionSets[optionIndex].kD;
+        final double integratMin = optionSets[optionIndex].minI;
+        final double integratMax = optionSets[optionIndex].maxI;
 
-        double currentTime = Timer.getFPGATimestamp();
-        double deltaTime = currentTime - lastTime;
+        final double currentTime = Timer.getFPGATimestamp();
+        final double deltaTime = currentTime - lastTime;
         lastTime = currentTime;
-        double distanceLeft = desiredPosition - CurrentPosition;
+        final double distanceLeft = desiredPosition - CurrentPosition;
 
         double pTerm, dTerm, iTerm;
 

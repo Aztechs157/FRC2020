@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.NEO;
-import frc.robot.util.PID_Wescott;
+import frc.robot.util.PID;
 import frc.robot.RobotContainer;
 import frc.robot.util.SlewRate;
 
@@ -18,8 +18,8 @@ public class Drive extends SubsystemBase {
     private static NEO backLeft;
     private static NEO backRight;
     private static AnalogGyro driveGyro;
-    public static PID_Wescott drivePID;
-    public static PID_Wescott gyroDrivePID;
+    public static PID drivePID;
+    public static PID gyroDrivePID;
     public static SlewRate slew;
 
     public Drive() {
@@ -27,8 +27,8 @@ public class Drive extends SubsystemBase {
         frontRight = new NEO(Constants.RobotConstants.FrontRight, MotorType.kBrushless);
         backLeft = new NEO(Constants.RobotConstants.BackLeft, MotorType.kBrushless);
         backRight = new NEO(Constants.RobotConstants.BackRight, MotorType.kBrushless);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
-        drivePID = new PID_Wescott(.1, 0, 0, 100, 0, 100, 0, 2, -2);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(.1, 0, 0, 100, 0, 100, 0, 2, -2);
         slew = new SlewRate(0.5);
         frontRight.tare();
         frontLeft.tare();
