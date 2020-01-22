@@ -12,43 +12,40 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class LaserFire extends CommandBase {
-  private boolean on;
+    private boolean on;
 
-  /**
-   * Creates a new LaserFire2.
-   */
-  public LaserFire(boolean on) {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    this.on = on;
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if (on)
-    {
-      RobotContainer.vision.laser.set(Value.kForward);
+    /**
+     * Creates a new LaserFire2.
+     */
+    public LaserFire(boolean on) {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+        this.on = on;
     }
-    else
-    {
-      RobotContainer.vision.laser.set(Value.kOff);
+
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
     }
-  }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        if (on) {
+            RobotContainer.vision.laser.set(Value.kForward);
+        } else {
+            RobotContainer.vision.laser.set(Value.kOff);
+        }
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

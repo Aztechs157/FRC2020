@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -26,18 +24,17 @@ public final class Constants {
         public static final int FrontRight = 1;
         public static final int BackLeft = 4;
         public static final int BackRight = 3;
-        //public static final int IntakeRight = 5;
+        public static final int Intake = 5;
         public static final int ConveyerMotorID = 6;
         public static final int TurretMotorID = 7;
     }
+
     public final class OIConstants {
         public static final int RYStick = 5;
         public static final int LYStick = 1;
         public static final int RXStick = 4;
         public static final int LXStick = 0;
-        public static final int Ybutton = 4;   
+        public static final int Ybutton = 4;
 
-    } 
+    }
 }
-
-

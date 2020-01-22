@@ -16,22 +16,24 @@ import frc.robot.NEO;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
- //public final NEO IntakeRight;
-  /**  
-   * Creates a new Intake.
-   */
-  public Intake() {
-  //IntakeRight = new NEO(Constants.RobotConstants.IntakeRight, MotorType.kBrushless);
-  }
+    // public final NEO IntakeRight;
+    /**
+     * Creates a new Intake.
+     */
+    public NEO Intake;
 
-  public void runIntake(double speed) {
-  //IntakeRight.set(speed);
-  }
+    public Intake() {
+        Intake = new NEO(Constants.RobotConstants.Intake, MotorType.kBrushless);
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    public void runIntake(final double speed) {
+        Intake.set(speed);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 }
 
 // Y is button 4
