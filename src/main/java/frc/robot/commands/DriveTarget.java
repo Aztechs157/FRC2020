@@ -6,24 +6,24 @@ import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.Timer;
 
 public class DriveTarget {
-    private int target;
+    private final int target;
     private double startTime;
-    private double time;
-    private double targetAngle;
+    private final double time;
+    private final double targetAngle;
     private boolean slewCut;
     private double encoder;
     private double drivePower;
-    private PID_Wescott drivePID;
-    private PID_Wescott gyroDrivePID;
+    private final PID_Wescott drivePID;
+    private final PID_Wescott gyroDrivePID;
     private SlewRate slewRate;
     private double leftPower;
     private double rightPower;
     private int repsAtTarget;
-    private int tolerance;
+    private final int tolerance;
     private boolean firstIteration;
     private boolean megaSlew = false;
 
-    public DriveTarget(int target, double targetAngle, int tolerance, double time) {
+    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time) {
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
@@ -35,7 +35,8 @@ public class DriveTarget {
         firstIteration = true;
     }
 
-    public DriveTarget(int target, double targetAngle, int tolerance, double time, boolean slew) {
+    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time,
+            final boolean slew) {
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
@@ -48,7 +49,8 @@ public class DriveTarget {
         firstIteration = true;
     }
 
-    public DriveTarget(int target, double targetAngle, int tolerance, double time, boolean slew, boolean megaSlew) {
+    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time,
+            final boolean slew, final boolean megaSlew) {
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;

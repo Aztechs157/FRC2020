@@ -1,36 +1,25 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.util.Pixy2Controller.Target;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class TrackTarget extends CommandBase {
-    double map(double x, double in_min, double in_max, double out_min, double out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
 
     // private final double LRMUL = 0.00001;
     // private final double UDMUL = 0.004;
     private final double LRTARGET = 158;
     int count = 0;
     private final Shooter shooter;
-    private Vision vision;
-    private Joystick joystick;
+    private final Vision vision;
+    private final Joystick joystick;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(Shooter shooter, Vision vision, Joystick joystick) {
+    public TrackTarget(final Shooter shooter, final Vision vision, final Joystick joystick) {
         this.shooter = shooter;
         this.vision = vision;
         this.joystick = joystick;
@@ -48,7 +37,7 @@ public class TrackTarget extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Target[] targets = vision.getBlocks();
+        final Target[] targets = vision.getBlocks();
         System.out.println(targets.length);
         if (targets.length == 1) {
             count = 0;
@@ -62,9 +51,14 @@ public class TrackTarget extends CommandBase {
         }
     }
 
+    private double map(final double x, final double in_min, final double in_max, final double out_min,
+            final double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {
+    public void end(final boolean interrupted) {
 
         vision.setHorizontal(0);
         vision.turnLight(false);
@@ -76,7 +70,7 @@ public class TrackTarget extends CommandBase {
         boolean retVal = true;
         double joyValx;
 
-        joyValx = RobotContainer.joystick.getRawAxis(4);
+        joyValx = joystick.getRawAxis(4);
 
         if (joyValx > -0.01 && joyValx < 0.01) {
             retVal = false;
