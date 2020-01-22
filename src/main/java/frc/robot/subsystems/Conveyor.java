@@ -7,7 +7,7 @@ import frc.robot.Constants;
 import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 
-public class Conveyer extends SubsystemBase {
+public class Conveyor extends SubsystemBase {
 
     private final NEO conveyerMotor = new NEO(Constants.RobotConstants.ConveyerMotorID, MotorType.kBrushless);
     private final LogitechController controller;
@@ -15,7 +15,7 @@ public class Conveyer extends SubsystemBase {
     /**
      * Creates a new Conveyer.
      */
-    public Conveyer(final LogitechController controller) {
+    public Conveyor(final LogitechController controller) {
         this.controller = controller;
     }
 
