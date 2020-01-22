@@ -24,8 +24,12 @@ public class LogitechController {
     /** The raw underlying joystick */
     private final Joystick joystick;
 
-    /** Each index of the array corisponds to a button id */
-    private final JoystickButton[] buttons = {};
+    /**
+     * Each index of the array corisponds to a button id
+     *
+     * Make sure number of nulls matches number of button ids
+     */
+    private final JoystickButton[] buttons = { null, null, null, null, null, null, null, null, null, null, null };
 
     /**
      * @param port Please just pick 0
