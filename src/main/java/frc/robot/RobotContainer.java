@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -26,7 +26,7 @@ public class RobotContainer {
     private static final LogitechController controller = new LogitechController(0);
 
     // #region Subsystems
-    private static final Conveyer conveyer = new Conveyer(controller);
+    private static final Conveyor conveyor = new Conveyor(controller);
     private static final Drive drive = new Drive(controller);
     private static final Intake intake = new Intake();
     private static final Vision vision = new Vision();
@@ -41,7 +41,7 @@ public class RobotContainer {
      * Put button controls here
      */
     private void configureButtonBindings() {
-        controller.A().whenPressed(new TrackTarget(shooter, vision, controller));
+        controller.A().whileHeld(new TrackTarget(shooter, vision, controller));
         controller.B().whenPressed(new LaserFire(true, vision));
         controller.B().whenReleased(new LaserFire(false, vision));
     }
