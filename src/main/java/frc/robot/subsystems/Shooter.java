@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 import frc.robot.commands.ShooterControl;
 
@@ -20,11 +21,10 @@ public class Shooter extends SubsystemBase {
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Shooter() {
+    public Shooter(LogitechController controller) {
         LeftRight = new NEO(Constants.RobotConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
-        setDefaultCommand(new ShooterControl(this)); // temporary commented out to see if solves null pointer exceptions
-
+        setDefaultCommand(new ShooterControl(this, controller));
     }
 
     public void moveShooter(final double Speed) {

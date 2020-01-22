@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.util.LogitechController;
 import frc.robot.util.Pixy2Controller.Target;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -14,15 +14,15 @@ public class TrackTarget extends CommandBase {
     int count = 0;
     private final Shooter shooter;
     private final Vision vision;
-    private final Joystick joystick;
+    private final LogitechController controller;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(final Shooter shooter, final Vision vision, final Joystick joystick) {
+    public TrackTarget(final Shooter shooter, final Vision vision, final LogitechController controller) {
         this.shooter = shooter;
         this.vision = vision;
-        this.joystick = joystick;
+        this.controller = controller;
         addRequirements(shooter);
         addRequirements(vision);
     }
@@ -70,7 +70,7 @@ public class TrackTarget extends CommandBase {
         boolean retVal = true;
         double joyValx;
 
-        joyValx = joystick.getRawAxis(4);
+        joyValx = controller.getRawAxis(4);
 
         if (joyValx > -0.01 && joyValx < 0.01) {
             retVal = false;

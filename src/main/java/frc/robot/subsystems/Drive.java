@@ -3,15 +3,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
-import frc.robot.RobotContainer;
 import frc.robot.util.SlewRate;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
-    public Drive drive;
+
+    private final LogitechController controller;
 
     public static NEO frontLeft;
     public static NEO frontRight;
@@ -22,7 +23,8 @@ public class Drive extends SubsystemBase {
     public static PID gyroDrivePID;
     public static SlewRate slew;
 
-    public Drive() {
+    public Drive(final LogitechController controller) {
+        this.controller = controller;
         frontLeft = new NEO(Constants.RobotConstants.FrontLeft, MotorType.kBrushless);
         frontRight = new NEO(Constants.RobotConstants.FrontRight, MotorType.kBrushless);
         backLeft = new NEO(Constants.RobotConstants.BackLeft, MotorType.kBrushless);
@@ -45,19 +47,19 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // frontLeft.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
-        // frontRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
+        // frontLeft.set(controller.getRawAxis(Constants.OIConstants.LYStick));
+        // frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
         tankdrive();
     }
 
-    public static void tankdrive() {
+    public void tankdrive() {
         // left y axis= 1, right y axis= 5
-        frontLeft.set(-RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
-        frontRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
+        frontLeft.set(-controller.getRawAxis(Constants.OIConstants.LYStick));
+        frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
         // System.out.println("drivepower = " + Autonomous.drivepower + " frontRight = "
         // + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
-        backLeft.set(-RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
-        backRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
+        backLeft.set(-controller.getRawAxis(Constants.OIConstants.LYStick));
+        backRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
         // 12 ft = leftquad = 2717.5 Rightquad = 1430.72
         // 12 ft = leftquad = 2711.5 Rightquad = 1259.00
         // 12 ft = leftquad = 2727.25 Rightquad = 1347.75
