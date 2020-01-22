@@ -14,14 +14,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 // import frc.robot.Robot;
 import frc.robot.RobotContainer;
 // import frc.robot.subsystems.Conveyer;
+import frc.robot.subsystems.Conveyer;
 
 public class ConveyerController extends CommandBase {
+
+    private Conveyer conveyer;
+
     /**
      * Creates a new ConveyerMotor.
      */
-    public ConveyerController() {
-        addRequirements(RobotContainer.conveyer);
-        // Use addRequirements() here to declare subsystem dependencies.
+    public ConveyerController(Conveyer conveyer) {
+        this.conveyer = conveyer;
+        addRequirements(conveyer);
     }
 
     // Called when the command is initially scheduled.

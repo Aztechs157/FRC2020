@@ -30,14 +30,14 @@ import frc.robot.commands.TrackTarget;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
-    public static Conveyer conveyer = new Conveyer();
-    public static Drive drive = new Drive();
-    public static Intake intake = new Intake();
-    public static Command runIntakeCommand = new RunIntake();
 
-    public static Vision vision = new Vision();
-    private static Shooter shooter = new Shooter(); // reference throwing null pointer
+    // #region Subsystems
+    private static Conveyer conveyer = new Conveyer();
+    private static Drive drive = new Drive();
+    private static Intake intake = new Intake();
+    private static Vision vision = new Vision();
+    private static Shooter shooter = new Shooter();
+    // #endregion
 
     public final static Joystick joystick = new Joystick(5);
     public JoystickButton x = new JoystickButton(joystick, 3);
@@ -53,25 +53,16 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        // Configure the button bindings
-
         configureButtonBindings();
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * Put button controls here
      */
     private void configureButtonBindings() {
-        // Joystickbutton.whileHeld(runIntakeCommand);
-        // Joystickbutton.whenReleased(() ->
-        // RobotContainer.intake.IntakeRight.set(0.0));
-
-        a.whenPressed((Command) new TrackTarget(shooter));
-        b.whenPressed((Command) new LaserFire(true));
-        b.whenReleased((Command) new LaserFire(false));
+        a.whenPressed(new TrackTarget(shooter, vision, joystick));
+        b.whenPressed(new LaserFire(true, vision));
+        b.whenReleased(new LaserFire(false, vision));
     }
 
     /**

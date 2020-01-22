@@ -10,14 +10,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Intake;
 
 public class IntakeTrigger extends CommandBase {
+
+    private Intake intake;
+
     /**
      * Creates a new IntakeTrigger2.
      */
-    public IntakeTrigger() {
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements((Subsystem) RobotContainer.intake);
+    public IntakeTrigger(Intake intake) {
+        this.intake = intake;
+        addRequirements(intake);
     }
 
     // Called when the command is initially scheduled.

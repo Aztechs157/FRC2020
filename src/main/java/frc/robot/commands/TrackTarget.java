@@ -7,10 +7,12 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.util.Pixy2Controller.Target;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 public class TrackTarget extends CommandBase {
     double map(double x, double in_min, double in_max, double out_min, double out_max) {
@@ -22,38 +24,41 @@ public class TrackTarget extends CommandBase {
     private final double LRTARGET = 158;
     int count = 0;
     private final Shooter shooter;
+    private Vision vision;
+    private Joystick joystick;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(Shooter shooter) {
+    public TrackTarget(Shooter shooter, Vision vision, Joystick joystick) {
         this.shooter = shooter;
-        // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(RobotContainer.vision);// (Subsystem)
+        this.vision = vision;
+        this.joystick = joystick;
         addRequirements(shooter);
+        addRequirements(vision);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        RobotContainer.vision.turnLight(true);
+        vision.turnLight(true);
         count = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Target[] targets = RobotContainer.vision.getBlocks();
+        Target[] targets = vision.getBlocks();
         System.out.println(targets.length);
         if (targets.length == 1) {
             count = 0;
-            // System.out.println(RobotContainer.vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
-            shooter.moveShooter(RobotContainer.vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
-            RobotContainer.vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
+            // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
+            shooter.moveShooter(vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
+            vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
 
         } else {
             count++;
-            // RobotContainer.vision.setHorizontal(0);
+            // vision.setHorizontal(0);
         }
     }
 
@@ -61,8 +66,8 @@ public class TrackTarget extends CommandBase {
     @Override
     public void end(boolean interrupted) {
 
-        RobotContainer.vision.setHorizontal(0);
-        RobotContainer.vision.turnLight(false);
+        vision.setHorizontal(0);
+        vision.turnLight(false);
     }
 
     // Returns true when the command should end.
