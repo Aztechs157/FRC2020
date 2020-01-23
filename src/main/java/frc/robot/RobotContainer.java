@@ -7,88 +7,49 @@
 
 package frc.robot;
 
-// import java.util.ResourceBundle.Control;
-
-// import edu.wpi.first.wpilibj.AnalogGyro;
-// import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.Conveyer;
-// import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
+import frc.robot.util.LogitechController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.LaserFire;
-import frc.robot.commands.RunIntake;
 import frc.robot.commands.TrackTarget;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in the {@link Robot} periodic methods (other than the
- * scheduler calls). Instead, the structure of the robot (including subsystems,
- * commands, and button mappings) should be declared here.
+ * The container for the robot. Contains subsystems, OI devices, and commands.
  */
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
-    public static Conveyer conveyer = new Conveyer();
-    public static Drive drive = new Drive();
-    public static Intake intake = new Intake();
-    public static Command runIntakeCommand = new RunIntake();
 
-    public static Vision vision = new Vision();
-    private static Shooter shooter = new Shooter(); // reference throwing null pointer
+    private static final LogitechController controller = new LogitechController(0);
 
-    public final static Joystick joystick = new Joystick(5);
-    public JoystickButton x = new JoystickButton(joystick, 3);
-    public JoystickButton b = new JoystickButton(joystick, 2);
-    public JoystickButton y = new JoystickButton(joystick, 4);
-    public JoystickButton a = new JoystickButton(joystick, 1);
-    public JoystickButton a2;
-    public JoystickButton b2;
-    public JoystickButton x2;
-    public JoystickButton y2;
-    private final JoystickButton Joystickbutton = new JoystickButton(joystick, Constants.OIConstants.Ybutton);
+    // #region Subsystems
+    private static final Conveyor conveyor = new Conveyor(controller);
+    private static final Drive drive = new Drive(controller);
+    private static final Intake intake = new Intake();
+    private static final Vision vision = new Vision();
+    private static final Shooter shooter = new Shooter(controller);
+    // #endregion
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
     public RobotContainer() {
-        // Configure the button bindings
-
         configureButtonBindings();
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * Put button controls here
      */
     private void configureButtonBindings() {
-        // Joystickbutton.whileHeld(runIntakeCommand);
-        // Joystickbutton.whenReleased(() ->
-        // RobotContainer.intake.IntakeRight.set(0.0));
-
-        a.whenPressed((Command) new TrackTarget(shooter));
-        b.whenPressed((Command) new LaserFire(true));
-        b.whenReleased((Command) new LaserFire(false));
+        controller.A().whileHeld(new TrackTarget(shooter, vision, controller));
+        controller.B().whenPressed(new LaserFire(true, vision));
+        controller.B().whenReleased(new LaserFire(false, vision));
     }
 
     /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
+     * Put Autonomus command here
      */
     public Command getAutonomousCommand() {
-
-        // An ExampleCommand will run in autonomous
         return new Autonomous();
     }
 }
