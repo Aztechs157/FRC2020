@@ -1,63 +1,63 @@
 package frc.robot.commands;
 
-import frc.robot.PID_Wescott;
-import frc.robot.Robot;
-import frc.robot.SlewRate;
+import frc.robot.util.PID;
+import frc.robot.util.SlewRate;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.Timer;
 
 public class DriveTarget {
-    private int target;
+    private final int target;
     private double startTime;
-    private double time;
-    private double targetAngle;
+    private final double time;
+    private final double targetAngle;
     private boolean slewCut;
     private double encoder;
     private double drivePower;
-    private PID_Wescott drivePID;
-    private PID_Wescott gyroDrivePID;
+    private final PID drivePID;
+    private final PID gyroDrivePID;
     private SlewRate slewRate;
     private double leftPower;
     private double rightPower;
     private int repsAtTarget;
-    private int tolerance;
+    private final int tolerance;
     private boolean firstIteration;
     private boolean megaSlew = false;
 
-    public DriveTarget(int target, double targetAngle, int tolerance, double time) {
+    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time) {
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
         this.tolerance = tolerance;
         slewCut = false;
-        drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.8);
         firstIteration = true;
     }
 
-    public DriveTarget(int target, double targetAngle, int tolerance, double time, boolean slew) {
+    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time,
+            final boolean slew) {
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
         this.slewCut = slew;
         this.tolerance = tolerance;
-        // .28, .1, .000005, 10, 0, 999999, 0, 3, -3
-        drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.5);
         slewCut = !slew;
         firstIteration = true;
     }
 
-    public DriveTarget(int target, double targetAngle, int tolerance, double time, boolean slew, boolean megaSlew) {
+    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time,
+            final boolean slew, final boolean megaSlew) {
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
         this.slewCut = slew;
         this.tolerance = tolerance;
-        drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
-        gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.5);
         slewCut = !slew;
         firstIteration = true;
