@@ -34,7 +34,5 @@ public final class Constants {
         public static final int LYStick = 1;
         public static final int RXStick = 4;
         public static final int LXStick = 0;
-        public static final int Ybutton = 4;
-
     }
 }
