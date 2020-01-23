@@ -21,16 +21,16 @@ public class Conveyer extends SubsystemBase {
   /**
    * Creates a new Conveyer.
    */
-  public Conveyer() {
-    conveyerMotor = new NEO(Constants.RobotConstants.ConveyerMotorID, MotorType.kBrushless);
-  }
+ // public Conveyer() {
+   // conveyerMotor = new NEO(Constants.RobotConstants.ConveyerMotorID, MotorType.kBrushless);
+  //}
 
-  @Override
-  public void periodic() {
-    System.out.println(RobotContainer.joystick.getRawAxis(2));
-    RobotContainer.conveyer.conveyerMotor.set(RobotContainer.joystick.getRawAxis(2));
+  //@Override
+  //public void periodic() {
+    //System.out.println(RobotContainer.joystick.getRawAxis(2));
+    //RobotContainer.conveyer.conveyerMotor.set(RobotContainer.joystick.getRawAxis(2));
     // This method will be called once per scheduler run
-  }
+  //}
 
  //@Override
   //public void initDefaultCommand() {

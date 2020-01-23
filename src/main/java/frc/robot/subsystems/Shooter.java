@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.NEO;
-import frc.robot.commands.ShooterControl;
+//import frc.robot.commands.ShooterControl;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -27,14 +27,14 @@ public class Shooter extends SubsystemBase {
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Shooter() {
-        LeftRight = new NEO(Constants.RobotConstants.TurretMotorID, MotorType.kBrushless);
+    //public Shooter() {
+        //LeftRight = new NEO(Constants.RobotConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
-      setDefaultCommand(new ShooterControl(this));  // temporary commented out to see if solves null pointer exceptions
+      //setDefaultCommand(new ShooterControl(this));  // temporary commented out to see if solves null pointer exceptions
         
-    }
+    // }
 
-    public void moveShooter(double Speed) {
+    //public void moveShooter(double Speed) {
 
         // if (joyValy > -0.01 && joyValy < 0.01) 
         //     UpDown.set(0.0);
@@ -54,26 +54,26 @@ public class Shooter extends SubsystemBase {
         // }
 
 
-        if (Speed > -0.01 && Speed < 0.01) 
-            LeftRight.set(0.0);
-        else if (Speed > 0) {
-            if (LeftRight.getPosition() <= 35) {
-                LeftRight.set(1 * Speed);
-            }
-            else {
-                LeftRight.set(0.0);
-            }
-        } 
-        else if (LeftRight.getPosition() >= -25) {
-            LeftRight.set(1 * Speed);
-        }
-        else {
-            LeftRight.set(0.0);
-        }
-    }
+//         if (Speed > -0.01 && Speed < 0.01) 
+//             LeftRight.set(0.0);
+//         else if (Speed > 0) {
+//             if (LeftRight.getPosition() <= 35) {
+//                 LeftRight.set(1 * Speed);
+//             }
+//             else {
+//                 LeftRight.set(0.0);
+//             }
+//         } 
+//         else if (LeftRight.getPosition() >= -25) {
+//             LeftRight.set(1 * Speed);
+//         }
+//         else {
+//             LeftRight.set(0.0);
+//         }
+//     }
 
-  @Override
-  public void periodic() {
+//   @Override
+//   public void periodic() {
     // This method will be called once per scheduler run
   }
-}
+//}

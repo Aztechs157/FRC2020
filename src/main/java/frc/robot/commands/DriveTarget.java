@@ -45,6 +45,7 @@ public class DriveTarget
         this.targetAngle = targetAngle;
         this.slewCut = slew;
         this.tolerance = tolerance;
+        //.28, .1, .000005, 10, 0, 999999, 0, 3, -3
         drivePID = new PID_Wescott(0.028, 0.1, 0.000005, 10, 0, 999999, 0, 3, -3);
         gyroDrivePID = new PID_Wescott(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         slewRate = new SlewRate(0.5);

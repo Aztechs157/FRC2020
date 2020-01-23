@@ -26,7 +26,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.TrackTarget;
+//import frc.robot.commands.TrackTarget;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -74,7 +74,7 @@ public class RobotContainer {
    // Joystickbutton.whileHeld(runIntakeCommand);
     //Joystickbutton.whenReleased(() -> RobotContainer.intake.IntakeRight.set(0.0));
     
-    a.whenPressed((Command) new TrackTarget(shooter));
+    //a.whenPressed((Command) new TrackTarget(shooter));
     b.whenPressed((Command) new LaserFire(true));
     b.whenReleased((Command) new LaserFire(false));
   }

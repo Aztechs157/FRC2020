@@ -31,7 +31,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Drive extends SubsystemBase {
 public Drive drive;
-
+//SparkIDs can be found in Constants.java
 public static NEO frontLeft;
 public static NEO frontRight;
 private static NEO backLeft;
@@ -51,8 +51,8 @@ public static SlewRate slew;
     frontRight.tare();
     frontLeft.tare();
     driveGyro = new AnalogGyro(0);
-   // frontRight.setInverted(InvertType.InvertMotorOutput);
-    //1backRight.setInverted(InvertType.FollowMaster);
+    //frontRight.setInverted(InvertType.InvertMotorOutput);
+    //backRight.setInverted(InvertType.FollowMaster);
   }
   /*public Drive getInstance(){
     if(instance == null){
@@ -64,8 +64,8 @@ public static SlewRate slew;
 
   @Override
   public void periodic() {
-    //frontLeft.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
-    //frontRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
+    frontLeft.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
+    frontRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
     tankdrive();
   }
 
@@ -73,10 +73,11 @@ public static SlewRate slew;
    //left y axis= 1, right y axis= 5
     frontLeft.set(-RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
     frontRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
-    // System.out.println("drivepower = " + Autonomous.drivepower + " frontRight = " + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
+    System.out.println(" frontRight = " + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
     backLeft.set(-RobotContainer.joystick.getRawAxis(Constants.OIConstants.LYStick));
     backRight.set(RobotContainer.joystick.getRawAxis(Constants.OIConstants.RYStick));
-// 12 ft = leftquad = 2717.5  Rightquad = 1430.72 
+    System.out.println("DriveGyro =" + driveGyro.getAngle() );
+// 12 ft = leftquad = 2717.5  Rightquad = 1430.72
 // 12 ft = leftquad = 2711.5  Rightquad = 1259.00
 // 12 ft = leftquad = 2727.25 Rightquad = 1347.75
 // 12 ft = leftquad average 2718.75 // Rightquad average = 1345.82
@@ -84,7 +85,6 @@ public static SlewRate slew;
 
 
 }
-
 public static double getLeftEncoder() {
   //return RobotContainer.driveLeftQuad.getDistance();
   return frontLeft.getPosition();
@@ -92,7 +92,7 @@ public static double getLeftEncoder() {
 }
 
 public static double getRightEncoder() {
-//	return RobotContainer.driveRightQuad.getDistance();
+// return RobotContainer.driveRightQuad.getDistance();
 return frontLeft.getPosition();
 }
 

@@ -27,8 +27,8 @@ public final class Constants {
         public static final int BackLeft = 4;
         public static final int BackRight = 3;
         //public static final int IntakeRight = 5;
-        public static final int ConveyerMotorID = 6;
-        public static final int TurretMotorID = 7;
+        //public static final int ConveyerMotorID = 6; //6
+        //public static final int TurretMotorID = 7; //7
     }
     public final class OIConstants {
         public static final int RYStick = 5;
