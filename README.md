@@ -1,5 +1,5 @@
 # FRC2020
-> Aztech's (#157) 2020 season code
+> Aztech's (#157) Season 2020 Code
 
 ## Authors
 
