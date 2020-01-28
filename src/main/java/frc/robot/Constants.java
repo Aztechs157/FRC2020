@@ -35,4 +35,9 @@ public final class Constants {
         public static final int RXStick = 4;
         public static final int LXStick = 0;
     }
+
+    public final class ColorWheelConstants {
+        public static final int liftMotorId = 8;
+        public static final int spinMotorId = 9;
+    }
 }
