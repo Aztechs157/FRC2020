@@ -27,10 +27,10 @@ public class Drive extends SubsystemBase {
 
     public Drive(final LogitechController controller) {
         this.controller = controller;
-        frontLeft = new NEO(Constants.RobotConstants.FrontLeft, MotorType.kBrushless);
-        frontRight = new NEO(Constants.RobotConstants.FrontRight, MotorType.kBrushless);
-        backLeft = new NEO(Constants.RobotConstants.BackLeft, MotorType.kBrushless);
-        backRight = new NEO(Constants.RobotConstants.BackRight, MotorType.kBrushless);
+        frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
+        frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
+        backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
+        backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
         gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
         drivePID = new PID(.1, 0, 0, 100, 0, 100, 0, 2, -2);
         slew = new SlewRate(0.5);

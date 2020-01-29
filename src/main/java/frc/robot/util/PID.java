@@ -91,7 +91,7 @@ public class PID {
         // calculate the derivative
         dTerm = kD * ((CurrentPosition - lastPosition) / deltaTime);
 
-        System.out.println("sigma: " + sigma + "\nDeltaT: " + deltaTime);
+        // System.out.println("sigma: " + sigma + "\nDeltaT: " + deltaTime);
         lastPosition = CurrentPosition;
         powerOutput = pTerm + iTerm - dTerm;
 

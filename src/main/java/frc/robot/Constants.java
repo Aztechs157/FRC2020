@@ -19,11 +19,14 @@ package frc.robot;
  */
 public final class Constants {
 
-    public final class RobotConstants {
+    public final class DriveConstants {
         public static final int FrontLeft = 2;
         public static final int FrontRight = 1;
         public static final int BackLeft = 4;
         public static final int BackRight = 3;
+    }
+
+    public final class ShooterConstants {
         public static final int Intake = 5;
         public static final int ConveyerMotorID = 6;
         public static final int TurretMotorID = 7;

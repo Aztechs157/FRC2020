@@ -15,7 +15,10 @@ public class LaserFire extends CommandBase {
     public LaserFire(final boolean on, final Vision vision) {
         this.on = on;
         this.vision = vision;
-        addRequirements(vision);
+        // this needs to be used in concurrence with other vision commands
+        // therefore needs to not require vision
+
+        // addRequirements(vision);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -30,6 +33,6 @@ public class LaserFire extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

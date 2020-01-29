@@ -1,3 +1,10 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -5,36 +12,39 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.util.LogitechController;
 
 public class ShooterControl extends CommandBase {
-
-    private double count = 0;
-    private final Shooter shooter;
-    private final LogitechController controller;
-
     /**
-     * Creates a new ShooterControl2.
+     * Creates a new ShooterControl.
      */
-    public ShooterControl(final Shooter shooter, final LogitechController controller) {
+    public Shooter shooter;
+    public LogitechController controller;
+
+    public ShooterControl(Shooter shooter, LogitechController controller) {
         this.shooter = shooter;
         this.controller = controller;
-        addRequirements(shooter);
+        addRequirements(this.shooter);
+        // Use addRequirements() here to declare subsystem dependencies.
+    }
+
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double joyValx;
-        double Scale;
+        System.out.println("Running: " + shooter.shooter.getPosition());
+        shooter.shooter.set(controller.getRawAxis(3));
+    }
 
-        count++;
-        if (count == 12) {
-            System.out.println(shooter.LeftRight.getPosition());
-            count = 0;
-        }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+    }
 
-        joyValx = -controller.getRawAxis(4);
-        Scale = 0.1;
-        shooter.moveShooter(joyValx * Scale);
-        // RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));
-        // RobotContainer.shooter.LeftRight.set(RobotContainer.m_oi.controller2.getRawAxis(4));
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeTrigger;
+import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 
 public class Intake extends SubsystemBase {
@@ -13,13 +15,14 @@ public class Intake extends SubsystemBase {
      */
     public NEO intake;
 
-    public Intake() {
-        intake = new NEO(Constants.RobotConstants.Intake, MotorType.kBrushless);
+    public Intake(LogitechController controller) {
+        intake = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
+        setDefaultCommand(new IntakeTrigger(this, controller));
     }
 
-    public void runIntake(final double speed) {
-        intake.set(speed);
-    }
+    // public void runIntake(final double speed) {
+    // intake.set(speed);
+    // }
 
     @Override
     public void periodic() {
