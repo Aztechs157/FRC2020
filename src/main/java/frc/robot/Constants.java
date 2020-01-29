@@ -30,6 +30,7 @@ public final class Constants {
         public static final int Intake = 5;
         public static final int ConveyerMotorID = 6;
         public static final int TurretMotorID = 7;
+        // comment
     }
 
     public final class OIConstants {
@@ -37,5 +38,10 @@ public final class Constants {
         public static final int LYStick = 1;
         public static final int RXStick = 4;
         public static final int LXStick = 0;
+    }
+
+    public final class ColorWheelConstants {
+        public static final int liftMotorId = 8;
+        public static final int spinMotorId = 9;
     }
 }
