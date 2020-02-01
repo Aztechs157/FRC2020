@@ -21,7 +21,7 @@ public class Conveyor extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(controller.getRawAxis(2));
+        // System.out.println("Converyor: " + controller.getRawAxis(2));
         conveyerMotor.set(controller.getRawAxis(2));
     }
 }

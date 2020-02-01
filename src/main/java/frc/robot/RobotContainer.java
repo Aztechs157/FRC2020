@@ -23,14 +23,14 @@ import frc.robot.commands.TrackTarget;
  */
 public class RobotContainer {
 
-    private static final LogitechController controller = new LogitechController(0);
+    private final LogitechController controller = new LogitechController(0);
 
     // #region Subsystems
-    private static final Conveyor conveyor = new Conveyor(controller);
-    private static final Drive drive = new Drive(controller);
-    private static final Intake intake = new Intake();
-    private static final Vision vision = new Vision();
-    private static final Shooter shooter = new Shooter(controller);
+    private final Conveyor conveyor = new Conveyor(controller);
+    private final Drive drive = new Drive(controller);
+    private final Intake intake = new Intake();
+    private final Vision vision = new Vision();
+    private final Shooter shooter = new Shooter(controller);
     // #endregion
 
     public RobotContainer() {
@@ -50,6 +50,6 @@ public class RobotContainer {
      * Put Autonomus command here
      */
     public Command getAutonomousCommand() {
-        return new Autonomous();
+        return new Autonomous(drive);
     }
 }

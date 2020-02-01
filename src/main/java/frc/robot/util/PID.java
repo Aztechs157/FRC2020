@@ -13,7 +13,7 @@ public class PID {
     private final PIDParameters[] optionSets;
     private double lastTime;
     private double lastPosition; // Last position input
-    private double sigma; // Integrator state
+    public double sigma; // Integrator state
     double Highestvelocity = 0;// find highest velocity
 
     /**
@@ -91,7 +91,7 @@ public class PID {
         // calculate the derivative
         dTerm = kD * ((CurrentPosition - lastPosition) / deltaTime);
 
-        System.out.println("sigma: " + sigma + "\nDeltaT: " + deltaTime);
+        // System.out.println("sigma: " + sigma + "\nDeltaT: " + deltaTime);
         lastPosition = CurrentPosition;
         powerOutput = pTerm + iTerm - dTerm;
 

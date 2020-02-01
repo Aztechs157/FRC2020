@@ -38,7 +38,7 @@ public class TrackTarget extends CommandBase {
     @Override
     public void execute() {
         final Target[] targets = vision.getBlocks();
-        System.out.println(targets.length);
+        // System.out.println("Target length" + targets.length);
         if (targets.length == 1) {
             count = 0;
             // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);

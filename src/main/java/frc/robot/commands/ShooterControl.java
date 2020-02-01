@@ -27,7 +27,7 @@ public class ShooterControl extends CommandBase {
 
         count++;
         if (count == 12) {
-            System.out.println(shooter.LeftRight.getPosition());
+            // System.out.println("Shooter lift right" + shooter.LeftRight.getPosition());
             count = 0;
         }
 
