@@ -12,6 +12,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.util.LogitechController;
 
 public class ShooterControl extends CommandBase {
+
     /**
      * Creates a new ShooterControl.
      */

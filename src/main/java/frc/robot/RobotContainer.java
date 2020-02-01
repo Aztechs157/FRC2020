@@ -33,6 +33,7 @@ public class RobotContainer {
     private final Intake intake = new Intake(driveController);
     private final Vision vision = new Vision();
     private final Shooter shooter = new Shooter(driveController);
+    private final Turret turret = new Turret(driveController);
     // #endregion
 
     // comments
