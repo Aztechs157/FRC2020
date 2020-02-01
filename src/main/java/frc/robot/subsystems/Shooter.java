@@ -22,6 +22,14 @@ public class Shooter extends SubsystemBase {
      *
      * @param operatorcontroller
      */
+    public NEO LeftRight;
+    public NEO UpDown;
+
+    // public Shooter() {
+    // LeftRight = new Servo(0);
+    // UpDown = new Talon(1);
+    // testTalon = new AnalogPotentiometer(1);
+    // }
     public Shooter(LogitechController controller) {
         shooter = new NEO(8, MotorType.kBrushless);
         setDefaultCommand(new ShooterControl(this, controller));

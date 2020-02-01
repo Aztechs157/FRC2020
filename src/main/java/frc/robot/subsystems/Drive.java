@@ -74,11 +74,6 @@ public class Drive extends SubsystemBase {
         // left y axis= 1, right y axis= 5
         frontLeft.set(-controller.getRawAxis(Constants.OIConstants.LYStick));
         frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
-        // System.out.println("drivepower = " + Autonomous.drivepower + " frontRight = "
-        // System.out.println("Encoder= " + frontLeft.getPosition());
-        // System.out.println("GyroPrint = " + getAngle());
-
-        // + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
         backLeft.set(-controller.getRawAxis(Constants.OIConstants.LYStick));
         backRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
         // System.out.println("Giro angle:" + driveGyro.getAngle());
