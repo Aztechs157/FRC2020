@@ -1,3 +1,10 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -33,13 +40,13 @@ public class Drive extends SubsystemBase {
 
     public Drive(final LogitechController controller) {
         this.controller = controller;
-        frontLeft = new NEO(Constants.RobotConstants.FrontLeft, MotorType.kBrushless);
-        frontRight = new NEO(Constants.RobotConstants.FrontRight, MotorType.kBrushless);
-        backLeft = new NEO(Constants.RobotConstants.BackLeft, MotorType.kBrushless);
-        backRight = new NEO(Constants.RobotConstants.BackRight, MotorType.kBrushless);
-        gyroDrivePID = new PID(0.055, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
-        drivePID = new PID(1.35, 0, .01, 100, 0, 100, 0, 10000, -10000);
-        slew = new SlewRate(0.1);
+        frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
+        frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
+        backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
+        backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+        drivePID = new PID(.1, 0, 0, 100, 0, 100, 0, 2, -2);
+        slew = new SlewRate(0.5);
         frontRight.tare();
         frontLeft.tare();
         driveGyro = new AnalogGyro(0);

@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "J Commit",
+            "type": "shell",
+            "command": "git -c user.name='${input:emailPrompt}' -c user.email='${input:emailPrompt}' commit -m '${input:messagePrompt}'",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "emailPrompt",
+            "description": "Please select your email",
+            "default": "Unspecified",
+            "type": "pickString",
+            "options": [
+                "Unspecified",
+                "jdenderplays@gmail.com"
+            ]
+        },
+        {
+            "id": "messagePrompt",
+            "description": "Please enter a commit message",
+            "default": "Placeholder",
+            "type": "promptString"
+        }
+    ]
+}

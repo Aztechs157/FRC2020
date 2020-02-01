@@ -11,6 +11,7 @@ import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.LogitechController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,15 +24,18 @@ import frc.robot.commands.TrackTarget;
  */
 public class RobotContainer {
 
-    private final LogitechController controller = new LogitechController(0);
+    private final LogitechController driveController = new LogitechController(0);
+    private final LogitechController operatorController = new LogitechController(1);
 
     // #region Subsystems
-    private final Conveyor conveyor = new Conveyor(controller);
-    private final Drive drive = new Drive(controller);
-    private final Intake intake = new Intake();
+    private final Conveyor conveyor = new Conveyor(driveController);
+    private final Drive drive = new Drive(driveController);
+    private final Intake intake = new Intake(driveController);
     private final Vision vision = new Vision();
-    private final Shooter shooter = new Shooter(controller);
+    private final Shooter shooter = new Shooter(driveController);
     // #endregion
+
+    // comments
 
     public RobotContainer() {
         configureButtonBindings();
@@ -41,9 +45,9 @@ public class RobotContainer {
      * Put button controls here
      */
     private void configureButtonBindings() {
-        controller.A().whileHeld(new TrackTarget(shooter, vision, controller));
-        controller.B().whenPressed(new LaserFire(true, vision));
-        controller.B().whenReleased(new LaserFire(false, vision));
+        operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController));
+        operatorController.B().whenPressed(new LaserFire(true, vision));
+        operatorController.B().whenReleased(new LaserFire(false, vision));
     }
 
     /**
