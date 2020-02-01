@@ -13,7 +13,6 @@ import frc.robot.util.LogitechController;
 
 public class ShooterControl extends CommandBase {
 
-    private double count = 0;
     private final Shooter shooter;
     private final LogitechController controller;
 
@@ -31,12 +30,6 @@ public class ShooterControl extends CommandBase {
     public void execute() {
         double joyValx;
         double Scale;
-
-        count++;
-        if (count == 12) {
-            System.out.println(shooter.LeftRight.getPosition());
-            count = 0;
-        }
 
         joyValx = -controller.getRawAxis(4);
         Scale = 0.1;

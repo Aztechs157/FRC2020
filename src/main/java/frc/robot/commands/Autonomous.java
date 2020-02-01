@@ -32,7 +32,6 @@ public class Autonomous extends CommandBase {
             final double gyropower = 0;// Drive.gyroDrivePID.pidCalculate(0, Drive.getAngle());
             Drive.frontLeft.set((drivepower - gyropower));
             Drive.frontRight.set(-(drivepower + gyropower));
-            System.out.println("drivepower = " + drivepower);
         }
     }
 

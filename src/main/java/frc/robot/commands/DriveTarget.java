@@ -77,13 +77,8 @@ public class DriveTarget {
             startTime = Timer.getFPGATimestamp();
             slewRate = new SlewRate((!megaSlew) ? 1.6 : 0.2);
             firstIteration = false;
-            // System.out.println("New Motion");
         }
-        // System.out.println("Right Encoder: " + Robot.drive.getRightEncoder());
-        // System.out.println("Left Encoder: " + Robot.drive.getLeftEncoder());
-        // System.out.println("Encoder: " + encoder);
         encoder = (Drive.getRightEncoder() + Drive.getLeftEncoder()) / 2.0;
-        // System.out.println("Encoder: " + encoder);
         drivePower = drivePID.pidCalculate(target, encoder);
 
         if (!slewCut) {

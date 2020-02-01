@@ -21,7 +21,6 @@ public class Shooter extends SubsystemBase {
      */
     public NEO LeftRight;
     public NEO UpDown;
-    // private int Count;
 
     // public Shooter() {
     // LeftRight = new Servo(0);
