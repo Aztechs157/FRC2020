@@ -28,9 +28,10 @@ public final class Constants {
 
     public final class ShooterConstants {
         public static final int Intake = 5;
-        public static final int ConveyerMotorID = 6;
-        public static final int TurretMotorID = 7;
-        // comment
+        public static final int shooter = 9;
+        public static final int conveyorMotor = 6;
+        public static final int TurretMotorID = 8;
+        public static final int kicker = 7;
     }
 
     public final class OIConstants {
@@ -41,7 +42,7 @@ public final class Constants {
     }
 
     public final class ColorWheelConstants {
-        public static final int liftMotorId = 8;
-        public static final int spinMotorId = 9;
+        public static final int liftMotorId = 10;
+        public static final int spinMotorId = 11;
     }
 }

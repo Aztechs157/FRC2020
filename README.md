@@ -9,10 +9,11 @@ Person                                                | Title                   
 [**jamiesondunne**](https://github.com/jamiesondunne) | _Jr. Mentor_                       | Misc, Drive
 [**tytytyty74**](https://github.com/tytytyty74)       | _Jr. Mentor_                       | Vision Backend, Misc
 [**Jdender~**](https://github.com/Jdender)            | _Lead Technical Developer_         | Github, Organisation, Misc
-[**Wallaby14**](https://github.com/Wallaby14)         | _Lead Interdepartmental Developer_ | Intake, Conveyor, Vision, Turret, Shooter, Conveyer Camera
-[**Eric-157**](https://github.com/Eric-157)           | _Developer_                        | Drive, Auto, Gate
-[**jcoleman157**](https://github.com/jcoleman157)     | _Developer_                        | Drive, Auto, Gate
-[**RyanCulkin4**](https://github.com/RyanCulkin4)     | _Developer_                        | Drive, Auto, Gate
+[**Wallaby14**](https://github.com/Wallaby14)         | _Lead Interdepartmental Developer_ | Intake, Conveyor, Vision, Turret, Shooter, Conveyer Sensor, Misc
+[**Eric-157**](https://github.com/Eric-157)           | _Developer_                        | Drive, Auto,
+[**jcoleman157**](https://github.com/jcoleman157)     | _Developer_                        | Drive, Auto,
+[**RyanCulkin4**](https://github.com/RyanCulkin4)     | _Developer_                        | Some Drive, Some Auto, Conveyer Sensor
+[**JD2313**](https://github.com/JD2313)               | _Developer_                        | Website
 
 Also, check the list of [contributors](https://github.com/Aztechs157/FRC2020/contributors) who made minor contributions.
 

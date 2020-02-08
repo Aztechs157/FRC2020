@@ -33,8 +33,8 @@ public class ShooterControl extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println("Running: " + shooter.shooter.getPosition());
-        shooter.shooter.set(controller.getRawAxis(3));
+        // System.out.println("Running: " + shooter.shooter.getPosition());
+        shooter.Shoot(controller);
     }
 
     // Called once the command ends or is interrupted.

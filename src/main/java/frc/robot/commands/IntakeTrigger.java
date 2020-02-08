@@ -15,7 +15,8 @@ import frc.robot.util.LogitechController;
 public class IntakeTrigger extends CommandBase {
 
     private final Intake intake;
-    private final LogitechController controller;
+    // public final ConveyerSensors sensor2;
+    public final LogitechController controller;
 
     /**
      * Creates a new IntakeTrigger2.
@@ -23,12 +24,25 @@ public class IntakeTrigger extends CommandBase {
     public IntakeTrigger(final Intake intake, final LogitechController controller) {
         this.intake = intake;
         this.controller = controller;
+        // this.sensor2 = sensor2;
         addRequirements(intake);
+        // addRequirements(sensor2);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
+    public void initialize() {
+    }
+
+    @Override
     public void execute() {
-        intake.intake.set(controller.getRawAxis(2));
+        intake.runIntake(controller);
+
+        // if (on) {
+        // intake.intake.set(0.75);
+        // } else {
+        // intake.intake.set(0);
+        // }
+
     }
 }

@@ -16,8 +16,6 @@ import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Drive extends SubsystemBase {
 

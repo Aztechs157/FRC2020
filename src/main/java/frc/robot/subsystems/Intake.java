@@ -9,30 +9,74 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeTrigger;
 import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
+//import sun.font.TrueTypeFont;
 
 public class Intake extends SubsystemBase {
     // public final NEO IntakeRight;
     /**
      * Creates a new Intake.
      */
-    public NEO intake;
+    private final NEO intakeMotor;
+    private int ballCount;
+    private boolean gotBall = false;
+    private DigitalInput intakeSensor = new DigitalInput(2);
 
     public Intake(LogitechController controller) {
-        intake = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
+        intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         setDefaultCommand(new IntakeTrigger(this, controller));
     }
 
-    // public void runIntake(final double speed) {
-    // intake.set(speed);
+    // public ConveyerSensors(LogitechController controller) {
+
     // }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+
+    }
+
+    public void run() {
+        intakeMotor.set(1.0);
+    }
+
+    public void stop() {
+        intakeMotor.set(0.0);
+    }
+
+    public int ballCount() {
+        return ballCount;
+    }
+
+    public boolean get() {
+        if (!gotBall) {
+            if (intakeSensor.get()) {
+                gotBall = true;
+                ballCount++;
+            }
+        } else {
+            if (!intakeSensor.get()) {
+                gotBall = false;
+            }
+        }
+        return gotBall;
+    }
+
+    // private int printCount;
+    public void runIntake(LogitechController controller) {
+        intakeMotor.set(controller.getRawAxis(2));
+
+        // printCount++;
+        // if (printCount > 25) {
+        // System.out.println("gotBall: " + gotBall);
+        // }
+        // if (ballCount == 5) {
+        // System.out.println("Fully Loaded");
+        // }
     }
 }

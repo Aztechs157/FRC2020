@@ -10,6 +10,7 @@ package frc.robot;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -28,12 +29,15 @@ public class RobotContainer {
     private static final LogitechController operatorController = new LogitechController(1);
 
     // #region Subsystems
-    private static final Conveyor conveyor = new Conveyor(driveController);
-    private static final Drive drive = new Drive(driveController);
+    // private static final Conveyor conveyor = new Conveyor(driveController);
+    // private static final Drive drive = new Drive(driveController);
     private static final Intake intake = new Intake(driveController);
     private static final Vision vision = new Vision();
     private static final Turret turret = new Turret(operatorController);
     private static final Shooter shooter = new Shooter(operatorController);
+    private static final Kicker kicker = new Kicker(driveController);
+    private static final Conveyor conveyor = new Conveyor(intake, kicker);
+    private static final Drive drive = new Drive(driveController);
     // #endregion
 
     // comments
