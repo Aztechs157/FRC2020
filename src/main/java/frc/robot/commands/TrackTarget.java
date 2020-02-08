@@ -18,19 +18,19 @@ public class TrackTarget extends CommandBase {
     // private final double LRMUL = 0.00001;
     // private final double UDMUL = 0.004;
     private final double LRTARGET = 158;
-    int count = 0;
-    private final Turret shooter;
+    private int importantCounter = 0;
+    private final Turret turret;
     private final Vision vision;
     private final LogitechController controller;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(final Turret shooter, final Vision vision, final LogitechController controller) {
-        this.shooter = shooter;
+    public TrackTarget(final Turret turret, final Vision vision, final LogitechController controller) {
+        this.turret = turret;
         this.vision = vision;
         this.controller = controller;
-        addRequirements(shooter);
+        addRequirements(turret);
         addRequirements(vision);
     }
 
@@ -38,22 +38,22 @@ public class TrackTarget extends CommandBase {
     @Override
     public void initialize() {
         vision.turnLight(true);
-        count = 0;
+        importantCounter = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         final Target[] targets = vision.getBlocks();
-        // System.out.println(targets.length);
+        // System.out.println("Target length" + targets.length);
         if (targets.length == 1) {
-            count = 0;
+            importantCounter = 0;
             // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
-            shooter.moveShooter(vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
+            turret.moveShooter(vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
             vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
 
         } else {
-            count++;
+            importantCounter++;
             // vision.setHorizontal(0);
         }
     }
@@ -83,7 +83,7 @@ public class TrackTarget extends CommandBase {
         if (joyValx > -0.01 && joyValx < 0.01) {
             retVal = false;
         }
-        if (count >= 40) {
+        if (importantCounter >= 40) {
             retVal = true;
         }
         return retVal;

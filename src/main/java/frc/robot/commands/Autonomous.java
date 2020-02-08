@@ -8,16 +8,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
 
 public class Autonomous extends CommandBase {
 
     // DriveTarget target = new DriveTarget(2718, 0, 50, 15.0);
 
+    private Drive drive;
+    private Double drivepower;
+    private double gyropower;
+
     /**
      * Creates a new Autonomous.
      */
-    public Autonomous() {
+    public Autonomous(Drive drive) {
+        this.drive = drive;
+        addRequirements(drive);
+        // 81.83
+        // for (int i = 0; i <= 20; i++) {
+        // System.out.println("getAngle" + drive.getAngle());
+        // }
+
+        drivepower = drive.drivePID.pidCalculate(83, drive.frontLeft.getPosition());
+        drivepower = drive.slew.rateCalculate(drivepower, 1125);
+        gyropower = drive.gyroDrivePID.pidCalculate(0, drive.getAngle());
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
@@ -26,19 +41,14 @@ public class Autonomous extends CommandBase {
     // 75.83
     @Override
     public void execute() {
-        if (Drive.frontLeft.getPosition() <= 75.83) {
-            final double drivepower = Drive.drivePID.pidCalculate(75.83, Drive.frontLeft.getPosition());
-            // drivepower = Drive.slew.rateCalculate(drivepower);
-            final double gyropower = 0;// Drive.gyroDrivePID.pidCalculate(0, Drive.getAngle());
-            Drive.frontLeft.set((drivepower - gyropower));
-            Drive.frontRight.set(-(drivepower + gyropower));
-            // System.out.println("drivepower = " + drivepower);
-        }
+        // drive.AutoDrive(drivepower + gyropower, -drivepower - gyropower);
+        drive.autoTurn(.5);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Drive.frontLeft.getPosition() >= 75.83;
+        return drive.frontLeft.getPosition() >= 81.83;
     }
+
 }

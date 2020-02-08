@@ -29,8 +29,11 @@ public class DriveTarget {
     private final int tolerance;
     private boolean firstIteration;
     private boolean megaSlew = false;
+    private final Drive drive;
 
-    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time) {
+    public DriveTarget(final Drive drive, final int target, final double targetAngle, final int tolerance,
+            final double time) {
+        this.drive = drive;
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
@@ -42,8 +45,9 @@ public class DriveTarget {
         firstIteration = true;
     }
 
-    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time,
-            final boolean slew) {
+    public DriveTarget(final Drive drive, final int target, final double targetAngle, final int tolerance,
+            final double time, final boolean slew) {
+        this.drive = drive;
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
@@ -56,8 +60,9 @@ public class DriveTarget {
         firstIteration = true;
     }
 
-    public DriveTarget(final int target, final double targetAngle, final int tolerance, final double time,
-            final boolean slew, final boolean megaSlew) {
+    public DriveTarget(final Drive drive, final int target, final double targetAngle, final int tolerance,
+            final double time, final boolean slew, final boolean megaSlew) {
+        this.drive = drive;
         this.target = target;
         this.time = time;
         this.targetAngle = targetAngle;
@@ -77,13 +82,8 @@ public class DriveTarget {
             startTime = Timer.getFPGATimestamp();
             slewRate = new SlewRate((!megaSlew) ? 1.6 : 0.2);
             firstIteration = false;
-            // System.out.println("New Motion");
         }
-        // System.out.println("Right Encoder: " + Robot.drive.getRightEncoder());
-        // System.out.println("Left Encoder: " + Robot.drive.getLeftEncoder());
-        // System.out.println("Encoder: " + encoder);
-        encoder = (Drive.getRightEncoder() + Drive.getLeftEncoder()) / 2.0;
-        // System.out.println("Encoder: " + encoder);
+        encoder = (drive.getRightEncoder() + drive.getLeftEncoder()) / 2.0;
         drivePower = drivePID.pidCalculate(target, encoder);
 
         if (!slewCut) {
@@ -93,13 +93,13 @@ public class DriveTarget {
             slewCut = true;
         }
 
-        leftPower = drivePower - gyroDrivePID.pidCalculate(targetAngle, Drive.getAngle());
+        leftPower = drivePower - gyroDrivePID.pidCalculate(targetAngle, drive.getAngle());
         leftPower = ((leftPower > 0) ? 1 : -1) * Math.min(1, Math.abs(leftPower));
 
-        rightPower = drivePower + gyroDrivePID.pidCalculate(targetAngle, Drive.getAngle());
+        rightPower = drivePower + gyroDrivePID.pidCalculate(targetAngle, drive.getAngle());
         rightPower = ((rightPower > 0) ? 1 : -1) * Math.min(1, Math.abs(rightPower));
 
-        Drive.AutoDrive(leftPower, rightPower);
+        drive.AutoDrive(leftPower, rightPower);
         if (Math.abs(encoder - target) < tolerance) {
             repsAtTarget++;
             if (repsAtTarget >= 5) {
