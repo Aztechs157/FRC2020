@@ -12,6 +12,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.util.LogitechController;
 
 public class ShooterControl extends CommandBase {
+
     /**
      * Creates a new ShooterControl.
      */
@@ -34,7 +35,7 @@ public class ShooterControl extends CommandBase {
     @Override
     public void execute() {
         // System.out.println("Running: " + shooter.shooter.getPosition());
-        // shooter.shooter.set(controller.getRawAxis(3));
+        shooter.Shoot(controller);
     }
 
     // Called once the command ends or is interrupted.

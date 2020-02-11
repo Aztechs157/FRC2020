@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,28 +8,50 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Intake;
 
 public class Conveyor extends SubsystemBase {
+    private final NEO conveyorMotor;
 
-    // private final NEO conveyerMotor = new
-    // NEO(Constants.ShooterConstants.ConveyerMotorID, MotorType.kBrushless);
-    private final LogitechController controller;
+    private Intake intake;
+    private Kicker kicker;
+    private DigitalInput conveyorBottom = new DigitalInput(3);
 
     /**
      * Creates a new Conveyer.
      */
-    public Conveyor(final LogitechController controller) {
-        this.controller = controller;
+    public Conveyor(Intake intake, Kicker kicker) {
+        conveyorMotor = new NEO(Constants.ShooterConstants.conveyorMotor, MotorType.kBrushless);
+        this.intake = intake;
+        this.kicker = kicker;
     }
 
     @Override
     public void periodic() {
-        // System.out.println("Converyor: " + controller.getRawAxis(2));
-        // conveyerMotor.set(controller.getRawAxis(2));
+        // This method will be called once per scheduler run
     }
+
+    public void shift() {
+        if (intake.get() && intake.ballCount() <= 5) {
+            intake.run();
+            run();
+        } else {
+            stop();
+            intake.stop();
+        }
+    }
+
+    public void run() {
+        conveyorMotor.set(1.0);
+    }
+
+    public void stop() {
+        conveyorMotor.set(0.0);
+    }
+
 }
