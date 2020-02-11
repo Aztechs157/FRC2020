@@ -26,10 +26,13 @@ public class Intake extends SubsystemBase {
     private int ballCount;
     private boolean gotBall = false;
     private DigitalInput intakeSensor = new DigitalInput(2);
+    private LogitechController controller;
 
     public Intake(LogitechController controller) {
+        this.controller = controller;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
-        setDefaultCommand(new IntakeTrigger(this, controller));
+        setDefaultCommand(new IntakeTrigger(this));
+
     }
 
     // public ConveyerSensors(LogitechController controller) {
@@ -38,11 +41,11 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        System.out.println(intakeSensor.get());
     }
 
     public void run() {
-        intakeMotor.set(1.0);
+        intakeMotor.set(0.75);
     }
 
     public void stop() {
@@ -67,16 +70,17 @@ public class Intake extends SubsystemBase {
         return gotBall;
     }
 
-    // private int printCount;
-    public void runIntake(LogitechController controller) {
+    // // private int printCount;
+    public void runIntake() {
         intakeMotor.set(controller.getRawAxis(2));
-
-        // printCount++;
-        // if (printCount > 25) {
-        // System.out.println("gotBall: " + gotBall);
-        // }
-        // if (ballCount == 5) {
-        // System.out.println("Fully Loaded");
-        // }
     }
+
+    // printCount++;
+    // if (printCount > 25) {
+    // System.out.println("gotBall: " + gotBall);
+    // }
+    // if (ballCount == 5) {
+    // System.out.println("Fully Loaded");
+    // }
+    // }
 }
