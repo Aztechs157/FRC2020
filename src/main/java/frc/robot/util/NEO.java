@@ -34,8 +34,14 @@ public class NEO {
         return motor.getEncoder().getVelocity();
     }
 
+    double count = 0;
+
     public void set(final double speed) {
         motor.set(speed);
+        if (count++ < 50)
+            return;
+        count = 0;
+        // System.out.println(speed);
     }
 
     public void setInverted(final boolean bool) {

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,47 +8,43 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
 
-public class Autonomous extends CommandBase {
+public class DriveTurn extends CommandBase {
 
-    // DriveTarget target = new DriveTarget(2718, 0, 50, 15.0);
-
-    private Drive drive;
-    private Double drivepower;
-    private double gyropower;
+    public Drive drive;
+    private double angle;
+    public double drivepower;
 
     /**
-     * Creates a new Autonomous.
+     * Creates a new DriveTurn.
      */
-    public Autonomous(Drive drive) {
+    public DriveTurn(double angle, Drive drive) {
+        this.angle = angle;
         this.drive = drive;
         addRequirements(drive);
-        // 81.83
-        // for (int i = 0; i <= 20; i++) {
-        // System.out.println("getAngle" + drive.getAngle());
-        // }
-
-        drivepower = drive.drivePID.pidCalculate(83, drive.frontLeft.getPosition());
+        drive.drivePID.pidCalculate(83, drive.frontLeft.getPosition());
         drivepower = drive.slew.rateCalculate(drivepower, 1125);
-        gyropower = drive.gyroDrivePID.pidCalculate(0, drive.getAngle());
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
     // Called every time the scheduler runs while the command is scheduled.
-    // 2718.75
-    // 75.83
     @Override
     public void execute() {
-        // drive.AutoDrive(drivepower + gyropower, -drivepower - gyropower);
-        drive.autoTurn(.5);
+        // System.out.println("drivepower = ");// + drivepower);
+
+        if (drive.getAngle() >= angle) {
+            drive.frontLeft.set(.5);
+            drive.backLeft.set(.5);
+            drive.frontRight.set(.5);
+            drive.backRight.set(.5);
+        }
+
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return drive.frontLeft.getPosition() >= 81.83;
+        return (drive.getAngle() < angle);
     }
-
 }

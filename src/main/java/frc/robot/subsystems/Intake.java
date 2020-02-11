@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
 
     public Intake(LogitechController controller) {
         intake = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
-        setDefaultCommand(new IntakeTrigger(this, controller));
+        // setDefaultCommand(new IntakeTrigger(this, controller));
     }
 
     // public void runIntake(final double speed) {
