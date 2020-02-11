@@ -7,9 +7,12 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.TeleopDrive;
 import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
@@ -21,31 +24,31 @@ public class Drive extends SubsystemBase {
 
     private final LogitechController controller;
 
-    public NEO frontLeft;
-    private NEO frontRight;
-    private NEO backLeft;
-    private NEO backRight;
-    private AnalogGyro driveGyro;
-    public PID drivePID;
-    public PID gyroDrivePID;
-    public SlewRate slew;
-    private double leftPower = 0;
-    private double rightPower = 0;
-    public double drivePower;
-    private double initAngle = 0;
+    public final NEO frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
+    public final NEO frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
+    public final NEO backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
+    public final NEO backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+
+    public final PID drivePID = new PID(1.35, 0, 0, 100, 0, 100, 0, 2, -2);
+    public final PID gyroDrivePID = new PID(0.055, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
+    public final SlewRate slew = new SlewRate(0.5);
+
+    public final SPI.Port kGyroPort = SPI.Port.kOnboardCS0;
+    public final ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(kGyroPort);
+    public static SlewRate leftSlew = new SlewRate(1.2);
+    public static SlewRate rightSlew = new SlewRate(1.2);
+    // public final double drivepower = leftSlew.rateCalculate(1);
+    // public final AnalogInput driveGyro = new
+    // AnalogInput(Constants.DriveConstants.driveGyro);
 
     public Drive(final LogitechController controller) {
         this.controller = controller;
-        frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
-        frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
-        backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
-        backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
-        gyroDrivePID = new PID(0.03, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
-        drivePID = new PID(.1, 0, 0, 100, 0, 100, 0, 2, -2);
-        slew = new SlewRate(0.5);
+        driveGyro.calibrate();
         frontRight.tare();
         frontLeft.tare();
-        driveGyro = new AnalogGyro(0);
+        backRight.tare();
+        backLeft.tare();
+        setDefaultCommand(new TeleopDrive(this));
 
         // frontRight.setInverted(InvertType.InvertMotorOutput);
         // 1backRight.setInverted(InvertType.FollowMaster);
@@ -61,23 +64,57 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         // frontLeft.set(controller.getRawAxis(Constants.OIConstants.LYStick));
         // frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
-        tankdrive();
         // System.out.println("getleftencoder" + frontLeft.getPosition());
         // System.out.println("gyropower = " + getAngle());
+        System.out.println("FL " + frontLeft.getPosition() + "  BL " + backLeft.getPosition() + "  FR "
+                + frontRight.getPosition() + "  BR " + backRight.getPosition());
+
+        // front left tests
+        // test 1 -63
+        // test 2 -68
+        // test 3 -63.14
+        // test 4 -67
+        // -73
+        // 9 units is 20 inches 12 feet is 63.6
+        // R 62
+        // L -73
+
     }
 
     public void tankdrive() {
         // left y axis= 1, right y axis= 5
-        frontLeft.set(-controller.getRawAxis(Constants.OIConstants.LYStick));
-        frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
-        backLeft.set(-controller.getRawAxis(Constants.OIConstants.LYStick));
-        backRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
+        frontLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
+        frontRight.set(rightSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.RYStick)));
+        // System.out.println("drivepower = " + Autonomous.drivepower + " frontRight = "
+        // System.out.println("Encoder= " + frontLeft.getPosition());
+        // System.out.println("GyroPrint = " + getAngle());
+
+        // + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
+        backLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
+        backRight.set(rightSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.RYStick)));
         // System.out.println("Giro angle:" + driveGyro.getAngle());
         // 12 ft = leftquad = 2717.5 Rightquad = 1430.72
         // 12 ft = leftquad = 2711.5 Rightquad = 1259.00
         // 12 ft = leftquad = 2727.25 Rightquad = 1347.75
         // 12 ft = leftquad average 2718.75 // Rightquad average = 1345.82
 
+    }
+
+    public void arcadedrive() {
+        // SmartDashboard.putNumber("LXValue",
+        // controller.getRawAxis(Constants.OIConstants.LXStick));
+        if (controller.getRawAxis(Constants.OIConstants.LYStick) > .05
+                || controller.getRawAxis(Constants.OIConstants.LYStick) < -0.5) {
+            frontLeft.set(leftSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.LYStick)));
+            frontRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
+            backLeft.set(leftSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.LYStick)));
+            backRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
+        } else {
+            frontLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
+            frontRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
+            backLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
+            backRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
+        }
     }
 
     public double getLeftEncoder() {
@@ -95,48 +132,21 @@ public class Drive extends SubsystemBase {
         return driveGyro.getAngle();
     }
 
-    public void AutoDrive(final double leftPower, final double rightPower) {
+    public void autoDrive(final double leftPower, final double rightPower) {
         // System.out.println("frontleft.getposision = " + frontLeft.getPosition());
-        if (frontLeft.getPosition() <= 81.83) {
-            // 81.83 is 12 feet
-
-            // drivepower *= 0.5;
-            frontLeft.set(leftPower); // + gyropower));
-            frontRight.set(rightPower); // gyropower);
-            backLeft.set(leftPower);
-            backRight.set(rightPower);
-
-            // frontLeft.set(1); // + gyropower));
-            // frontRight.set(-(1)); // gyropower);
-            // backLeft.set(1);
-            // backRight.set(-(1));
-            // System.out.println("GyroPrint = " + getAngle());
-            // System.out.println("Sigma = " + drivePID.sigma);
-            // System.out.println("drivepower = " + drivepower);
-            // System.out.println("gyropower = " + gyropower);
-            // System.out.println("left = " + backLeft.getVelocity());
-            // System.out.println("right = " + backRight.getVelocity());
-
-        }
 
     }
 
-    public void autoTurn(double speed) {
+    public void autoTurn(final double speed) {
         // leftPower = drivePower - gyroDrivePID.pidCalculate(initAngle, getAngle());
         // leftPower = ((leftPower > 0) ? 1 : -1) * Math.min(1, Math.abs(leftPower));
 
         // rightPower = drivePower + gyroDrivePID.pidCalculate(initAngle, getAngle());
         // rightPower = ((rightPower > 0) ? 1 : -1) * Math.min(1, Math.abs(rightPower));
-        int count = 0;
+        final int count = 0;
         /*
          * while (count <= 100) { System.out.println(getAngle()); count++; }
          */
 
-        if (getAngle() >= -60) {
-            frontLeft.set(speed);
-            backLeft.set(speed);
-            frontRight.set(speed);
-            backRight.set(speed);
-        }
     }
 }

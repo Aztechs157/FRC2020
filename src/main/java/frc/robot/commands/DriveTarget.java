@@ -99,7 +99,7 @@ public class DriveTarget {
         rightPower = drivePower + gyroDrivePID.pidCalculate(targetAngle, drive.getAngle());
         rightPower = ((rightPower > 0) ? 1 : -1) * Math.min(1, Math.abs(rightPower));
 
-        drive.AutoDrive(leftPower, rightPower);
+        drive.autoDrive(leftPower, rightPower);
         if (Math.abs(encoder - target) < tolerance) {
             repsAtTarget++;
             if (repsAtTarget >= 5) {

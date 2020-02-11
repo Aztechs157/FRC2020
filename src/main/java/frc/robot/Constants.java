@@ -24,14 +24,19 @@ public final class Constants {
         public static final int FrontRight = 1;
         public static final int BackLeft = 4;
         public static final int BackRight = 3;
+        public static final double compensationRate = 0.25;
     }
 
     public final class ShooterConstants {
         public static final int Intake = 5;
+        // public static final int conveyorMotor = 6;
+        public static final int intakeArmMotorID = 12;
         public static final int shooter = 9;
         public static final int conveyorMotor = 6;
         public static final int TurretMotorID = 8;
         public static final int kicker = 7;
+
+        // comment
     }
 
     public final class OIConstants {
@@ -42,7 +47,12 @@ public final class Constants {
     }
 
     public final class ColorWheelConstants {
+        <<<<<<<HEAD
+        public static final int colorWheelLiftMotorId = 10;
+        public static final int colorWheelSpinMotorId = 11;
+        // spinMotorId not on the robot yet
+        =======
         public static final int liftMotorId = 10;
-        public static final int spinMotorId = 11;
+        public static final int spinMotorId = 11;>>>>>>>df2562d855d722dec90b02725fbc01cdd7e278c8
     }
 }

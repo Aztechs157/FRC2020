@@ -24,7 +24,7 @@ public class Turret extends SubsystemBase {
     public Turret(LogitechController controller) {
         LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
-        setDefaultCommand(new TurretControl(this, controller));
+        // setDefaultCommand(new TurretControl(this, controller));
     }
 
     public void moveShooter(final double Speed) {
