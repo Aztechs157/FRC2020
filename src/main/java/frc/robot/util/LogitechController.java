@@ -38,8 +38,46 @@ public class LogitechController {
         joystick = new Joystick(port);
     }
 
+    /**
+     * @deprecated Use the new individual axis methods insted e.g
+     *             {@link LogitechControler#getLeftStickX()} or
+     *             {@link LogitechControler#getRightTrigger()}
+     */
+    @Deprecated
     public double getRawAxis(int axis) {
         return joystick.getRawAxis(axis);
+    }
+
+    /*
+     * JavaScript code to auto generate the folowing part of the file:
+     *
+     * 'LeftStickX LeftStickY LeftTrigger RightTrigger RightStickX
+     * RightStickY'.split(' ').map(s => 'get' + s).map((s, i) => `public double
+     * ${s}() { return joystick.getRawAxis(${i}); }`).join(' ');
+     */
+
+    public double getLeftStickX() {
+        return joystick.getRawAxis(0);
+    }
+
+    public double getLeftStickY() {
+        return joystick.getRawAxis(1);
+    }
+
+    public double getLeftTrigger() {
+        return joystick.getRawAxis(2);
+    }
+
+    public double getRightTrigger() {
+        return joystick.getRawAxis(3);
+    }
+
+    public double getRightStickX() {
+        return joystick.getRawAxis(4);
+    }
+
+    public double getRightStickY() {
+        return joystick.getRawAxis(5);
     }
 
     /*
