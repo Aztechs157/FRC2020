@@ -13,16 +13,16 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.TeleopDrive;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
+import frc.robot.util.controllers.Controller;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
 
-    private final LogitechController controller;
+    private final Controller controller;
 
     public final NEO frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
     public final NEO frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
@@ -41,7 +41,7 @@ public class Drive extends SubsystemBase {
     // public final AnalogInput driveGyro = new
     // AnalogInput(Constants.DriveConstants.driveGyro);
 
-    public Drive(final LogitechController controller) {
+    public Drive(final Controller controller) {
         this.controller = controller;
         driveGyro.calibrate();
         frontRight.tare();

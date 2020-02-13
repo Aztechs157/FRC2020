@@ -9,8 +9,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
+import frc.robot.util.controllers.Controller;
 
 public class Kicker extends SubsystemBase {
     private NEO kicker;
@@ -22,11 +22,11 @@ public class Kicker extends SubsystemBase {
     /**
      * Creates a new Kicker.
      */
-    public Kicker(LogitechController controller) {
+    public Kicker(Controller controller) {
         // kicker = new NEO(Constants.ShooterConstants.kicker, MotorType.kBrushless);
     }
 
-    public void CountingSensors(LogitechController controller) {
+    public void CountingSensors(Controller controller) {
         kicker.set(controller.getRawAxis(3));
 
         if (!gotBall) {

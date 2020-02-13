@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.util.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /**
  * A util class to make dealing with our logitech controllers easier
  */
-public class LogitechController {
+public class LogitechController implements Controller {
 
     /**
      * A enum to map ids to their buttons
@@ -40,11 +40,11 @@ public class LogitechController {
 
     /**
      * @deprecated Use the new individual axis methods insted e.g
-     *             {@link LogitechControler#getLeftStickX()} or
-     *             {@link LogitechControler#getRightTrigger()}
+     *             {@link LogitechController#getLeftStickX()} or
+     *             {@link LogitechController#getRightTrigger()}
      */
     @Deprecated
-    public double getRawAxis(int axis) {
+    public double getRawAxis(final int axis) {
         return joystick.getRawAxis(axis);
     }
 

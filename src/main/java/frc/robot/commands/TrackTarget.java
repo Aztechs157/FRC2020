@@ -8,8 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.util.LogitechController;
 import frc.robot.util.Pixy2Controller.Target;
+import frc.robot.util.controllers.Controller;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
@@ -21,12 +21,12 @@ public class TrackTarget extends CommandBase {
     private int importantCounter = 0;
     private final Turret turret;
     private final Vision vision;
-    private final LogitechController controller;
+    private final Controller controller;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(final Turret turret, final Vision vision, final LogitechController controller) {
+    public TrackTarget(final Turret turret, final Vision vision, final Controller controller) {
         this.turret = turret;
         this.vision = vision;
         this.controller = controller;

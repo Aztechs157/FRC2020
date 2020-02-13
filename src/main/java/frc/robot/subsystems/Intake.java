@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeTrigger;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 //import sun.font.TrueTypeFont;
+import frc.robot.util.controllers.Controller;
 
 public class Intake extends SubsystemBase {
     // public final NEO IntakeRight;
@@ -26,16 +26,16 @@ public class Intake extends SubsystemBase {
     private int ballCount;
     private boolean gotBall = false;
     private DigitalInput intakeSensor = new DigitalInput(2);
-    private LogitechController controller;
+    private Controller controller;
 
-    public Intake(LogitechController controller) {
+    public Intake(Controller controller) {
         this.controller = controller;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         setDefaultCommand(new IntakeTrigger(this));
 
     }
 
-    // public ConveyerSensors(LogitechController controller) {
+    // public ConveyerSensors( Controller controller) {
 
     // }
 

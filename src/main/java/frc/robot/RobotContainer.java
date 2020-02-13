@@ -14,7 +14,11 @@ import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
-import frc.robot.util.LogitechController;
+import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.LogitechController;
+import frc.robot.util.controllers.PlaneController;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AutoGroup;
 import frc.robot.commands.LaserFire;
@@ -25,8 +29,10 @@ import frc.robot.commands.TrackTarget;
  */
 public class RobotContainer {
 
-    private final LogitechController driveController = new LogitechController(0);
-    private final LogitechController operatorController = new LogitechController(1);
+    private final Controller driveController = Preferences.getInstance().getBoolean("usePlaneController", false)
+            ? new PlaneController(0, 2)
+            : new LogitechController(0);
+    private final Controller operatorController = new LogitechController(1);
 
     // #region Subsystems
     // private static final Conveyor conveyor = new Conveyor(driveController);

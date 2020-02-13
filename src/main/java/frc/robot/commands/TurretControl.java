@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
-import frc.robot.util.LogitechController;
+import frc.robot.util.controllers.LogitechController;
 
 public class TurretControl extends CommandBase {
 
