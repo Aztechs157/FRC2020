@@ -18,8 +18,39 @@ public class AutoGroup extends SequentialCommandGroup {
     /**
      * Add your docs here.
      */
-    public AutoGroup(Drive drive) {
-        addCommands(new DriveForward(-64.8, drive), /* new DriveTurn(-57, drive), */
-                new PrintCommand(" "));
+
+    public enum autoMode {
+        rightSide, leftSide, middleField, offLine
     }
+
+    public final autoMode autoArray[] = { autoMode.rightSide, autoMode.middleField, autoMode.leftSide,
+            autoMode.offLine };
+
+    // public final autoMode getautoMode() {
+    // return autoArray[getPotVal()];
+    // }
+
+    public AutoGroup(Drive drive) {
+        addCommands(new DriveForward(-64.8, false, drive)); /* new DriveTurn(-57, drive), */
+
+        // -64.8
+        // switch (autoMode) {
+        // case rightSide:
+        // addSequential(new rightSide());
+        // break;
+
+        // case middleField:
+        // addSequential(new middleField());
+        // break;
+
+        // case leftSide:
+        // addSequential(new leftSide());
+        // break;
+
+        // case offLine:
+        // addSequential(new offline());
+
+        // }
+    }
+
 }

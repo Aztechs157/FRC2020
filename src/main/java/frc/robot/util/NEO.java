@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -51,4 +52,7 @@ public class NEO {
     public void setIdleMode(final IdleMode mode) {
         motor.setIdleMode(mode);
     }
+
+    // public void setNeutralMode(final NeutralMode mode) {
+    // motor.setNeutralMode(mode);
 }

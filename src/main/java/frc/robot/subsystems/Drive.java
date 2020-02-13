@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,6 +36,9 @@ public class Drive extends SubsystemBase {
     public final ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(kGyroPort);
     public static SlewRate leftSlew = new SlewRate(1.2);
     public static SlewRate rightSlew = new SlewRate(1.2);
+
+    public boolean isArcade = false;
+
     // public final double drivepower = leftSlew.rateCalculate(1);
     // public final AnalogInput driveGyro = new
     // AnalogInput(Constants.DriveConstants.driveGyro);
@@ -66,8 +68,9 @@ public class Drive extends SubsystemBase {
         // frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
         // System.out.println("getleftencoder" + frontLeft.getPosition());
         // System.out.println("gyropower = " + getAngle());
-        System.out.println("FL " + frontLeft.getPosition() + "  BL " + backLeft.getPosition() + "  FR "
-                + frontRight.getPosition() + "  BR " + backRight.getPosition());
+        // System.out.println("FL " + frontLeft.getPosition() + " BL " +
+        // backLeft.getPosition() + " FR "
+        // + frontRight.getPosition() + " BR " + backRight.getPosition());
 
         // front left tests
         // test 1 -63
@@ -82,16 +85,18 @@ public class Drive extends SubsystemBase {
     }
 
     public void tankdrive() {
+        var leftVal = controller.getLeftStickY();
+        var rightVal = controller.getRightStickY();
         // left y axis= 1, right y axis= 5
-        frontLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
-        frontRight.set(rightSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.RYStick)));
+        frontLeft.set(leftSlew.rateCalculate(leftVal));
+        frontRight.set(rightSlew.rateCalculate(-rightVal));
         // System.out.println("drivepower = " + Autonomous.drivepower + " frontRight = "
         // System.out.println("Encoder= " + frontLeft.getPosition());
         // System.out.println("GyroPrint = " + getAngle());
 
         // + frontRight.getPosition() +"frontLeft = " + frontLeft.getPosition());
-        backLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
-        backRight.set(rightSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.RYStick)));
+        backLeft.set(leftSlew.rateCalculate(leftVal));
+        backRight.set(rightSlew.rateCalculate(-rightVal));
         // System.out.println("Giro angle:" + driveGyro.getAngle());
         // 12 ft = leftquad = 2717.5 Rightquad = 1430.72
         // 12 ft = leftquad = 2711.5 Rightquad = 1259.00
@@ -103,17 +108,19 @@ public class Drive extends SubsystemBase {
     public void arcadedrive() {
         // SmartDashboard.putNumber("LXValue",
         // controller.getRawAxis(Constants.OIConstants.LXStick));
-        if (controller.getRawAxis(Constants.OIConstants.LYStick) > .05
-                || controller.getRawAxis(Constants.OIConstants.LYStick) < -0.5) {
-            frontLeft.set(leftSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.LYStick)));
-            frontRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
-            backLeft.set(leftSlew.rateCalculate(-controller.getRawAxis(Constants.OIConstants.LYStick)));
-            backRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LYStick)));
-        } else {
-            frontLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
-            frontRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
-            backLeft.set(leftSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
-            backRight.set(rightSlew.rateCalculate(controller.getRawAxis(Constants.OIConstants.LXStick)));
+        var yVal = -controller.getLeftStickY();
+        var xVal = -controller.getRightStickX();
+        if (yVal > .05 || yVal < -0.5) {
+            frontLeft.set(leftSlew.rateCalculate(-yVal));
+            frontRight.set(rightSlew.rateCalculate(yVal));
+            backLeft.set(leftSlew.rateCalculate(-yVal));
+            backRight.set(rightSlew.rateCalculate(yVal));
+        }
+        if (xVal > .05 || xVal < -0.5) {
+            frontLeft.set(leftSlew.rateCalculate(xVal));
+            frontRight.set(rightSlew.rateCalculate(xVal));
+            backLeft.set(leftSlew.rateCalculate(xVal));
+            backRight.set(rightSlew.rateCalculate(xVal));
         }
     }
 

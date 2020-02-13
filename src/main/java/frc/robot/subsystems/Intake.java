@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(intakeSensor.get());
+        // System.out.println(intakeSensor.get());
     }
 
     public void run() {
@@ -72,7 +72,7 @@ public class Intake extends SubsystemBase {
 
     // // private int printCount;
     public void runIntake() {
-        intakeMotor.set(controller.getRawAxis(2));
+        intakeMotor.set(controller.getLeftTrigger());
     }
 
     // printCount++;

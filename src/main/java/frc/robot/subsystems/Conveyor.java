@@ -41,15 +41,15 @@ public class Conveyor extends SubsystemBase {
         // This method will be called once per scheduler run
     }
 
-    public void shift() {
-        if (intake.get() && intake.ballCount() <= 5) {
-            intake.run();
-            run();
-        } else {
-            stop();
-            intake.stop();
-        }
-    }
+    // public void shift() {
+    // if (intake.get() && intake.ballCount() <= 5) {
+    // intake.run();
+    // run();
+    // } else {
+    // stop();
+    // intake.stop();
+    // }
+    // }
 
     // public void test() {
     // conveyorMotor.set(controller.getRawAxis(2));
