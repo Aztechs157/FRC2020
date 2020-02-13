@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.util.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /**
  * A util class to make dealing with our logitech controllers easier
  */
-public class LogitechController {
+public class LogitechController implements Controller {
 
     /**
      * A enum to map ids to their buttons
@@ -38,8 +38,46 @@ public class LogitechController {
         joystick = new Joystick(port);
     }
 
-    public double getRawAxis(int axis) {
+    /**
+     * @deprecated Use the new individual axis methods insted e.g
+     *             {@link LogitechController#getLeftStickX()} or
+     *             {@link LogitechController#getRightTrigger()}
+     */
+    @Deprecated
+    public double getRawAxis(final int axis) {
         return joystick.getRawAxis(axis);
+    }
+
+    /*
+     * JavaScript code to auto generate the folowing part of the file:
+     *
+     * 'LeftStickX LeftStickY LeftTrigger RightTrigger RightStickX
+     * RightStickY'.split(' ').map(s => 'get' + s).map((s, i) => `public double
+     * ${s}() { return joystick.getRawAxis(${i}); }`).join(' ');
+     */
+
+    public double getLeftStickX() {
+        return joystick.getRawAxis(0);
+    }
+
+    public double getLeftStickY() {
+        return joystick.getRawAxis(1);
+    }
+
+    public double getLeftTrigger() {
+        return joystick.getRawAxis(2);
+    }
+
+    public double getRightTrigger() {
+        return joystick.getRawAxis(3);
+    }
+
+    public double getRightStickX() {
+        return joystick.getRawAxis(4);
+    }
+
+    public double getRightStickY() {
+        return joystick.getRawAxis(5);
     }
 
     /*

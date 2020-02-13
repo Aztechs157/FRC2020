@@ -10,8 +10,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
+import frc.robot.util.controllers.Controller;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ConveyerControl;
@@ -23,12 +23,12 @@ public class Conveyor extends SubsystemBase {
     private Intake intake;
     private Kicker kicker;
     private DigitalInput conveyorBottom = new DigitalInput(3);
-    private LogitechController controller;
+    private Controller controller;
 
     /**
      * Creates a new Conveyer.
      */
-    public Conveyor(LogitechController controller, Intake intake, Kicker kicker) {
+    public Conveyor(Controller controller, Intake intake, Kicker kicker) {
         conveyorMotor = new NEO(Constants.ShooterConstants.conveyorMotor, MotorType.kBrushless);
         this.intake = intake;
         this.kicker = kicker;

@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.LogitechController;
+import frc.robot.util.controllers.Controller;
 
 public class ShooterControl extends CommandBase {
 
@@ -17,9 +17,9 @@ public class ShooterControl extends CommandBase {
      * Creates a new ShooterControl.
      */
     public Shooter shooter;
-    public LogitechController controller;
+    public Controller controller;
 
-    public ShooterControl(Shooter shooter, LogitechController controller) {
+    public ShooterControl(Shooter shooter, Controller controller) {
         this.shooter = shooter;
         this.controller = controller;
         addRequirements(this.shooter);

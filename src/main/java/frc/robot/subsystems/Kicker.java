@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.LogitechController;
+import frc.robot.util.controllers.Controller;
 import frc.robot.util.NEO;
 
 public class Kicker extends SubsystemBase {
@@ -21,12 +21,12 @@ public class Kicker extends SubsystemBase {
     private boolean gotBall = false;
     private DigitalInput kickerSensor = new DigitalInput(4);
     public int printCount;
-    private LogitechController controller;
+    private Controller controller;
 
     /**
      * Creates a new Kicker.
      */
-    public Kicker(LogitechController controller, Intake intake) {
+    public Kicker(Controller controller, Intake intake) {
         kicker = new NEO(Constants.ShooterConstants.kicker, MotorType.kBrushless);
         this.intake = intake;
         // setDefaultCommand(KickerControl(this, LogitechController controller));

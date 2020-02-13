@@ -12,8 +12,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.ShooterControl;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
+import frc.robot.util.controllers.Controller;
 
 public class Shooter extends SubsystemBase {
     private final NEO shooterMotor;
@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
      */
     public NEO LeftRight;
     public NEO UpDown;
-    private LogitechController controller;
+    private Controller controller;
     private final Kicker kicker;
     private final Conveyor conveyor;
 
@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase {
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Shooter(LogitechController controller, Kicker kicker, Conveyor conveyor) {
+    public Shooter(Controller controller, Kicker kicker, Conveyor conveyor) {
         shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
         setDefaultCommand(new ShooterControl(this, controller));
         this.controller = controller;

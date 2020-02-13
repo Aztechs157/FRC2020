@@ -4,8 +4,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
+import frc.robot.util.controllers.Controller;
 import frc.robot.commands.TurretControl;
 
 public class Turret extends SubsystemBase {
@@ -21,7 +21,7 @@ public class Turret extends SubsystemBase {
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Turret(LogitechController controller) {
+    public Turret(Controller controller) {
         LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
         // setDefaultCommand(new TurretControl(this, controller));

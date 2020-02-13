@@ -9,16 +9,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Kicker;
-import frc.robot.util.LogitechController;
+import frc.robot.util.controllers.Controller;
 
 public class KickerControl extends CommandBase {
     private final Kicker kicker;
-    private LogitechController controller;
+    private Controller controller;
 
     /**
      * Creates a new KickerControl.
      */
-    public KickerControl(final Kicker kicker, LogitechController controller) {
+    public KickerControl(final Kicker kicker, Controller controller) {
         this.controller = controller;
         this.kicker = kicker;
         addRequirements(kicker);
