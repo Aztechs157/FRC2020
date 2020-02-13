@@ -78,7 +78,7 @@ public class TrackTarget extends CommandBase {
         boolean retVal = true;
         double joyValx;
 
-        joyValx = controller.getRawAxis(4);
+        joyValx = controller.getRightStickX();
 
         if (joyValx > -0.01 && joyValx < 0.01) {
             retVal = false;

@@ -27,7 +27,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public void CountingSensors(Controller controller) {
-        kicker.set(controller.getRawAxis(3));
+        kicker.set(controller.getRightTrigger());
 
         if (!gotBall) {
             if (sensor3.get()) {

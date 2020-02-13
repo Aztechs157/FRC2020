@@ -59,6 +59,7 @@ public class RobotContainer {
         operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController));
         operatorController.B().whenPressed(new LaserFire(true, vision));
         operatorController.B().whenReleased(new LaserFire(false, vision));
+        driveController.Start().and(driveController.Back()).whenActive(() -> drive.isArcade = !drive.isArcade, drive);
     }
 
     /**

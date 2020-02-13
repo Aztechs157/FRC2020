@@ -37,7 +37,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void Shoot(Controller controller) {
-        shooterMotor.set(-controller.getRawAxis(3));
+        shooterMotor.set(-controller.getRightTrigger());
     }
 
     @Override
