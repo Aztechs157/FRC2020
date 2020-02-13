@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,7 +38,7 @@ public class Drive extends SubsystemBase {
     public static SlewRate leftSlew = new SlewRate(1.2);
     public static SlewRate rightSlew = new SlewRate(1.2);
 
-    public boolean isArcade = false;
+    public boolean isArcade = Preferences.getInstance().getBoolean("useArcade", false);
 
     // public final double drivepower = leftSlew.rateCalculate(1);
     // public final AnalogInput driveGyro = new
