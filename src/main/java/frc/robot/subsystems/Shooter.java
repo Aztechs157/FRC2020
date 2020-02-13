@@ -25,19 +25,39 @@ public class Shooter extends SubsystemBase {
      */
     public NEO LeftRight;
     public NEO UpDown;
+    private LogitechController controller;
+    private final Kicker kicker;
+    private final Conveyor conveyor;
 
     // public Shooter() {
     // LeftRight = new Servo(0);
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Shooter(LogitechController controller) {
+    public Shooter(LogitechController controller, Kicker kicker, Conveyor conveyor) {
         shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
         setDefaultCommand(new ShooterControl(this, controller));
+        this.controller = controller;
+        this.kicker = kicker;
+        this.conveyor = conveyor;
     }
 
-    public void Shoot(LogitechController controller) {
-        shooterMotor.set(-controller.getRawAxis(3));
+    public void run() {
+        shooterMotor.set(1);
+    }
+
+    public void Shoot() {
+        if (kicker.get()) {
+            run();
+        } else {
+            if (!kicker.get()) {
+                conveyor.run();
+                kicker.run();
+            } else {
+                conveyor.stop();
+                kicker.stop();
+            }
+        }
     }
 
     @Override

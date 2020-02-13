@@ -47,12 +47,8 @@ public final class Constants {
     }
 
     public final class ColorWheelConstants {
-        <<<<<<<HEAD
         public static final int colorWheelLiftMotorId = 10;
         public static final int colorWheelSpinMotorId = 11;
         // spinMotorId not on the robot yet
-        =======
-        public static final int liftMotorId = 10;
-        public static final int spinMotorId = 11;>>>>>>>df2562d855d722dec90b02725fbc01cdd7e278c8
     }
 }

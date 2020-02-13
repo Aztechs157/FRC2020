@@ -41,7 +41,8 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(intakeSensor.get());
+        // System.out.println(intakeSensor.get());
+        System.out.println(ballCount);
     }
 
     public void run() {
@@ -56,14 +57,18 @@ public class Intake extends SubsystemBase {
         return ballCount;
     }
 
+    public void zeroBallCount() {
+        ballCount = 0;
+    }
+
     public boolean get() {
-        if (!gotBall) {
-            if (intakeSensor.get()) {
+        if (gotBall == false) {
+            if (intakeSensor.get() == true) {
                 gotBall = true;
                 ballCount++;
             }
         } else {
-            if (!intakeSensor.get()) {
+            if (intakeSensor.get() == false) {
                 gotBall = false;
             }
         }

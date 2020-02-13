@@ -7,38 +7,50 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.util.LogitechController;
 import frc.robot.util.NEO;
 
 public class Kicker extends SubsystemBase {
     private NEO kicker;
+    private final Intake intake;
     private boolean gotBall = false;
-    private DigitalInput sensor3 = new DigitalInput(4);
+    private DigitalInput kickerSensor = new DigitalInput(4);
     public int printCount;
-    public int ballCount;
+    private LogitechController controller;
 
     /**
      * Creates a new Kicker.
      */
-    public Kicker(LogitechController controller) {
-        // kicker = new NEO(Constants.ShooterConstants.kicker, MotorType.kBrushless);
+    public Kicker(LogitechController controller, Intake intake) {
+        kicker = new NEO(Constants.ShooterConstants.kicker, MotorType.kBrushless);
+        this.intake = intake;
+        // setDefaultCommand(KickerControl(this, LogitechController controller));
     }
 
-    public void CountingSensors(LogitechController controller) {
-        kicker.set(controller.getRawAxis(3));
+    public void run() {
+        kicker.set(1);
+    }
 
-        if (!gotBall) {
-            if (sensor3.get()) {
+    public void stop() {
+        kicker.set(0);
+    }
+
+    public boolean get() {
+        if (gotBall == false) {
+            if (kickerSensor.get() == true) {
                 gotBall = true;
-                kicker.set(0);
-                ballCount++;
             }
         } else {
-            if (!gotBall)
+            if (kickerSensor.get() == false) {
                 gotBall = false;
+            }
         }
+        return gotBall;
     }
 
     @Override

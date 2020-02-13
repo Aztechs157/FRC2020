@@ -18,6 +18,7 @@ import frc.robot.util.LogitechController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AutoGroup;
 import frc.robot.commands.LaserFire;
+import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TrackTarget;
 
 /**
@@ -34,9 +35,9 @@ public class RobotContainer {
     private final Intake intake = new Intake(driveController);
     private final Vision vision = new Vision();
     private final Turret turret = new Turret(operatorController);
-    private final Shooter shooter = new Shooter(operatorController);
-    private final Kicker kicker = new Kicker(driveController);
+    private final Kicker kicker = new Kicker(driveController, intake);
     private final Conveyor conveyor = new Conveyor(driveController, intake, kicker);
+    private final Shooter shooter = new Shooter(operatorController, kicker, conveyor);
     private final Drive drive = new Drive(driveController);
     // #endregion
 
@@ -53,6 +54,10 @@ public class RobotContainer {
         operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController));
         operatorController.B().whenPressed(new LaserFire(true, vision));
         operatorController.B().whenReleased(new LaserFire(false, vision));
+        driveController.Y().whenPressed(() -> {
+            intake.zeroBallCount();
+        }, intake);
+        operatorController.RightButton().whenPressed(new ShooterControl(shooter, operatorController));
     }
 
     /**

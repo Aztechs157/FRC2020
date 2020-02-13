@@ -66,8 +66,9 @@ public class Drive extends SubsystemBase {
         // frontRight.set(controller.getRawAxis(Constants.OIConstants.RYStick));
         // System.out.println("getleftencoder" + frontLeft.getPosition());
         // System.out.println("gyropower = " + getAngle());
-        System.out.println("FL " + frontLeft.getPosition() + "  BL " + backLeft.getPosition() + "  FR "
-                + frontRight.getPosition() + "  BR " + backRight.getPosition());
+        // System.out.println("FL " + frontLeft.getPosition() + " BL " +
+        // backLeft.getPosition() + " FR "
+        // + frontRight.getPosition() + " BR " + backRight.getPosition());
 
         // front left tests
         // test 1 -63

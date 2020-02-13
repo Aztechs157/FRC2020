@@ -38,11 +38,12 @@ public class Conveyor extends SubsystemBase {
 
     @Override
     public void periodic() {
+        shift();
         // This method will be called once per scheduler run
     }
 
     public void shift() {
-        if (intake.get() && intake.ballCount() <= 5) {
+        if (intake.ballCount() < 5 && intake.get()) {
             intake.run();
             run();
         } else {
@@ -56,7 +57,7 @@ public class Conveyor extends SubsystemBase {
     // }
 
     public void run() {
-        conveyorMotor.set(1.0);
+        conveyorMotor.set(0.45);
     }
 
     public void stop() {
