@@ -1,58 +1,36 @@
 package frc.robot.util;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANEncoder;
 
-public class NEO {
-    private final CANSparkMax motor;
-    private double ticks;
-    private double offset;
+public class NEO extends CANSparkMax {
 
-    public NEO(final int port, final MotorType type) {
-        motor = new CANSparkMax(port, type);
-        ticks = 0;
-        offset = 0;
+    public final CANEncoder encoder;
+
+    public NEO(final int port, MotorType type) {
+        super(port, type);
+        encoder = super.getEncoder();
     }
 
+    // Decorator methods
+
+    public NEO inverted() {
+        super.setInverted(true);
+        return this;
+    }
+
+    public NEO brushed() {
+        super.setMotorType(MotorType.kBrushed);
+        return this;
+    }
+
+    // Convenience methods
+
     public double getPosition() {
-        ticks = motor.getEncoder().getPosition();
-        return ticks - offset;
+        return encoder.getPosition();
     }
 
     public void tare() {
-        ticks = motor.getEncoder().getPosition();
-        offset = ticks;
+        encoder.setPosition(0);
     }
-
-    public void setPosition(final double position) {
-        ticks = motor.getEncoder().getPosition();
-        offset = ticks - position;
-    }
-
-    public double getVelocity() {
-        return motor.getEncoder().getVelocity();
-    }
-
-    double count = 0;
-
-    public void set(final double speed) {
-        motor.set(speed);
-        if (count++ < 50)
-            return;
-        count = 0;
-        // System.out.println(speed);
-    }
-
-    public void setInverted(final boolean bool) {
-        motor.setInverted(bool);
-    }
-
-    public void setIdleMode(final IdleMode mode) {
-        motor.setIdleMode(mode);
-    }
-
-    // public void setNeutralMode(final NeutralMode mode) {
-    // motor.setNeutralMode(mode);
 }
