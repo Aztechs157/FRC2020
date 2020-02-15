@@ -109,14 +109,12 @@ public class DriveForward extends CommandBase {
                     drive.backRight.set(Constants.DriveConstants.compensationRate);
                     drive.frontLeft.set(Drive.leftSlew.rateCalculate(drivepower));
                     drive.backLeft.set(Drive.leftSlew.rateCalculate(drivepower));
-                    System.out.println("left");
                 } else if (angleChange < 0) {
                     // Drifting Left
                     drive.frontLeft.set(Constants.DriveConstants.compensationRate);
                     drive.backLeft.set(Constants.DriveConstants.compensationRate);
                     drive.frontRight.set(Drive.rightSlew.rateCalculate(drivepower));
                     drive.backRight.set(Drive.rightSlew.rateCalculate(drivepower));
-                    System.out.println("right");
                 }
             } else {
                 drive.frontLeft.set(Drive.leftSlew.rateCalculate(drivepower));

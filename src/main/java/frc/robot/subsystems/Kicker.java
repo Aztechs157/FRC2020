@@ -63,7 +63,7 @@ public class Kicker extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("Ball: " + gotBall);
+        // System.out.println("Ball: " + gotBall);
         // This method will be called once per scheduler run
     }
 }

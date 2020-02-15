@@ -24,7 +24,7 @@ public class Turret extends SubsystemBase {
     public Turret(Controller controller) {
         LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
-        // setDefaultCommand(new TurretControl(this, controller));
+        setDefaultCommand(new TurretControl(this, controller));
     }
 
     public void moveShooter(final double Speed) {
@@ -46,9 +46,9 @@ public class Turret extends SubsystemBase {
         // UpDown.set(0.0);
         // }
 
-        if (Speed > -0.01 && Speed < 0.01)
+        if (Speed > -0.01 && Speed < 0.01) {
             LeftRight.set(0.0);
-        else if (Speed > 0) {
+        } else if (Speed > 0) {
             if (LeftRight.getPosition() <= 35) {
                 LeftRight.set(1 * Speed);
             } else {
@@ -61,4 +61,3 @@ public class Turret extends SubsystemBase {
         }
     }
 }
-// }

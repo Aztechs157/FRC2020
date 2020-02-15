@@ -48,15 +48,25 @@ public class Shooter extends SubsystemBase {
     // testTalon = new AnalogPotentiometer(1);
     // }
     public Shooter(Controller controller, Kicker kicker, Conveyor conveyor, Intake intake) {
-        shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
+        shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless).inverted();
         this.controller = controller;
         this.kicker = kicker;
         this.conveyor = conveyor;
         this.intake = intake;
     }
 
+    public void stopAll() {
+        kicker.stop();
+        conveyor.stop();
+        stop();
+    }
+
     public void run() {
-        shooterMotor.set(-1);
+        shooterMotor.set(1);
+    }
+
+    public void resetStateMachine() {
+        state = STATEMACHINE.END;
     }
 
     public void stop() {
@@ -65,13 +75,6 @@ public class Shooter extends SubsystemBase {
 
     public double getVelocityMotor() {
         return shooterMotor.getVelocity();
-    }
-
-    private boolean upToSpeed() {
-        if (!motorUpToSpeed) {
-            motorUpToSpeed = true;
-        }
-        return true;
     }
 
     public void StateMachine() {
@@ -99,8 +102,9 @@ public class Shooter extends SubsystemBase {
             break;
         case SPINSHOOTER:
             run();
-            if (shooterMotor.getVelocity() <= -4000) {
+            if (shooterMotor.getVelocity() >= 4300) {
                 state = STATEMACHINE.SHOOT;
+                intake.ballCountDecrement();
             }
             break;
         case SHOOT:

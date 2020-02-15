@@ -63,9 +63,7 @@ public class RobotContainer {
         driveController.Y().whenPressed(() -> {
             intake.zeroBallCount();
         }, intake);
-
-        operatorController.RightButton().whenPressed(new ShooterControl(shooter, operatorController));
-        driveController.Back().and(driveController.Start()).whenActive(() -> drive.isArcade = !drive.isArcade, drive);
+        operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController));
     }
 
     /**
