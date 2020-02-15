@@ -8,7 +8,7 @@ Person                                                | Title                   
 [**wcarr92**](https://github.com/wcarr92)             | _Lead Programing Mentor_           | Everything, Electrical
 [**jamiesondunne**](https://github.com/jamiesondunne) | _Jr. Mentor_                       | Drive, Misc
 [**tytytyty74**](https://github.com/tytytyty74)       | _Jr. Mentor_                       | Vision Backend, Misc
-[**Jdender~**](https://github.com/Jdender)            | _Lead Technical Developer_         | Github, Organisation, Misc
+[**jamesBeeProg**](https://github.com/jamesBeeProg)   | _Lead Technical Developer_         | Github, Organisation, Misc
 [**Wallaby14**](https://github.com/Wallaby14)         | _Lead Interdepartmental Developer_ | Intake, Conveyor, Vision, Turret, Shooter, Conveyer Sensor, Misc
 [**Eric-157**](https://github.com/Eric-157)           | _Developer_                        | Drive, Auto,
 [**jcoleman157**](https://github.com/jcoleman157)     | _Developer_                        | Drive, Auto,
