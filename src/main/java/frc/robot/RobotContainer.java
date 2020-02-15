@@ -44,7 +44,7 @@ public class RobotContainer {
     private final Kicker kicker = new Kicker(driveController, intake);
     private final Conveyor conveyor = new Conveyor(driveController, intake, kicker);
     private final Shooter shooter = new Shooter(operatorController, kicker, conveyor);
-    private final Drive drive = new Drive(driveController);
+    public final Drive drive = new Drive(driveController);
     // #endregion
 
     // comments
@@ -63,7 +63,9 @@ public class RobotContainer {
         driveController.Y().whenPressed(() -> {
             intake.zeroBallCount();
         }, intake);
+
         operatorController.RightButton().whenPressed(new ShooterControl(shooter, operatorController));
+        driveController.Back().and(driveController.Start()).whenActive(() -> drive.isArcade = !drive.isArcade, drive);
     }
 
     /**

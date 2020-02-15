@@ -31,9 +31,9 @@ public class AutoGroup extends SequentialCommandGroup {
     // }
 
     public AutoGroup(Drive drive) {
-        addCommands(new DriveForward(-64.8, false, drive)); /* new DriveTurn(-57, drive), */
+        addCommands(new DriveForward(64.8, true, drive)); /* new DriveTurn(57, drive), */
 
-        // -64.8
+        // 64.8
         // switch (autoMode) {
         // case rightSide:
         // addSequential(new rightSide());

@@ -33,4 +33,13 @@ public class NEO extends CANSparkMax {
     public void tare() {
         encoder.setPosition(0);
     }
+
+    public void setBrakeMode() {
+        super.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void setCoastMode() {
+        super.setIdleMode(IdleMode.kCoast);
+    }
+
 }

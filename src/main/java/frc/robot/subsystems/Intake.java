@@ -42,7 +42,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         // System.out.println(intakeSensor.get());
-        System.out.println(ballCount);
+        // System.out.println(ballCount);
     }
 
     public void run() {

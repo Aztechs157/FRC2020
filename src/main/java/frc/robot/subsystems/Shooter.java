@@ -36,10 +36,10 @@ public class Shooter extends SubsystemBase {
     // }
     public Shooter(Controller controller, Kicker kicker, Conveyor conveyor) {
         shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
-        setDefaultCommand(new ShooterControl(this, controller));
         this.controller = controller;
         this.kicker = kicker;
         this.conveyor = conveyor;
+        // setDefaultCommand(new ShooterControl(this, controller));
     }
 
     public void run() {

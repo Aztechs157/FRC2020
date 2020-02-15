@@ -12,6 +12,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,10 +63,12 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        robotContainer.drive.setAllCoastMode();
     }
 
     @Override
     public void disabledPeriodic() {
+
     }
 
     /**
@@ -75,7 +78,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
-
+        robotContainer.drive.setAllBrakeMode();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
@@ -99,6 +102,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+        robotContainer.drive.setAllBrakeMode();
     }
 
     /**
