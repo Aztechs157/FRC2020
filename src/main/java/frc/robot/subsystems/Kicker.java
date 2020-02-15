@@ -16,10 +16,10 @@ import frc.robot.util.controllers.Controller;
 import frc.robot.util.NEO;
 
 public class Kicker extends SubsystemBase {
-    private NEO kicker;
+    public NEO kicker;
     private final Intake intake;
     private boolean gotBall = false;
-    private DigitalInput kickerSensor = new DigitalInput(4);
+    private DigitalInput kickerSensor = new DigitalInput(5);
     public int printCount;
     private Controller controller;
 
@@ -32,12 +32,20 @@ public class Kicker extends SubsystemBase {
         // setDefaultCommand(KickerControl(this, LogitechController controller));
     }
 
+    public void runIntake() {
+        kicker.set(0.5);
+    }
+
     public void run() {
         kicker.set(1);
     }
 
     public void stop() {
         kicker.set(0);
+    }
+
+    public double getVelocityMotor() {
+        return kicker.getVelocity();
     }
 
     public boolean get() {
@@ -55,6 +63,7 @@ public class Kicker extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println("Ball: " + gotBall);
         // This method will be called once per scheduler run
     }
 }

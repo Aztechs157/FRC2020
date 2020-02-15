@@ -30,6 +30,10 @@ public class NEO extends CANSparkMax {
         return encoder.getPosition();
     }
 
+    public double getVelocity() {
+        return encoder.getVelocity();
+    }
+
     public void tare() {
         encoder.setPosition(0);
     }

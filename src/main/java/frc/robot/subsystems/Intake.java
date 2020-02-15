@@ -57,8 +57,22 @@ public class Intake extends SubsystemBase {
         return ballCount;
     }
 
+    public int ballCountIncrement() {
+        ballCount++;
+        return ballCount;
+    }
+
+    public int ballCountDecrement() {
+        ballCount--;
+        return ballCount;
+    }
+
     public void zeroBallCount() {
         ballCount = 0;
+    }
+
+    public double getVelocityMotor() {
+        return intakeMotor.getVelocity();
     }
 
     public boolean get() {

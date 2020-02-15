@@ -35,7 +35,9 @@ public class ShooterControl extends CommandBase {
     @Override
     public void execute() {
         // System.out.println("Running: " + shooter.shooter.getPosition());
-        shooter.Shoot();
+        // System.out.println("ShooterControl.Execute");
+        shooter.StateMachine();
+
     }
 
     // Called once the command ends or is interrupted.
@@ -46,6 +48,6 @@ public class ShooterControl extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

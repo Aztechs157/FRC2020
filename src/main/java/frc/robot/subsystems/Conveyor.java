@@ -18,7 +18,7 @@ import frc.robot.commands.ConveyerControl;
 import frc.robot.subsystems.Intake;
 
 public class Conveyor extends SubsystemBase {
-    private final NEO conveyorMotor;
+    public final NEO conveyorMotor;
 
     private Intake intake;
     private Kicker kicker;
@@ -43,12 +43,16 @@ public class Conveyor extends SubsystemBase {
     }
 
     public void shift() {
-        if (intake.ballCount() < 5 && intake.get()) {
+        if (intake.ballCount() < 1 && intake.get()) {
             intake.run();
             run();
+            kicker.runIntake();
         } else {
-            stop();
-            intake.stop();
+            if (kicker.get()) {
+                stop();
+                intake.stop();
+                kicker.stop();
+            }
         }
     }
 
@@ -57,11 +61,15 @@ public class Conveyor extends SubsystemBase {
     // }
 
     public void run() {
-        conveyorMotor.set(0.45);
+        conveyorMotor.set(0.40);
     }
 
     public void stop() {
         conveyorMotor.set(0.0);
+    }
+
+    public double getVelocityMotor() {
+        return conveyorMotor.getVelocity();
     }
 
 }
