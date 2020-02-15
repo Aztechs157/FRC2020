@@ -154,7 +154,6 @@ public class DriveForward extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(final boolean interrupted) {
-        System.out.println("Interupted");
         drive.frontLeft.set(0);
         drive.backLeft.set(0);
         drive.frontRight.set(0);
