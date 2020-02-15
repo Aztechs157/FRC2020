@@ -43,7 +43,7 @@ public class RobotContainer {
     private final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
     private final Conveyor conveyor = new Conveyor(driveController, intake, kicker);
-    private final Shooter shooter = new Shooter(operatorController, kicker, conveyor);
+    private final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
     private final Drive drive = new Drive(driveController);
     // #endregion
 

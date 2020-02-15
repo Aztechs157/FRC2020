@@ -9,6 +9,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.ShooterControl;
@@ -26,37 +29,100 @@ public class Shooter extends SubsystemBase {
     public NEO LeftRight;
     public NEO UpDown;
     private Controller controller;
+    private Intake intake;
     private final Kicker kicker;
     private final Conveyor conveyor;
+    private boolean motorUpToSpeed = false;
+    private int count = 0;
+    private final int SHOOTTIME = 50;
+
+    private enum STATEMACHINE {
+        END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP
+    };
+
+    STATEMACHINE state = STATEMACHINE.END;
 
     // public Shooter() {
     // LeftRight = new Servo(0);
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Shooter(Controller controller, Kicker kicker, Conveyor conveyor) {
+    public Shooter(Controller controller, Kicker kicker, Conveyor conveyor, Intake intake) {
         shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
-        setDefaultCommand(new ShooterControl(this, controller));
         this.controller = controller;
         this.kicker = kicker;
         this.conveyor = conveyor;
+        this.intake = intake;
     }
 
     public void run() {
-        shooterMotor.set(1);
+        shooterMotor.set(-1);
     }
 
-    public void Shoot() {
-        if (kicker.get()) {
-            run();
-        } else {
-            if (!kicker.get()) {
-                conveyor.run();
-                kicker.run();
-            } else {
-                conveyor.stop();
-                kicker.stop();
+    public void stop() {
+        shooterMotor.set(0);
+    }
+
+    public double getVelocityMotor() {
+        return shooterMotor.getVelocity();
+    }
+
+    private boolean upToSpeed() {
+        if (!motorUpToSpeed) {
+            motorUpToSpeed = true;
+        }
+        return true;
+    }
+
+    public void StateMachine() {
+        switch (state) {
+        case END:
+            conveyor.stop();
+            kicker.stop();
+            stop();
+            if (conveyor.getVelocityMotor() == 0 && kicker.getVelocityMotor() == 0 && getVelocityMotor() == 0) {
+                state = STATEMACHINE.MOVEBALL;
             }
+            break;
+        case MOVEBALL:
+            if (!kicker.get()) {
+                kicker.run();
+                conveyor.run();
+            } else {
+                state = STATEMACHINE.STOPMOVE;
+            }
+            break;
+        case STOPMOVE:
+            conveyor.stop();
+            kicker.stop();
+            state = STATEMACHINE.SPINSHOOTER;
+            break;
+        case SPINSHOOTER:
+            run();
+            if (shooterMotor.getVelocity() <= -4000) {
+                state = STATEMACHINE.SHOOT;
+            }
+            break;
+        case SHOOT:
+            kicker.run();
+            if (!kicker.get()) {
+                count++;
+            } else {
+                count = 0;
+            }
+            if (count > SHOOTTIME) {
+                state = STATEMACHINE.END;
+            }
+            break;
+        case PANICSTOP:
+            kicker.stop();
+            intake.stop();
+            stop();
+            conveyor.stop();
+            break;
+        default:
+            state = STATEMACHINE.PANICSTOP;
+            break;
         }
     }
 
