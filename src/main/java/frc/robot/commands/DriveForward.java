@@ -99,25 +99,31 @@ public class DriveForward extends CommandBase {
         // }
         if (gyroEnabled == true) {
 
-            if (Math.abs(angle) > 5) {
+            if (Math.abs(angleChange) > 2) {
                 // Left
                 // changed to right
                 // System.out.println("Robot Has Drifted");
-                if (angle > 0) {
+                if (angleChange > 0) {
                     // Drifting Right
-                    drive.frontLeft.set(Constants.DriveConstants.compensationRate);
-                    drive.backLeft.set(Constants.DriveConstants.compensationRate);
-                    drive.frontRight.set(Drive.leftSlew.rateCalculate(drivepower));
-                    drive.backRight.set(Drive.leftSlew.rateCalculate(drivepower));
-                    System.out.println("Right");
-                } else if (angle < 0) {
+                    drive.frontRight.set(Constants.DriveConstants.compensationRate);
+                    drive.backRight.set(Constants.DriveConstants.compensationRate);
+                    drive.frontLeft.set(Drive.leftSlew.rateCalculate(drivepower));
+                    drive.backLeft.set(Drive.leftSlew.rateCalculate(drivepower));
+                    System.out.println("left");
+                } else if (angleChange < 0) {
                     // Drifting Left
                     drive.frontLeft.set(Constants.DriveConstants.compensationRate);
                     drive.backLeft.set(Constants.DriveConstants.compensationRate);
-                    drive.frontRight.set(Drive.leftSlew.rateCalculate(drivepower));
-                    drive.backRight.set(Drive.leftSlew.rateCalculate(drivepower));
-                    System.out.println("Left");
+                    drive.frontRight.set(Drive.rightSlew.rateCalculate(drivepower));
+                    drive.backRight.set(Drive.rightSlew.rateCalculate(drivepower));
+                    System.out.println("right");
                 }
+            } else {
+                drive.frontLeft.set(Drive.leftSlew.rateCalculate(drivepower));
+                drive.backLeft.set(Drive.leftSlew.rateCalculate(drivepower));
+                drive.frontRight.set(Drive.rightSlew.rateCalculate(drivepower));
+                drive.backRight.set(Drive.rightSlew.rateCalculate(drivepower));
+
             }
         } else {
             // Forward
@@ -128,7 +134,7 @@ public class DriveForward extends CommandBase {
             drive.backLeft.set(Drive.leftSlew.rateCalculate(drivepower));
             drive.frontRight.set(Drive.rightSlew.rateCalculate(drivepower));
             drive.backRight.set(Drive.rightSlew.rateCalculate(drivepower));
-            System.out.println("working");
+            // System.out.println("working");
         }
         // drive.frontLeft.setNeutralMode(NeutralMode.Brake);
         // drive.frontRight.setNeutralMode(NeutralMode.Brake);
@@ -150,6 +156,11 @@ public class DriveForward extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(final boolean interrupted) {
+        System.out.println("Interupted");
+        drive.frontLeft.set(0);
+        drive.backLeft.set(0);
+        drive.frontRight.set(0);
+        drive.backRight.set(0);
     }
 
     // Returns true when the command should end.
