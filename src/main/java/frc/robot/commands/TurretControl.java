@@ -2,18 +2,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
+import frc.robot.util.controllers.Controller;
 import frc.robot.util.controllers.LogitechController;
 
 public class TurretControl extends CommandBase {
 
     private double count = 0;
     private final Turret shooter;
-    private final LogitechController controller;
+    private final Controller controller;
 
     /**
      * Creates a new ShooterControl2.
      */
-    public TurretControl(final Turret shooter, final LogitechController controller) {
+    public TurretControl(final Turret shooter, final Controller controller) {
         this.shooter = shooter;
         this.controller = controller;
         addRequirements(shooter);

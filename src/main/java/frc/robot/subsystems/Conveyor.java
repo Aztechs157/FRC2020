@@ -44,6 +44,7 @@ public class Conveyor extends SubsystemBase {
 
     public void shift() {
         if (intake.ballCount() < 1 && intake.get()) {
+            System.out.println("run the thing");
             intake.run();
             run();
             kicker.runIntake();

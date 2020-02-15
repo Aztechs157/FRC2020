@@ -63,7 +63,7 @@ public class RobotContainer {
         driveController.Y().whenPressed(() -> {
             intake.zeroBallCount();
         }, intake);
-        operatorController.RightButton().whenPressed(new ShooterControl(shooter, operatorController));
+        operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController));
     }
 
     /**
