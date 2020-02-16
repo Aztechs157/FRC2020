@@ -37,7 +37,8 @@ public class ShooterControl extends CommandBase {
     public void execute() {
         // System.out.println("Running: " + shooter.shooter.getPosition());
         // System.out.println("ShooterControl.Execute");
-        shooter.StateMachine();
+        // shooter.SingleAction();
+        shooter.automatic();
 
     }
 

@@ -8,23 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.util.controllers.Controller;
+import frc.robot.subsystems.IntakeArm;
 
-public class ConveyerControl extends CommandBase {
-
-    private final Conveyor conveyor;
-    private final Controller controller;
+public class IntakeArmControl extends CommandBase {
+    public IntakeArm intakearm;
 
     /**
-     * Creates a new ConveyerControl.
+     * Creates a new IntakeArmControl.
      */
-    public ConveyerControl(final Conveyor conveyor, Controller controller) {
-        this.controller = controller;
-        this.conveyor = conveyor;
-
-        addRequirements(conveyor);
-
+    public IntakeArmControl() {
+        addRequirements(intakearm);
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
@@ -36,7 +29,6 @@ public class ConveyerControl extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        conveyor.stateMachine();
     }
 
     // Called once the command ends or is interrupted.

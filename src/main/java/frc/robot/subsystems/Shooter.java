@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import org.ejml.simple.ConvertToDenseException;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -35,12 +37,18 @@ public class Shooter extends SubsystemBase {
     private boolean motorUpToSpeed = false;
     private int count = 0;
     private final int SHOOTTIME = 50;
+    private boolean first = true;
 
-    private enum STATEMACHINE {
-        END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP
+    private enum SEMIAUTO {
+        END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP, BACKSPIN
     };
 
-    STATEMACHINE state = STATEMACHINE.END;
+    private enum AUTOMATIC {
+        MOVEBALL, BACKSPIN, SPINSHOOTER, SHOOT, SPEEDLOAD, END, PANICSTOP
+    };
+
+    AUTOMATIC autoState = AUTOMATIC.SPINSHOOTER;
+    SEMIAUTO semiAutoState = SEMIAUTO.END;
 
     // public Shooter() {
     // LeftRight = new Servo(0);
@@ -53,6 +61,7 @@ public class Shooter extends SubsystemBase {
         this.kicker = kicker;
         this.conveyor = conveyor;
         this.intake = intake;
+        this.conveyor.addshooter(this);
     }
 
     public void stopAll() {
@@ -66,7 +75,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void resetStateMachine() {
-        state = STATEMACHINE.END;
+        semiAutoState = SEMIAUTO.END;
+        autoState = AUTOMATIC.SPINSHOOTER;
     }
 
     public void stop() {
@@ -77,45 +87,54 @@ public class Shooter extends SubsystemBase {
         return shooterMotor.getVelocity();
     }
 
-    public void StateMachine() {
-        switch (state) {
+    public void SemiAuto() {
+        switch (semiAutoState) {
         case END:
             conveyor.stop();
             kicker.stop();
             stop();
             if (conveyor.getVelocityMotor() == 0 && kicker.getVelocityMotor() == 0 && getVelocityMotor() == 0) {
-                state = STATEMACHINE.MOVEBALL;
+                semiAutoState = SEMIAUTO.MOVEBALL;
             }
             break;
         case MOVEBALL:
             if (!kicker.get()) {
                 kicker.run();
                 conveyor.run();
+                intake.run();
             } else {
-                state = STATEMACHINE.STOPMOVE;
+                semiAutoState = SEMIAUTO.STOPMOVE;
             }
             break;
         case STOPMOVE:
             conveyor.stop();
             kicker.stop();
-            state = STATEMACHINE.SPINSHOOTER;
+            intake.stop();
+            semiAutoState = SEMIAUTO.BACKSPIN;
+            break;
+        case BACKSPIN:
+            runSpeed(-0.25);
+            if (kicker.get()) {
+                stop();
+                semiAutoState = SEMIAUTO.SPINSHOOTER;
+            }
             break;
         case SPINSHOOTER:
             run();
             if (shooterMotor.getVelocity() >= 4300) {
-                state = STATEMACHINE.SHOOT;
+                semiAutoState = SEMIAUTO.SHOOT;
                 intake.ballCountDecrement();
             }
             break;
         case SHOOT:
-            kicker.run();
+            kicker.halfRun();
             if (!kicker.get()) {
                 count++;
             } else {
                 count = 0;
             }
             if (count > SHOOTTIME) {
-                state = STATEMACHINE.END;
+                semiAutoState = SEMIAUTO.END;
             }
             break;
         case PANICSTOP:
@@ -125,13 +144,100 @@ public class Shooter extends SubsystemBase {
             conveyor.stop();
             break;
         default:
-            state = STATEMACHINE.PANICSTOP;
+            semiAutoState = SEMIAUTO.PANICSTOP;
             break;
         }
+
+    }
+
+    public boolean automatic() {
+        SmartDashboard.putNumber("motorSpeed", getVelocityMotor());
+        boolean retval = false;
+        switch (autoState) {
+        case MOVEBALL:
+            kicker.run();
+            conveyor.run();
+            if (kicker.get()) {
+                kicker.stop();
+                conveyor.stop();
+                autoState = AUTOMATIC.BACKSPIN;
+            }
+            break;
+        case BACKSPIN:
+            runSpeed(-0.25);
+            if (kicker.get()) {
+                stop();
+                autoState = AUTOMATIC.SPINSHOOTER;
+            }
+            break;
+        case SPINSHOOTER:
+            run();
+            if (shooterMotor.getVelocity() >= 4800) {
+                if (kicker.get()) {
+                    autoState = AUTOMATIC.SHOOT;
+                } else {
+                    autoState = AUTOMATIC.SPEEDLOAD;
+                }
+            }
+            break;
+        case SHOOT:
+            if (first) {
+                intake.ballCountDecrement();
+                first = false;
+            }
+            kicker.halfRun();
+            if (!kicker.get()) {
+                count++;
+            } else {
+                count = 0;
+            }
+            if (count > SHOOTTIME) {
+                first = true;
+                if (intake.ballCount() > 0) {
+                    if (shooterMotor.getVelocity() > 0) {
+                        autoState = AUTOMATIC.SPINSHOOTER;
+                    } else {
+                        autoState = AUTOMATIC.MOVEBALL;
+                    }
+                } else {
+                    autoState = AUTOMATIC.END;
+                }
+            }
+            break;
+        case SPEEDLOAD:
+            conveyor.run();
+            kicker.run();
+            if (kicker.get()) {
+                conveyor.stop();
+                autoState = AUTOMATIC.SHOOT;
+            }
+            break;
+        case END:
+            conveyor.stop();
+            stop();
+            kicker.stop();
+            retval = true;
+            break;
+        default:
+        case PANICSTOP:
+            kicker.stop();
+            conveyor.stop();
+            stop();
+            break;
+        }
+        return retval;
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+    }
+
+    public double getPosMotor() {
+        return shooterMotor.getPosition();
+    }
+
+    public void runSpeed(double d) {
+        shooterMotor.set(d);
     }
 }

@@ -33,7 +33,7 @@ public class TurretControl extends CommandBase {
         }
 
         joyValx = -controller.getRightStickX();
-        Scale = 0.1;
+        Scale = 0.4;
         shooter.moveShooter(joyValx * Scale);
         // RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));
         // RobotContainer.shooter.LeftRight.set(RobotContainer.m_oi.controller2.getRawAxis(4));

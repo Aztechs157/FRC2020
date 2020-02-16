@@ -27,6 +27,7 @@ public class Intake extends SubsystemBase {
     private boolean gotBall = false;
     private DigitalInput intakeSensor = new DigitalInput(2);
     private Controller controller;
+    public boolean allowIntake = true;
 
     public Intake(Controller controller) {
         this.controller = controller;
@@ -43,6 +44,10 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         // System.out.println(intakeSensor.get());
         // System.out.println(ballCount);
+    }
+
+    public void runSpeed(double s) {
+        intakeMotor.set(s);
     }
 
     public void run() {
@@ -91,7 +96,10 @@ public class Intake extends SubsystemBase {
 
     // // private int printCount;
     public void runIntake() {
-        intakeMotor.set(controller.getLeftTrigger());
+        // System.out.println(controller.getLeftTrigger());
+        if (allowIntake) {
+            intakeMotor.set(controller.getLeftTrigger() * 0.40);
+        }
     }
 
     // printCount++;

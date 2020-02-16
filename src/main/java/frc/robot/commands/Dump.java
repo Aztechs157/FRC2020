@@ -9,39 +9,47 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
-import frc.robot.util.controllers.Controller;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Kicker;
 
-public class ConveyerControl extends CommandBase {
-
-    private final Conveyor conveyor;
-    private final Controller controller;
-
+public class Dump extends CommandBase {
     /**
-     * Creates a new ConveyerControl.
+     * Creates a new Dump.
      */
-    public ConveyerControl(final Conveyor conveyor, Controller controller) {
-        this.controller = controller;
+    private Intake intake;
+    private Conveyor conveyor;
+    private Kicker kicker;
+
+    public Dump(Intake intake, Conveyor conveyor, Kicker kicker) {
+        this.intake = intake;
         this.conveyor = conveyor;
-
+        this.kicker = kicker;
         addRequirements(conveyor);
-
-        // Use addRequirements() here to declare subsystem dependencies.
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        intake.zeroBallCount();
+        conveyor.resetStateMachine();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        conveyor.stateMachine();
+        intake.allowIntake = false;
+        intake.runSpeed(-0.60);
+        conveyor.runSpeed(-0.20);
+        kicker.runSpeed(-0.05);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        intake.allowIntake = true;
+        intake.stop();
+        conveyor.stop();
+        kicker.stop();
     }
 
     // Returns true when the command should end.

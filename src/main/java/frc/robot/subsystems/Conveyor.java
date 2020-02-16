@@ -24,6 +24,17 @@ public class Conveyor extends SubsystemBase {
     private Kicker kicker;
     private DigitalInput conveyorBottom = new DigitalInput(3);
     private Controller controller;
+    private double pos;
+    private Shooter shooter;
+    private boolean firstTime = false;
+    private int maxBalls = 4;
+    private double maxSpeed = 0.20;
+
+    private enum STATEMACHINE {
+        WAIT, STARTCONVEYOR, SHIFT, INTOKICKER, STOP, REVERSE, PANICSTOP
+    };
+
+    private STATEMACHINE state = STATEMACHINE.WAIT;
 
     /**
      * Creates a new Conveyer.
@@ -38,20 +49,100 @@ public class Conveyor extends SubsystemBase {
 
     @Override
     public void periodic() {
-        shift();
+        // stateMachine();
+        // shift();
         // This method will be called once per scheduler run
+    }
+
+    public boolean getBottom() {
+        return conveyorBottom.get();
+    }
+
+    public void addshooter(Shooter shooter) {
+        this.shooter = shooter;
+    }
+
+    public void stateMachine() {
+        switch (state) {
+        case WAIT:
+            if (intake.get()) {
+                // intake.ballCountIncrement();
+                intake.allowIntake = true;
+                if (intake.ballCount() <= maxBalls - 1) {
+                    state = STATEMACHINE.STARTCONVEYOR;
+                } else {
+                    state = STATEMACHINE.INTOKICKER;
+                }
+            }
+            break;
+        case STARTCONVEYOR:
+            run();
+            kicker.stop();
+            if (conveyorBottom.get()) {
+                state = STATEMACHINE.SHIFT;
+            }
+            break;
+        case SHIFT:
+            if (conveyorBottom.get()) {
+                run();
+                kicker.stop();
+            } else {
+                stop();
+                if (intake.ballCount() <= maxBalls) {
+                    state = STATEMACHINE.WAIT;
+                } else {
+                    state = STATEMACHINE.REVERSE;
+                }
+            }
+            break;
+        case INTOKICKER:
+            kicker.halfRun();
+            run();
+            if (kicker.get()) {
+                kicker.stop();
+                stop();
+                intake.stop();
+                // intake.allowIntake = false;
+                state = STATEMACHINE.STARTCONVEYOR;
+            }
+            break;
+        case REVERSE:
+            conveyorMotor.set(-maxSpeed / 2);
+            if (intake.get()) {
+                state = STATEMACHINE.STOP;
+            }
+            break;
+        case STOP:
+            // stop();
+            // kicker.stop();
+            if (intake.ballCount() <= 0) {
+                state = STATEMACHINE.WAIT;
+            }
+            break;
+        case PANICSTOP:
+            kicker.stop();
+            stop();
+
+            break;
+        default:
+            state = STATEMACHINE.PANICSTOP;
+
+            break;
+        }
     }
 
     public void shift() {
         if (intake.ballCount() < 1 && intake.get()) {
             intake.run();
             run();
-            kicker.runIntake();
+            kicker.halfRun();
         } else {
             if (kicker.get()) {
                 stop();
                 intake.stop();
                 kicker.stop();
+            } else {
+                shooter.runSpeed(-0.03);
             }
         }
     }
@@ -59,9 +150,12 @@ public class Conveyor extends SubsystemBase {
     // public void test() {
     // conveyorMotor.set(controller.getRawAxis(2));
     // }
+    public void runSpeed(double s) {
+        conveyorMotor.set(s);
+    }
 
     public void run() {
-        conveyorMotor.set(0.40);
+        conveyorMotor.set(maxSpeed);
     }
 
     public void stop() {
@@ -70,6 +164,10 @@ public class Conveyor extends SubsystemBase {
 
     public double getVelocityMotor() {
         return conveyorMotor.getVelocity();
+    }
+
+    public void resetStateMachine() {
+        state = STATEMACHINE.WAIT;
     }
 
 }
