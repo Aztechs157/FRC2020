@@ -32,8 +32,8 @@ public class Kicker extends SubsystemBase {
         // setDefaultCommand(KickerControl(this, LogitechController controller));
     }
 
-    public void runIntake() {
-        kicker.set(0.5);
+    public void halfRun() {
+        kicker.set(0.25);
     }
 
     public void run() {
@@ -59,6 +59,10 @@ public class Kicker extends SubsystemBase {
             }
         }
         return gotBall;
+    }
+
+    public void runSpeed(double s) {
+        kicker.set(s);
     }
 
     @Override

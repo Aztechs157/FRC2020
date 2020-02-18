@@ -17,7 +17,7 @@ public class TrackTarget extends CommandBase {
 
     // private final double LRMUL = 0.00001;
     // private final double UDMUL = 0.004;
-    private final double LRTARGET = 158;
+    private final double LRTARGET = 145;// 158
     private int importantCounter = 0;
     private final Turret turret;
     private final Vision vision;

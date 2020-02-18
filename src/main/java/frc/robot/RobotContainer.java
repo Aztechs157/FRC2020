@@ -11,6 +11,7 @@ import frc.robot.subsystems.ColorWheel;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -29,7 +30,11 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoDriveAndShoot;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoMinimal;
+import frc.robot.commands.AutoGroup;
+import frc.robot.commands.Dump;
+import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.LaserFire;
+import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TrackTarget;
 import frc.robot.commands.AutoGroup.AutoOptions;
@@ -58,6 +63,7 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
     public final Drive drive = new Drive(driveController);
     // private final ColorWheel colorWheel = new ColorWheel();
+    // private final IntakeArm intakearm = new IntakeArm();
     // #endregion
 
     private enum AutoOptions {
@@ -73,6 +79,7 @@ public class RobotContainer {
         Shuffleboard.getTab("SmartDashboard").add("Auto Type", autoChooser)
                 .withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
+
     }
 
     /**
@@ -82,10 +89,13 @@ public class RobotContainer {
         operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController));
         operatorController.B().whenPressed(new LaserFire(true, vision));
         operatorController.B().whenReleased(new LaserFire(false, vision));
-        driveController.Y().whenPressed(() -> {
-            intake.zeroBallCount();
-        }, intake);
+        /*
+         * driveController.Y().whenPressed(() -> { intake.zeroBallCount(); }, intake);
+         */
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController));
+        operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
+        operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController));
+        // driveController.X().whenPressed(new SetArm(intakearm));
 
     }
 

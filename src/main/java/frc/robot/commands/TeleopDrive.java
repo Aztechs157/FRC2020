@@ -28,6 +28,7 @@ public class TeleopDrive extends CommandBase {
         chooser.addOption("Tank Drive", TANK);
         chooser.addOption("Arcade Drive", ARCADE_DUAL);
         chooser.addOption("Arcade (Single Stick)", ARCADE_SOLO);
+        chooser.setDefaultOption("Tank Drive", TANK);
         SmartDashboard.putData("Drive Switch", chooser);
     }
 
@@ -54,6 +55,7 @@ public class TeleopDrive extends CommandBase {
         case TANK:
         default:
             drive.tankdrive();
+            break;
         }
     }
 

@@ -49,12 +49,12 @@ public class Turret extends SubsystemBase {
         if (Speed > -0.01 && Speed < 0.01) {
             LeftRight.set(0.0);
         } else if (Speed > 0) {
-            if (LeftRight.getPosition() <= 35) {
+            if (LeftRight.getPosition() <= 50) {
                 LeftRight.set(1 * Speed);
             } else {
                 LeftRight.set(0.0);
             }
-        } else if (LeftRight.getPosition() >= -25) {
+        } else if (LeftRight.getPosition() >= -90) {
             LeftRight.set(1 * Speed);
         } else {
             LeftRight.set(0.0);

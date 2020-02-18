@@ -3,17 +3,18 @@
 
 ## Authors
 
-Person                                                | Title                              | Tasks
-------------------------------------------------------|------------------------------------|-----
-[**wcarr92**](https://github.com/wcarr92)             | _Lead Programing Mentor_           | Everything, Electrical
-[**jamiesondunne**](https://github.com/jamiesondunne) | _Jr. Mentor_                       | Drive, Misc
-[**tytytyty74**](https://github.com/tytytyty74)       | _Jr. Mentor_                       | Vision Backend, Misc
-[**jamesBeeProg**](https://github.com/jamesBeeProg)   | _Lead Technical Developer_         | Github, Organisation, Misc
-[**Wallaby14**](https://github.com/Wallaby14)         | _Lead Interdepartmental Developer_ | Intake, Conveyor, Vision, Turret, Shooter, Conveyer Sensor, Misc
-[**Eric-157**](https://github.com/Eric-157)           | _Developer_                        | Drive, Auto,
-[**jcoleman157**](https://github.com/jcoleman157)     | _Developer_                        | Drive, Auto,
-[**RyanCulkin4**](https://github.com/RyanCulkin4)     | _Developer_                        | Some Drive, Some Auto, Conveyer Sensor
-[**JD2313**](https://github.com/JD2313)               | _Developer_                        | Website
+Person                                                  | Title                              | Tasks
+--------------------------------------------------------|------------------------------------|-----
+[**wcarr92**](https://github.com/wcarr92)               | _Lead Programing Mentor_           | Everything, Electrical
+[**jamiesondunne**](https://github.com/jamiesondunne)   | _Jr. Mentor_                       | Drive, Misc
+[**tytytyty74**](https://github.com/tytytyty74)         | _Jr. Mentor_                       | Vision Backend, Misc
+[**jamesBeeProg**](https://github.com/jamesBeeProg)     | _Lead Technical Developer_         | Github, Organisation, Misc
+[**Wallaby14**](https://github.com/Wallaby14)           | _Lead Interdepartmental Developer_ | Intake, Conveyor, Vision, Turret, Shooter, Conveyer Sensor, Misc
+[**Eric-157**](https://github.com/Eric-157)             | _Developer_                        | Drive, Auto,
+[**jcoleman157**](https://github.com/jcoleman157)       | _Developer_                        | Drive, Auto,
+[**RyanCulkin4**](https://github.com/RyanCulkin4)       | _Developer_                        | Some Drive, Some Auto, Conveyer Sensor
+[**JD2313**](https://github.com/JD2313)                 | _Developer_                        | Website
+[**arepentingswan**](https://github.com/arepentingswan) | _Developer_                        | Shooter, Conveyer, Conveyer Sensor
 
 Also, check the list of [contributors](https://github.com/Aztechs157/FRC2020/contributors) who made minor contributions.
 
