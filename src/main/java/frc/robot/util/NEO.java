@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import com.revrobotics.CANSparkMax;
+
 import com.revrobotics.CANEncoder;
 
 public class NEO extends CANSparkMax {
@@ -32,6 +33,10 @@ public class NEO extends CANSparkMax {
 
     public double getVelocity() {
         return encoder.getVelocity();
+    }
+
+    public void setPositionConversionFactor(double factor) {
+        encoder.setPositionConversionFactor(factor);
     }
 
     public void tare() {

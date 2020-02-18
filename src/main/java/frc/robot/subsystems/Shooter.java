@@ -9,14 +9,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import org.ejml.simple.ConvertToDenseException;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.ShooterControl;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;

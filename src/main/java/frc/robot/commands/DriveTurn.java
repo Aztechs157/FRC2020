@@ -7,14 +7,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+import frc.robot.util.PID;
 
 public class DriveTurn extends CommandBase {
 
     public Drive drive;
     private double angle;
     public double drivepower;
+
+    public final PID gyroTurnPID = new PID(0.0021, 0.0000003, 0, 0, 0, 0, 0, 0, 0);
 
     /**
      * Creates a new DriveTurn.
@@ -23,28 +27,49 @@ public class DriveTurn extends CommandBase {
         this.angle = angle;
         this.drive = drive;
         addRequirements(drive);
-        drive.drivePID.pidCalculate(83, drive.frontLeft.getPosition());
-        drivepower = drive.slew.rateCalculate(drivepower, 1125);
+        drivepower = .5;
+        drivepower = drive.slew.rateCalculate(drivepower, 1000);
         // Use addRequirements() here to declare subsystem dependencies.
+        Shuffleboard.getTab("Test").addNumber("Raw Gyro Angle", drive::getAngle);
+        Shuffleboard.getTab("Test").addNumber("Times Ran", () -> timesRan);
+    }
+
+    private int timesRan = 0;
+
+    @Override
+    public void initialize() {
+        drive.driveGyro.reset();
+        timesRan = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         // System.out.println("drivepower = ");// + drivepower);
-
-        if (drive.getAngle() >= angle) {
-            drive.frontLeft.set(.5);
-            drive.backLeft.set(.5);
-            drive.frontRight.set(.5);
-            drive.backRight.set(.5);
+        timesRan++;
+        if (drive.getAngle() <= angle) {
+            double power = .5 * gyroTurnPID.pidCalculate(angle, drive.getAngle());
+            drive.frontLeft.set(power);
+            drive.backLeft.set(power);
+            drive.frontRight.set(-power);
+            drive.backRight.set(-power);
         }
+        // System.out.println("Jacob is a piece of mean human and will live a short
+        // life and die in prison");
 
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (drive.getAngle() < angle);
+        return (drive.getAngle() > angle);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drive.frontLeft.set(0);
+        drive.backLeft.set(0);
+        drive.frontRight.set(0);
+        drive.backRight.set(0);
     }
 }

@@ -32,8 +32,9 @@ public class ColorWheel extends SubsystemBase {
     private final Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushless);
-    private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
+    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
+    // private final NEO spinMotor = new
+    // NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
 
     /**
      * Creates a new ColorWheel.

@@ -8,17 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
+// import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
+// import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drive;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import jdk.nashorn.internal.ir.IfNode;
 
 public class DriveForward extends CommandBase {
     private final Drive drive;
-    private double drivepower;
+    public double drivepower;
     public double gyropower;
     private final double units;
     double kP = .1;
@@ -35,7 +35,7 @@ public class DriveForward extends CommandBase {
 
         addRequirements(drive);
         // Use addRequirements() here to declare subsystem dependencies.
-        drivepower = drive.drivePID.pidCalculate(64.8, drive.frontLeft.getPosition());
+        drivepower = drive.drivePID.pidCalculate(units, drive.frontLeft.getPosition());
         // drivepower = drive.slew.rateCalculate(drivepower, 1125); // 1125
         // gyropower = drive.gyroDrivePID.pidCalculate(0, drive.getAngle());
 
@@ -59,14 +59,18 @@ public class DriveForward extends CommandBase {
         // System.out.println("execute driveforward");
         double angleChange = heading - drive.getAngle();
         SmartDashboard.putNumber("angleChange", angleChange);
-        SmartDashboard.putNumber("frontLeftSpeed", drive.frontLeft.getPosition());
-        SmartDashboard.putNumber("frontRightSpeed", drive.frontRight.getPosition());
-        SmartDashboard.putNumber("backLeftSpeed", drive.backLeft.getPosition());
-        SmartDashboard.putNumber("backRightSpeed", drive.backRight.getPosition());
+        SmartDashboard.putNumber("frontLeftEncoder", drive.frontLeft.getPosition());
+        SmartDashboard.putNumber("frontRightEncoder", drive.frontRight.getPosition());
+        SmartDashboard.putNumber("backLeftEncoder", drive.backLeft.getPosition());
+        SmartDashboard.putNumber("backRightEncoder", drive.backRight.getPosition());
+
+        // SmartDashboard.putNumber("encoder", drive.frontLeft.getPosition());
         // 81.83 is 12 feet
         // System.out.println("gyro =" + drive.getAngle());
 
         final double angle = drive.getAngle();
+        drivepower = .7;
+
         /*
          * if (count++ > 49) { count = 0; String angleDirection = angle < 0 ? "left" :
          * angle > 0 ? "right" : "straight"; SmartDashboard.putString("angleDirection",
@@ -83,7 +87,6 @@ public class DriveForward extends CommandBase {
         // angleChange));
 
         // }
-        // drivepower = .8;
         // else {
         // drive.frontLeft.set(Drive.leftSlew.rateCalculate(drivepower));
         // drive.backLeft.set(Drive.leftSlew.rateCalculate(drivepower));
@@ -99,7 +102,7 @@ public class DriveForward extends CommandBase {
         // }
         if (gyroEnabled == true) {
 
-            if (Math.abs(angleChange) > 2) {
+            if (Math.abs(angleChange) > 0.5) {
                 // Left
                 // changed to right
                 // System.out.println("Robot Has Drifted");
@@ -148,8 +151,6 @@ public class DriveForward extends CommandBase {
     // System.out.println("Sigma = " + drivePID.sigma);
     // System.out.println("drivepower = " + drivepower);
     // System.out.println("gyropower = " + gyropower);
-    // System.out.println("left = " + backLeft.getVelocity());
-    // System.out.println("right = " + backRight.getVelocity());
 
     // Called once the command ends or is interrupted.
     @Override
@@ -163,8 +164,9 @@ public class DriveForward extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (drive.frontLeft.getPosition() > units);
-
+        return (drive.frontRight.getPosition() > units);
+        //
         // return false;
     }
+
 }

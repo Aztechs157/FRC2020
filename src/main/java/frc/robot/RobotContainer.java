@@ -19,15 +19,22 @@ import frc.robot.util.controllers.Controller;
 import frc.robot.util.controllers.LogitechController;
 import frc.robot.util.controllers.PlaneController;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.AutoGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
+import frc.robot.commands.AutoDriveAndShoot;
+import frc.robot.commands.AutoDriveTurn;
+import frc.robot.commands.AutoMinimal;
 import frc.robot.commands.Dump;
-import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TrackTarget;
+
+import java.util.Map;
+import static java.util.Map.entry;
 
 /**
  * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,10 +59,18 @@ public class RobotContainer {
     private final IntakeArm intakearm = new IntakeArm();
     // #endregion
 
-    // comments
+    private enum AutoOptions {
+        Minimal, DriveAndShoot, AutoDriveTurn
+    }
+
+    private SendableChooser<AutoOptions> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
-
+        autoChooser.setDefaultOption("Minimal", AutoOptions.Minimal);
+        autoChooser.addOption("Drive and Shoot", AutoOptions.DriveAndShoot);
+        autoChooser.addOption("Auto Turn", AutoOptions.AutoDriveTurn);
+        Shuffleboard.getTab("SmartDashboard").add("Auto Type", autoChooser)
+                .withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
 
     }
@@ -85,10 +100,14 @@ public class RobotContainer {
 
     }
 
+    private Command autoCommand = new SelectCommand(Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
+            entry(AutoOptions.DriveAndShoot, new AutoDriveAndShoot(drive)),
+            entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive))), autoChooser::getSelected);
+
     /**
      * Put Autonomus command here
      */
     public Command getAutonomousCommand() {
-        return new AutoGroup(drive);
+        return autoCommand;
     }
 }

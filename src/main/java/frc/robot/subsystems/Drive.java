@@ -10,15 +10,20 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+// import frc.robot.commands.DriveForward;
+// import frc.robot.commands.DriveTurn;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
 import frc.robot.util.controllers.Controller;
 
-import com.revrobotics.CANSparkMaxLowLevel;
+// import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
@@ -52,8 +57,14 @@ public class Drive extends SubsystemBase {
         frontLeft.tare();
         backRight.tare();
         backLeft.tare();
+        driveGyro.reset();
         setDefaultCommand(new TeleopDrive(this));
 
+        frontLeft.setPositionConversionFactor(2.105);
+        frontRight.setPositionConversionFactor(2.105);
+        backLeft.setPositionConversionFactor(2.105);
+        backRight.setPositionConversionFactor(2.105);
+        Shuffleboard.getTab("Test").add("Gyro", driveGyro);
         // frontRight.setInverted(InvertType.InvertMotorOutput);
         // 1backRight.setInverted(InvertType.FollowMaster);
     }
@@ -71,6 +82,7 @@ public class Drive extends SubsystemBase {
         frontLeft.setBrakeMode();
         frontRight.setBrakeMode();
     }
+
     /*
      * private Drive getInstance(){ if(instance == null){ instance = new Drive(); }
      * return instance;
@@ -87,6 +99,10 @@ public class Drive extends SubsystemBase {
         // System.out.println("FL " + frontLeft.getPosition() + " BL " +
         // backLeft.getPosition() + " FR "
         // + frontRight.getPosition() + " BR " + backRight.getPosition());
+        // System.out.println("back left = " + backLeft.getPosition());
+        // System.out.println("front left = " + frontLeft.getPosition());
+        // System.out.println("back right = " + backLeft.getPosition());
+        // System.out.println("Front right = " + frontRight.getPosition());
 
         // front left tests
         // test 1 -63
@@ -97,7 +113,10 @@ public class Drive extends SubsystemBase {
         // 9 units is 20 inches 12 feet is 63.6
         // R 62
         // L -73
-
+        // System.out.println("LeftFrontEncoder = " + frontLeft.getPosition());
+        // System.out.println("RightFrontEncoder = " + frontRight.getPosition());
+        // System.out.println("LeftBackEncoder = " + backLeft.getPosition());
+        // System.out.println("RightBackEncoder = " + backRight.getPosition());
     }
 
     public void tankdrive() {
@@ -184,19 +203,5 @@ public class Drive extends SubsystemBase {
 
     public void autoDrive(final double leftPower, final double rightPower) {
         // System.out.println("frontleft.getposision = " + frontLeft.getPosition());
-
-    }
-
-    public void autoTurn(final double speed) {
-        // leftPower = drivePower - gyroDrivePID.pidCalculate(initAngle, getAngle());
-        // leftPower = ((leftPower > 0) ? 1 : -1) * Math.min(1, Math.abs(leftPower));
-
-        // rightPower = drivePower + gyroDrivePID.pidCalculate(initAngle, getAngle());
-        // rightPower = ((rightPower > 0) ? 1 : -1) * Math.min(1, Math.abs(rightPower));
-        final int count = 0;
-        /*
-         * while (count <= 100) { System.out.println(getAngle()); count++; }
-         */
-
     }
 }
