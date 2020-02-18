@@ -226,7 +226,7 @@ public class Pixy2Controller {
         public double width;
         public double height;
         public int angle;
-        public boolean unread = true;
+        // public boolean unread = true;
         public int checkSum;
         public boolean checkCorrect;
     }

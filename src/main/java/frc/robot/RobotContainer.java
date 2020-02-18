@@ -49,7 +49,7 @@ public class RobotContainer {
     private final Conveyor conveyor = new Conveyor(driveController, intake, kicker);
     private final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
     public final Drive drive = new Drive(driveController);
-    // private final IntakeArm intakearm = new IntakeArm();
+    private final IntakeArm intakearm = new IntakeArm();
     // #endregion
 
     // comments
@@ -73,7 +73,15 @@ public class RobotContainer {
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController));
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController));
-        // driveController.X().whenPressed(new SetArm(intakearm));
+        driveController.X().whenPressed(new SetArm(intakearm));
+        // operatorController.LeftButton().whileHeld(() -> {
+        // shooter.setSpeed(3300);
+        // // shooter.runSpeed(1);
+        // SmartDashboard.putNumber("shooter speed", shooter.getVelocityMotor());
+        // });
+        // operatorController.LeftButton().whenReleased(() -> {
+        // shooter.stop();
+        // });
 
     }
 

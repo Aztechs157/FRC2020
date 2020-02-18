@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.ShooterControl;
 import frc.robot.util.NEO;
+import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;
 
 public class Shooter extends SubsystemBase {
@@ -38,6 +39,8 @@ public class Shooter extends SubsystemBase {
     private int count = 0;
     private final int SHOOTTIME = 50;
     private boolean first = true;
+    private double currentPower = 0;
+    private PID shootPid = new PID(0.00001, 0, 0, 0, 0, 0, 0, 0, 0);
 
     private enum SEMIAUTO {
         END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP, BACKSPIN
@@ -68,6 +71,15 @@ public class Shooter extends SubsystemBase {
         kicker.stop();
         conveyor.stop();
         stop();
+    }
+
+    public void setSpeed(double speed) {
+        currentPower += shootPid.pidCalculate(speed, shooterMotor.getVelocity());
+        if (currentPower > 1)
+            currentPower = 1;
+        else if (currentPower < -1)
+            currentPower = -1;
+        shooterMotor.set(currentPower);
     }
 
     public void run() {
@@ -121,7 +133,7 @@ public class Shooter extends SubsystemBase {
             break;
         case SPINSHOOTER:
             run();
-            if (shooterMotor.getVelocity() >= 4300) {
+            if (shooterMotor.getVelocity() >= 3300) {
                 semiAutoState = SEMIAUTO.SHOOT;
                 intake.ballCountDecrement();
             }
@@ -171,8 +183,8 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SPINSHOOTER:
-            run();
-            if (shooterMotor.getVelocity() >= 4800) {
+            setSpeed(3400);
+            if (shooterMotor.getVelocity() >= 3300) {
                 if (kicker.get()) {
                     autoState = AUTOMATIC.SHOOT;
                 } else {
@@ -181,6 +193,7 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SHOOT:
+            setSpeed(3400);
             if (first) {
                 intake.ballCountDecrement();
                 first = false;
@@ -193,6 +206,7 @@ public class Shooter extends SubsystemBase {
             }
             if (count > SHOOTTIME) {
                 first = true;
+                count = 0;
                 if (intake.ballCount() > 0) {
                     if (shooterMotor.getVelocity() > 0) {
                         autoState = AUTOMATIC.SPINSHOOTER;
@@ -205,6 +219,7 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SPEEDLOAD:
+            setSpeed(3400);
             conveyor.run();
             kicker.run();
             if (kicker.get()) {

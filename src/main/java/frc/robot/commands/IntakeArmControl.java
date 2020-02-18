@@ -16,7 +16,8 @@ public class IntakeArmControl extends CommandBase {
     /**
      * Creates a new IntakeArmControl.
      */
-    public IntakeArmControl() {
+    public IntakeArmControl(IntakeArm intakeArm) {
+        this.intakearm = intakeArm;
         addRequirements(intakearm);
         // Use addRequirements() here to declare subsystem dependencies.
     }
@@ -29,6 +30,7 @@ public class IntakeArmControl extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        intakearm.MoveArm();
     }
 
     // Called once the command ends or is interrupted.

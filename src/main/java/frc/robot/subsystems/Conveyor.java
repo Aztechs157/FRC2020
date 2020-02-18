@@ -28,10 +28,10 @@ public class Conveyor extends SubsystemBase {
     private Shooter shooter;
     private boolean firstTime = false;
     private int maxBalls = 4;
-    private double maxSpeed = 0.20;
+    private double maxSpeed = 0.40;
 
     private enum STATEMACHINE {
-        WAIT, STARTCONVEYOR, SHIFT, INTOKICKER, STOP, REVERSE, PANICSTOP
+        WAIT, STARTCONVEYOR, SHIFT, INTOKICKER, STOP, CLEARKICKER, PANICSTOP
     };
 
     private STATEMACHINE state = STATEMACHINE.WAIT;
@@ -66,7 +66,7 @@ public class Conveyor extends SubsystemBase {
         switch (state) {
         case WAIT:
             if (intake.get()) {
-                // intake.ballCountIncrement();
+                intake.ballCountIncrement();
                 intake.allowIntake = true;
                 if (intake.ballCount() <= maxBalls - 1) {
                     state = STATEMACHINE.STARTCONVEYOR;
@@ -77,6 +77,8 @@ public class Conveyor extends SubsystemBase {
             break;
         case STARTCONVEYOR:
             run();
+            intake.allowIntake = false;
+            intake.run();
             kicker.stop();
             if (conveyorBottom.get()) {
                 state = STATEMACHINE.SHIFT;
@@ -86,18 +88,23 @@ public class Conveyor extends SubsystemBase {
             if (conveyorBottom.get()) {
                 run();
                 kicker.stop();
+                intake.run();
             } else {
                 stop();
-                if (intake.ballCount() <= maxBalls) {
+                intake.stop();
+                intake.allowIntake = true;
+                if (intake.ballCount() <= maxBalls - 1) {
                     state = STATEMACHINE.WAIT;
                 } else {
-                    state = STATEMACHINE.REVERSE;
+                    state = STATEMACHINE.CLEARKICKER;
                 }
             }
             break;
         case INTOKICKER:
             kicker.halfRun();
             run();
+            intake.allowIntake = false;
+            intake.run();
             if (kicker.get()) {
                 kicker.stop();
                 stop();
@@ -106,9 +113,10 @@ public class Conveyor extends SubsystemBase {
                 state = STATEMACHINE.STARTCONVEYOR;
             }
             break;
-        case REVERSE:
+        case CLEARKICKER:
             conveyorMotor.set(-maxSpeed / 2);
             if (intake.get()) {
+                stop();
                 state = STATEMACHINE.STOP;
             }
             break;

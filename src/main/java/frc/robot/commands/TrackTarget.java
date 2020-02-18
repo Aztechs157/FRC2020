@@ -19,6 +19,7 @@ public class TrackTarget extends CommandBase {
     // private final double UDMUL = 0.004;
     private final double LRTARGET = 145;// 158
     private int importantCounter = 0;
+    private int unimportantCounter = 0;
     private final Turret turret;
     private final Vision vision;
     private final Controller controller;
@@ -48,9 +49,15 @@ public class TrackTarget extends CommandBase {
         // System.out.println("Target length" + targets.length);
         if (targets.length == 1) {
             importantCounter = 0;
+            unimportantCounter++;
             // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
             turret.moveShooter(vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
             vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
+            if (unimportantCounter >= 100) {
+                System.out.println("pos: (" + targets[0].x + ", " + targets[0].y + ")");
+                System.out.println("siz: (" + targets[0].width + ", " + targets[0].height + ")");
+                unimportantCounter = 0;
+            }
 
         } else {
             importantCounter++;

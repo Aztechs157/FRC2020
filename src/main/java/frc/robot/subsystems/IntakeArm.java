@@ -19,14 +19,14 @@ public class IntakeArm extends SubsystemBase {
 
     private final NEO intakeArmMotor;
     public double position = 0;
-    private PID intakePID = new PID(0.5, 0, 0, 0, 0, 0, 0, 0, 0);
+    private PID intakePID = new PID(0.05, 0, 0.002, 0, 0, 0, 0, 0, 0);
 
     /**
      * Creates a new IntakeArm.
      */
     public IntakeArm() {
-        intakeArmMotor = new NEO(Constants.ShooterConstants.intakeArmMotorID, MotorType.kBrushless);
-        setDefaultCommand(new IntakeArmControl());
+        intakeArmMotor = new NEO(Constants.ShooterConstants.intakeArmMotorID, MotorType.kBrushless).inverted();
+        setDefaultCommand(new IntakeArmControl(this));
     }
 
     public void run(double speed) {
