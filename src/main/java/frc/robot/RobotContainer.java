@@ -7,11 +7,9 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.ColorWheel;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -22,22 +20,16 @@ import frc.robot.util.controllers.PlaneController;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoDriveAndShoot;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoMinimal;
-import frc.robot.commands.AutoGroup;
 import frc.robot.commands.Dump;
-import frc.robot.commands.IntakeArmControl;
 import frc.robot.commands.LaserFire;
-import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TrackTarget;
-import frc.robot.commands.AutoGroup.AutoOptions;
 
 import java.util.Map;
 import static java.util.Map.entry;

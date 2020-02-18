@@ -1,12 +1,8 @@
 package frc.robot.util;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.jni.CANSparkMaxJNI;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANError;
 
 public class NEO extends CANSparkMax {
 

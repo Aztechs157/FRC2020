@@ -7,12 +7,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drive;
-import frc.robot.util.NEO;
 
 public class AutoGroup extends SequentialCommandGroup {
     // A MAN HAS FALLEN INTO THE RIVER OF LEGO CITY

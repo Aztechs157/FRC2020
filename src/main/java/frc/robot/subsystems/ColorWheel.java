@@ -11,7 +11,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
