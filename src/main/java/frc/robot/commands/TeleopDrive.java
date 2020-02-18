@@ -40,7 +40,11 @@ public class TeleopDrive extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        switch (chooser.getSelected()) {
+        var selected = chooser.getSelected();
+        if (selected == null) {
+            selected = TANK;
+        }
+        switch (selected) {
         case ARCADE_DUAL:
             drive.arcadedrive(false);
             break;

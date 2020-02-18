@@ -11,6 +11,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
@@ -32,8 +33,9 @@ public class ColorWheel extends SubsystemBase {
     private final Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushless);
-    private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
+    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
+    // private final NEO spinMotor = new
+    // NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
 
     /**
      * Creates a new ColorWheel.
