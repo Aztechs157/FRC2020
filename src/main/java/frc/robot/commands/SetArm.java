@@ -13,7 +13,6 @@ import frc.robot.subsystems.IntakeArm;
 public class SetArm extends CommandBase {
     public IntakeArm intakearm;
     private boolean extended = false;
-    private double outPos = 38;
 
     /**
      * Creates a new SetArm.
@@ -34,7 +33,7 @@ public class SetArm extends CommandBase {
         if (extended) {
             intakearm.position = 0;
         } else {
-            intakearm.position = outPos;
+            intakearm.position = intakearm.outPos;
         }
         extended = !extended;
     }

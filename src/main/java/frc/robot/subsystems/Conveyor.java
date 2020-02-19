@@ -20,6 +20,7 @@ public class Conveyor extends SubsystemBase {
     public final NEO conveyorMotor;
 
     private Intake intake;
+    private IntakeArm intakearm;
     private Kicker kicker;
     private DigitalInput conveyorBottom = new DigitalInput(3);
     private Controller controller;
@@ -38,11 +39,12 @@ public class Conveyor extends SubsystemBase {
     /**
      * Creates a new Conveyer.
      */
-    public Conveyor(Controller controller, Intake intake, Kicker kicker) {
+    public Conveyor(Controller controller, Intake intake, Kicker kicker, IntakeArm intakearm) {
         conveyorMotor = new NEO(Constants.ShooterConstants.conveyorMotor, MotorType.kBrushless);
         this.intake = intake;
         this.kicker = kicker;
         this.controller = controller;
+        this.intakearm = intakearm;
         setDefaultCommand(new ConveyerControl(this, controller));
     }
 
@@ -95,11 +97,14 @@ public class Conveyor extends SubsystemBase {
                 if (intake.ballCount() <= maxBalls - 1) {
                     state = STATEMACHINE.WAIT;
                 } else {
+                    intakearm.position = 0;
                     state = STATEMACHINE.CLEARKICKER;
+
                 }
             }
             break;
         case INTOKICKER:
+
             kicker.halfRun();
             run();
             intake.allowIntake = false;

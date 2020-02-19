@@ -36,6 +36,7 @@ public class Vision extends SubsystemBase {
         pixyLight = new Relay(0);
         pixyLight.setDirection(Direction.kForward);
         laser.setDirection(Direction.kForward);
+        pixy.AddCameraServer(10);
     }
 
     public void setHorizontal(final double pos) {
@@ -61,4 +62,12 @@ public class Vision extends SubsystemBase {
     public void turnLight(final boolean lightOn) {
         pixyLight.set((lightOn) ? Value.kForward : Value.kOff);
     }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        getBlocks();
+        // System.out.println("hello world");
+    }
+
 }

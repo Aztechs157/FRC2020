@@ -29,9 +29,11 @@ public class Intake extends SubsystemBase {
     private Controller controller;
     public boolean allowIntake = true;
     private double intakeSpeed = 0.80;
+    private IntakeArm intakearm;
 
-    public Intake(Controller controller) {
+    public Intake(Controller controller, IntakeArm intakearm) {
         this.controller = controller;
+        this.intakearm = intakearm;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         setDefaultCommand(new IntakeTrigger(this));
 
@@ -100,6 +102,11 @@ public class Intake extends SubsystemBase {
         // System.out.println(controller.getLeftTrigger());
         if (allowIntake) {
             intakeMotor.set(controller.getLeftTrigger() * intakeSpeed);
+            if (controller.getLeftTrigger() > 0.1 && ballCount <= 4) {
+                intakearm.position = intakearm.outPos;
+            } else {
+                intakearm.position = 0;
+            }
         }
     }
 

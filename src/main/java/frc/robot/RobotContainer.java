@@ -49,14 +49,14 @@ public class RobotContainer {
     // #region Subsystems
     // private static final Conveyor conveyor = new Conveyor(driveController);
     // private static final Drive drive = new Drive(driveController);
-    private final Intake intake = new Intake(driveController);
+    private final IntakeArm intakearm = new IntakeArm();
     private final Vision vision = new Vision();
+    private final Intake intake = new Intake(driveController, intakearm);
     private final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
-    private final Conveyor conveyor = new Conveyor(driveController, intake, kicker);
+    private final Conveyor conveyor = new Conveyor(driveController, intake, kicker, intakearm);
     private final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
     public final Drive drive = new Drive(driveController);
-    private final IntakeArm intakearm = new IntakeArm();
     // #endregion
 
     private enum AutoOptions {
@@ -88,7 +88,7 @@ public class RobotContainer {
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController));
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController));
-        driveController.X().whenPressed(new SetArm(intakearm));
+        // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
         // shooter.setSpeed(3300);
         // // shooter.runSpeed(1);
