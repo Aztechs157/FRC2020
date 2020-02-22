@@ -28,6 +28,7 @@ public class Conveyor extends SubsystemBase {
     private boolean firstTime = false;
     private int maxBalls = 4;
     private double maxSpeed = 0.40;
+    private double outPos = 38;
 
     private enum STATEMACHINE {
         WAIT, STARTCONVEYOR, SHIFT, INTOKICKER, STOP, CLEARKICKER, PANICSTOP

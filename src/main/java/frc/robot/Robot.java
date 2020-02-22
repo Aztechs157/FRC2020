@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         robotContainer.drive.setAllCoastMode();
+        robotContainer.vision.turnLight(false);
     }
 
     @Override
@@ -78,6 +79,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
         robotContainer.drive.setAllBrakeMode();
+        robotContainer.vision.turnLight(true);
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+        robotContainer.vision.turnLight(true);
         robotContainer.drive.setAllBrakeMode();
     }
 

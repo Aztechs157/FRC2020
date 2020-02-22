@@ -7,19 +7,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeArm;
+import frc.robot.subsystems.ColorWheel;
 
-public class IntakeArmControl extends CommandBase {
-    public IntakeArm intakearm;
+public class ColorWheelSpin extends CommandBase {
+    private ColorWheel colorWheel;
 
     /**
-     * Creates a new IntakeArmControl.
+     * Creates a new ColorWheelSpin.
      */
-    public IntakeArmControl(IntakeArm intakeArm) {
-        this.intakearm = intakeArm;
-        addRequirements(intakearm);
+    public ColorWheelSpin(ColorWheel colorWheel) {
+        this.colorWheel = colorWheel;
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
@@ -31,7 +29,7 @@ public class IntakeArmControl extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        intakearm.MoveArm();
+        colorWheel.colorWheelState();
     }
 
     // Called once the command ends or is interrupted.

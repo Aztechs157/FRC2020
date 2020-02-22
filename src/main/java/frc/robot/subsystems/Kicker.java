@@ -37,7 +37,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public void run() {
-        kicker.set(1);
+        kicker.set(0.4);
     }
 
     public void stop() {

@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,6 +25,8 @@ public class Shooter extends SubsystemBase {
      *
      * @param operatorcontroller
      */
+    // var entry;
+    private double targetRPM = 4700;
     public NEO LeftRight;
     public NEO UpDown;
     private Controller controller;
@@ -32,10 +35,10 @@ public class Shooter extends SubsystemBase {
     private final Conveyor conveyor;
     private boolean motorUpToSpeed = false;
     private int count = 0;
-    private final int SHOOTTIME = 50;
+    private final int SHOOTTIME = 100;
     private boolean first = true;
     private double currentPower = 0;
-    private PID shootPid = new PID(0.00001, 0, 0, 0, 0, 0, 0, 0, 0);
+    private PID shootPid = new PID(0.00001, 0, 0.000003, 0, 0, 0, 0, 0, 0);
 
     private enum SEMIAUTO {
         END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP, BACKSPIN
@@ -60,6 +63,8 @@ public class Shooter extends SubsystemBase {
         this.conveyor = conveyor;
         this.intake = intake;
         this.conveyor.addshooter(this);
+        // entry = Shuffleboard.getTab("Test").addNumber("target RPM", valueSupplier)
+        Shuffleboard.getTab("Test").addNumber("shooter speed", this::getVelocityMotor);
     }
 
     public void stopAll() {
@@ -134,7 +139,7 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SHOOT:
-            kicker.halfRun();
+            kicker.run();
             if (!kicker.get()) {
                 count++;
             } else {
@@ -158,7 +163,6 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean automatic() {
-        SmartDashboard.putNumber("motorSpeed", getVelocityMotor());
         boolean retval = false;
         switch (autoState) {
         case MOVEBALL:
@@ -178,8 +182,8 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SPINSHOOTER:
-            setSpeed(3400);
-            if (shooterMotor.getVelocity() >= 3300) {
+            setSpeed(targetRPM);
+            if (shooterMotor.getVelocity() >= targetRPM - 50 && shooterMotor.getVelocity() <= targetRPM + 50) {
                 if (kicker.get()) {
                     autoState = AUTOMATIC.SHOOT;
                 } else {
@@ -188,8 +192,9 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SHOOT:
-            setSpeed(3400);
+            setSpeed(targetRPM);
             if (first) {
+
                 intake.ballCountDecrement();
                 first = false;
             }
@@ -214,7 +219,7 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SPEEDLOAD:
-            setSpeed(3400);
+            setSpeed(targetRPM);
             conveyor.run();
             kicker.run();
             if (kicker.get()) {

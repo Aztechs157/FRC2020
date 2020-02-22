@@ -7,14 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakeArm;
-import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.*;
 import frc.robot.util.controllers.Controller;
 import frc.robot.util.controllers.LogitechController;
 import frc.robot.util.controllers.PlaneController;
@@ -22,11 +15,13 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoDriveAndShoot;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoMinimal;
+import frc.robot.commands.ColorWheelSpin;
 import frc.robot.commands.Dump;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.SetArm;
@@ -50,13 +45,14 @@ public class RobotContainer {
     // private static final Conveyor conveyor = new Conveyor(driveController);
     // private static final Drive drive = new Drive(driveController);
     private final Intake intake = new Intake(driveController);
-    private final Vision vision = new Vision();
+    public final Vision vision = new Vision();
     private final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
     private final Conveyor conveyor = new Conveyor(driveController, intake, kicker);
     private final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
     public final Drive drive = new Drive(driveController);
     private final IntakeArm intakearm = new IntakeArm();
+    private final ColorWheel colorWheel = new ColorWheel(turret);
     // #endregion
 
     private enum AutoOptions {
@@ -89,14 +85,26 @@ public class RobotContainer {
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController));
         driveController.X().whenPressed(new SetArm(intakearm));
+        operatorController.LeftButton().whenPressed(new ColorWheelSpin(colorWheel));
         // operatorController.LeftButton().whileHeld(() -> {
         // shooter.setSpeed(3300);
         // // shooter.runSpeed(1);
-        // SmartDashboard.putNumber("shooter speed", shooter.getVelocityMotor());
         // });
         // operatorController.LeftButton().whenReleased(() -> {
         // shooter.stop();
         // });
+        driveController.LeftButton().whileHeld(() -> {
+            colorWheel.run(0.2);
+        });
+        driveController.LeftButton().whenReleased(() -> {
+            colorWheel.stopArm();
+        });
+        driveController.RightButton().whileHeld(() -> {
+            colorWheel.run(-0.50);
+        });
+        driveController.RightButton().whenReleased(() -> {
+            colorWheel.stopArm();
+        });
 
     }
 

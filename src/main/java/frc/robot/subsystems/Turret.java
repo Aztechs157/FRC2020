@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.NEO;
+import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;
 import frc.robot.commands.TurretControl;
 
@@ -21,6 +22,13 @@ public class Turret extends SubsystemBase {
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
+    public double position = 0;
+    private PID turretPID = new PID(0.0001, 0, 0, 0, 0, 0, 0, 0, 0);
+
+    public void run(double s) {
+        LeftRight.set(s);
+    }
+
     public Turret(Controller controller) {
         LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
@@ -59,5 +67,9 @@ public class Turret extends SubsystemBase {
         } else {
             LeftRight.set(0.0);
         }
+    }
+
+    public void MoveTurret() {
+        run(turretPID.pidCalculate(position, LeftRight.getPosition()));
     }
 }

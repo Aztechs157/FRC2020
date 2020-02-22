@@ -14,7 +14,7 @@ Person                                                  | Title                 
 [**jcoleman157**](https://github.com/jcoleman157)       | _Developer_                        | Drive, Auto,
 [**RyanCulkin4**](https://github.com/RyanCulkin4)       | _Developer_                        | Some Drive, Some Auto, Conveyer Sensor
 [**JD2313**](https://github.com/JD2313)                 | _Developer_                        | Website
-[**arepentingswan**](https://github.com/arepentingswan) | _Developer_                        | Shooter, Conveyer, Conveyer Sensor
+[**arepentingswan**](https://github.com/arepentingswan) | _Developer_                        | Shooter, Conveyer, Conveyer Sensor, Color Wheel
 
 Also, check the list of [contributors](https://github.com/Aztechs157/FRC2020/contributors) who made minor contributions.
 
