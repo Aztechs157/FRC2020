@@ -10,16 +10,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drive;
 
-public class AutoDriveAndShoot extends SequentialCommandGroup {
+public class AutoLeft extends SequentialCommandGroup {
     /**
-     * Creates a new AutoDriveAndShoot.
+     * Creates a new AutoLeft.
      */
-    public AutoDriveAndShoot(Drive drive) {
-        DriveForward command = new DriveForward(16.2, true, drive);
-        command.drivepower = .1;
+    public AutoLeft(Drive drive) {
+        DriveTurn command = new DriveTurn(45, drive);
         addCommands(command);
-        System.out.println("DriveAndShoot");
+        System.out.println("Left");
 
     }
-
 }

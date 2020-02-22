@@ -26,12 +26,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoDriveAndShoot;
 import frc.robot.commands.AutoDriveTurn;
+import frc.robot.commands.AutoLeft;
+import frc.robot.commands.AutoMid;
 import frc.robot.commands.AutoMinimal;
+import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TrackTarget;
+import frc.robot.commands.AutoGroup.AutoOptions;
 
 import java.util.Map;
 import static java.util.Map.entry;
@@ -60,15 +64,18 @@ public class RobotContainer {
     // #endregion
 
     private enum AutoOptions {
-        Minimal, DriveAndShoot, AutoDriveTurn
+        Minimal, DriveAndShoot, AutoDriveTurn, AutoLeft, AutoRight, AutoMid
     }
 
     private SendableChooser<AutoOptions> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
-        autoChooser.setDefaultOption("Minimal", AutoOptions.Minimal);
+        autoChooser.addOption("Minimal", AutoOptions.Minimal);
         autoChooser.addOption("Drive and Shoot", AutoOptions.DriveAndShoot);
         autoChooser.addOption("Auto Turn", AutoOptions.AutoDriveTurn);
+        autoChooser.addOption("Auto Left", AutoOptions.AutoLeft);
+        autoChooser.setDefaultOption("Auto Right", AutoOptions.AutoRight);
+        autoChooser.addOption("Auto Mid", AutoOptions.AutoMid);
         Shuffleboard.getTab("SmartDashboard").add("Auto Type", autoChooser)
                 .withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
@@ -100,9 +107,13 @@ public class RobotContainer {
 
     }
 
-    private Command autoCommand = new SelectCommand(Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
-            entry(AutoOptions.DriveAndShoot, new AutoDriveAndShoot(drive)),
-            entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive))), autoChooser::getSelected);
+    private Command autoCommand = new SelectCommand(
+            Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
+                    entry(AutoOptions.DriveAndShoot, new AutoDriveAndShoot(drive)),
+                    entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive)),
+                    entry(AutoOptions.AutoRight, new AutoRight(drive)),
+                    entry(AutoOptions.AutoLeft, new AutoLeft(drive)), entry(AutoOptions.AutoMid, new AutoMid(drive))),
+            autoChooser::getSelected);
 
     /**
      * Put Autonomus command here
