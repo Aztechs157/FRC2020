@@ -27,7 +27,7 @@ public class AutoGroup extends SequentialCommandGroup {
         case StartShootFar:
             // add shoot code
             addCommands(new DriveForward(16.2, true, drive), new DriveTurn(-90, drive),
-                    new DriveForward(37.8, true, drive), new DriveTurn(-90, drive));
+                    new DriveForward(32.4, true, drive), new DriveTurn(-90, drive));
             System.out.println("Far done");
 
             break;
@@ -50,7 +50,7 @@ public class AutoGroup extends SequentialCommandGroup {
         }
 
         // 64.8 is 12 feet, we don'nt want to run into a wall for the second time
-        // 37.8 is 6 feet
+        // 32.4 is 6 feet
         // 16.2 is 3 feet
         // 27 is 5 feet
         // 21.6 is 4 feet

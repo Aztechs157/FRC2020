@@ -15,9 +15,9 @@ public class AutoMinimal extends SequentialCommandGroup {
      * Creates a new AutoMinimal.
      */
     public AutoMinimal(Drive drive) {
-        DriveForward command = new DriveForward(16.2, true, drive);
-        command.drivepower = .1;
-        addCommands(command);
+        // DriveForward command = new DriveForward(16.2, true, drive);
+        // command.drivepower = .1;
+        // addCommands(command);
         System.out.println("Minimal");
 
     }

@@ -18,8 +18,9 @@ public class DriveTurn extends CommandBase {
     private double angle;
     public double drivepower;
 
-    public final PID gyroTurnPID = new PID(0.0021, 0.0000003, 0, 0, 0, 0, 0, 0, 0);
+    public final PID gyroTurnPID = new PID(.0092, 0, .004, 0, 0, 0, 0, 0, 0);
 
+    // original P is 0.0022
     /**
      * Creates a new DriveTurn.
      */
@@ -27,11 +28,9 @@ public class DriveTurn extends CommandBase {
         this.angle = angle;
         this.drive = drive;
         addRequirements(drive);
-        drivepower = .5;
-        drivepower = drive.slew.rateCalculate(drivepower, 1000);
         // Use addRequirements() here to declare subsystem dependencies.
-        Shuffleboard.getTab("Test").addNumber("Raw Gyro Angle", drive::getAngle);
-        Shuffleboard.getTab("Test").addNumber("Times Ran", () -> timesRan);
+        // Shuffleboard.getTab("Test").addNumber("Raw Gyro Angle", drive::getAngle);
+        // Shuffleboard.getTab("Test").addNumber("Times Ran", () -> timesRan);
     }
 
     private int timesRan = 0;
@@ -54,8 +53,6 @@ public class DriveTurn extends CommandBase {
             drive.frontRight.set(-power);
             drive.backRight.set(-power);
         }
-        // System.out.println("Jacob is a piece of mean human and will live a short
-        // life and die in prison");
 
     }
 

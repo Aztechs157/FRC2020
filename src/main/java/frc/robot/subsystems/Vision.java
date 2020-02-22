@@ -44,6 +44,7 @@ public class Vision extends SubsystemBase {
         });
         pixyLight.setDirection(Direction.kForward);
         laser.setDirection(Direction.kForward);
+        pixy.AddCameraServer(10);
     }
 
     public void setHorizontal(final double pos) {
@@ -73,4 +74,12 @@ public class Vision extends SubsystemBase {
             limelight.LEDoff();
         }
     }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        getBlocks();
+        // System.out.println("hello world");
+    }
+
 }

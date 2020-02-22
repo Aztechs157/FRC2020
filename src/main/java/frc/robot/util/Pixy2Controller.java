@@ -9,7 +9,20 @@ package frc.robot.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.CvSource;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.I2C;
 
 /**
@@ -28,6 +41,11 @@ public class Pixy2Controller {
     private byte[] packetHead = new byte[6];
     private final I2C pixy;
     public Target[] current = { new Target() };
+    private boolean serverStarted = false;
+    private CvSource server;
+    private int frameCount = 0;
+    private int maxcount;
+    public int selectedIndex = -1;
 
     public Pixy2Controller(final I2C.Port port, final int address) {
         this.pixy = new I2C(port, address);
@@ -78,6 +96,8 @@ public class Pixy2Controller {
         if (badReadInput(signatures, maxBlocks)) {
             return false;
         }
+
+        // System.out.println(serverStarted);
         final Byte sigmap = mask(signatures);
         final byte[] writeBytes = GETBLOCKS;
         writeBytes[4] = sigmap;
@@ -85,7 +105,10 @@ public class Pixy2Controller {
         pixy.writeBulk(writeBytes);
         packetHead = new byte[6];
         pixy.readOnly(packetHead, 6);
+        // System.out.println("test " + packetHead[0]);
         if (packetHead[3] > 1) {
+
+            // System.out.println(serverStarted);
             final byte[] packetBody = new byte[packetHead[3]];
             pixy.readOnly(packetBody, packetHead[3]);
             final Target[] retval = new Target[packetBody.length / 14];
@@ -99,11 +122,38 @@ public class Pixy2Controller {
                 retval[i / 14].angle = convertToShort(packetBody[i + 10], packetBody[i + 11]);
             }
             this.current = retval;
+            // System.out.println(serverStarted);
+            if (serverStarted) {
+                drawPicture(retval);
+            }
             return true;
         } else {
             return false;
         }
 
+    }
+
+    private void drawPicture(Target[] targets) {
+        frameCount++;
+
+        if (frameCount >= maxcount) {
+            Arrays.sort(targets);
+            frameCount = 0;
+            Mat image = new Mat(new Size(315, 207), CvType.CV_8UC3);
+            image.setTo(new Scalar(255, 255, 255));
+            // System.out.println(targets.length);
+
+            for (int i = 0; i < targets.length; i++) {
+                Point a = new Point(targets[i].x - (targets[i].width / 2), targets[i].y - (targets[i].height / 2));
+                Point b = new Point(targets[i].x + (targets[i].width / 2), targets[i].y + (targets[i].height / 2));
+                if (i == selectedIndex) {
+                    Imgproc.rectangle(image, a, b, new Scalar(0, 0, 255), 1);
+                } else {
+                    Imgproc.rectangle(image, a, b, new Scalar(100, 100, 255), 2);
+                }
+            }
+            server.putFrame(image);
+        }
     }
 
     public int unsign(final byte n) {
@@ -212,6 +262,56 @@ public class Pixy2Controller {
         return retval;
     }
 
+    /**
+     * creates a VideoSource with the name "Pixy Output" on the camera server at a
+     * framerate of 50 fps, which will be used to display all of the pixy blocks
+     * read to the driverstation
+     */
+    public void AddCameraServer() {
+        addCameraServer("Pixy Output", 50);
+    }
+
+    /**
+     * creates a VideoSource with the name "Pixy Output" at a framerate of the
+     * specified value, which will be used to display all of the pixy blocks read to
+     * the driverstation
+     *
+     * @param framerate
+     */
+    public void AddCameraServer(int framerate) {
+        addCameraServer("Pixy Output", framerate);
+    }
+
+    /**
+     * creates a VideoSource with a specified name on the camera server at a
+     * framerate of 50 fps, which will be used to display all of the pixy blocks
+     * read to the driverstation
+     *
+     * @param name - the name to use for the camera server
+     */
+    public void addCameraServer(String name) {
+        addCameraServer(name, 50);
+    }
+
+    /**
+     * creates a VideoSource with a specified name on the camera server at the
+     * specified framerate, which will be used to display all of the pixy blocks
+     * read to the driverstation
+     *
+     *
+     * @param name
+     * @param framerate
+     */
+    public void addCameraServer(String name, int framerate) {
+        this.maxcount = (framerate < 50) ? 50 / framerate : 1;
+        server = CameraServer.getInstance().putVideo(name, 315, 207);
+        serverStarted = true;
+    }
+
+    public void disableServer() {
+        serverStarted = false;
+    }
+
     public class Version {
         public int hardware;
         public String firmwareVersion;
@@ -219,7 +319,7 @@ public class Pixy2Controller {
         public String firmwareType;
     }
 
-    public class Target {
+    public static class Target implements Comparable<Target> {
         public double x;
         public double y;
         public int sig;
@@ -229,5 +329,12 @@ public class Pixy2Controller {
         // public boolean unread = true;
         public int checkSum;
         public boolean checkCorrect;
+
+        @Override
+        public int compareTo(Target o) {
+            // TODO Auto-generated method stub
+            return ((Double) (this.x * this.y)).compareTo((Double) (o.x * o.y));
+        }
+
     }
 }
