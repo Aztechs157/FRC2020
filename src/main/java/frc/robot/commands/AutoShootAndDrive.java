@@ -9,15 +9,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArm;
+import frc.robot.subsystems.Shooter;
+import frc.robot.util.controllers.Controller;
 
-public class AutoDriveAndShoot extends SequentialCommandGroup {
+public class AutoShootAndDrive extends SequentialCommandGroup {
     /**
      * Creates a new AutoDriveAndShoot.
      */
-    public AutoDriveAndShoot(Drive drive) {
-        DriveForward command = new DriveForward(16.2, true, drive);
-        command.drivepower = .1;
-        addCommands(command);
+    public AutoShootAndDrive(Drive drive, Shooter shooter, Controller controller) {
+        IntakeArm intakearm = new IntakeArm();
+        Intake intake = new Intake(controller, intakearm);
+
+        ShooterControl shoot = new ShooterControl(shooter, controller);
+        DriveForward commandForward = new DriveForward(16.2, true, drive);
+
+        intake.zeroBallCount();
+        addCommands(shoot);
+        commandForward.drivepower = .1;
+        addCommands(commandForward);
+
         System.out.println("DriveAndShoot");
 
     }

@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeTrigger;
@@ -36,6 +37,7 @@ public class Intake extends SubsystemBase {
         this.intakearm = intakearm;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         setDefaultCommand(new IntakeTrigger(this));
+        // Shuffleboard.putNumber();
 
     }
 
@@ -76,7 +78,8 @@ public class Intake extends SubsystemBase {
     }
 
     public void zeroBallCount() {
-        ballCount = 0;
+        ballCount = 3;
+        // testing with 3 should be 0
     }
 
     public double getVelocityMotor() {

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
-import frc.robot.commands.AutoDriveAndShoot;
+import frc.robot.commands.AutoShootAndDrive;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoLeft;
 import frc.robot.commands.AutoMid;
@@ -116,7 +116,7 @@ public class RobotContainer {
 
     private Command autoCommand = new SelectCommand(
             Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
-                    entry(AutoOptions.DriveAndShoot, new AutoDriveAndShoot(drive)),
+                    entry(AutoOptions.DriveAndShoot, new AutoShootAndDrive(drive, shooter, operatorController)),
                     entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive)),
                     entry(AutoOptions.AutoRight, new AutoRight(drive)),
                     entry(AutoOptions.AutoLeft, new AutoLeft(drive)), entry(AutoOptions.AutoMid, new AutoMid(drive))),
