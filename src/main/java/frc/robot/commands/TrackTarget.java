@@ -38,30 +38,40 @@ public class TrackTarget extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        vision.turnLight(true);
+        // vision.turnLight(true);
         importantCounter = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        final Target[] targets = vision.getBlocks();
-        // System.out.println("Target length" + targets.length);
-        if (targets.length == 1) {
-            importantCounter = 0;
-            unimportantCounter++;
-            // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
-            turret.moveShooter(vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
-            vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
-            if (unimportantCounter >= 100) {
-                System.out.println("pos: (" + targets[0].x + ", " + targets[0].y + ")");
-                System.out.println("siz: (" + targets[0].width + ", " + targets[0].height + ")");
-                unimportantCounter = 0;
-            }
+        if (vision.pixyIn) {
+            final Target[] targets = vision.getBlocks();
+            // System.out.println("Target length" + targets.length);
+            if (targets.length == 1) {
+                importantCounter = 0;
+                // unimportantCounter++;
+                // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
+                turret.moveShooter(vision.pixyPID.pidCalculate(LRTARGET, targets[0].x) * 0.1);
+                vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
+                if (unimportantCounter >= 100) {
+                    System.out.println("pos: (" + targets[0].x + ", " + targets[0].y + ")");
+                    System.out.println("siz: (" + targets[0].width + ", " + targets[0].height + ")");
+                    unimportantCounter = 0;
+                }
 
+            } else {
+                importantCounter++;
+                // vision.setHorizontal(0);
+            }
         } else {
-            importantCounter++;
-            // vision.setHorizontal(0);
+            if (vision.limelight.checkTargets()) {
+                importantCounter = 0;
+                turret.moveShooter(vision.limeLightPID.pidCalculate(0, vision.limelight.getx()));
+            } else {
+                importantCounter++;
+
+            }
         }
     }
 
@@ -76,7 +86,7 @@ public class TrackTarget extends CommandBase {
     public void end(final boolean interrupted) {
 
         vision.setHorizontal(0);
-        vision.turnLight(false);
+        // vision.turnLight(false);
     }
 
     // Returns true when the command should end.
