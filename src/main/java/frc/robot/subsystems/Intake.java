@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,12 +32,17 @@ public class Intake extends SubsystemBase {
     public boolean allowIntake = true;
     private double intakeSpeed = 0.80;
     private IntakeArm intakearm;
+    private NetworkTableEntry ballCountEntry;
 
     public Intake(Controller controller, IntakeArm intakearm) {
         this.controller = controller;
         this.intakearm = intakearm;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         setDefaultCommand(new IntakeTrigger(this));
+        Shuffleboard.getTab("Test").addNumber("ball count", () -> {
+            return (double) ballCount();
+        });
+        ballCountEntry = Shuffleboard.getTab("Test").add("ballCountSet", ballCount).getEntry();
         // Shuffleboard.putNumber();
 
     }
@@ -47,6 +53,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // ballCount = (int) ballCountEntry.getDouble(ballCount);
         // System.out.println(intakeSensor.get());
         // System.out.println(ballCount);
     }
@@ -67,6 +74,10 @@ public class Intake extends SubsystemBase {
         return ballCount;
     }
 
+    public void ballCountSet(int ballcount) {
+        this.ballCount = ballcount;
+    }
+
     public int ballCountIncrement() {
         ballCount++;
         return ballCount;
@@ -78,7 +89,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void zeroBallCount() {
-        ballCount = 3;
+        ballCount = 0;
         // testing with 3 should be 0
     }
 

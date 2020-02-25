@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LimeLight;
 import frc.robot.util.PID;
@@ -24,13 +25,15 @@ import frc.robot.util.Pixy2Controller.Target;
 public class Vision extends SubsystemBase {
 
     public final Relay laser;
-    public final PID pid = new PID(0.1, 0, 0, 100, 0, 100, 0, 10, -10);
+    public final PID pixyPID = new PID(0.1, 0, 0, 100, 0, 100, 0, 10, -10);
+    public final PID limeLightPID = new PID(0.03, 0, 0, 100, 0, 100, 0, 10, -10);
 
     private final Pixy2Controller pixy;
-    private final LimeLight limelight;
+    public final LimeLight limelight;
     private final Relay pixyLight;
     private final Servo UDServo;
     private double UD = 0.5;
+    public final boolean pixyIn = false; // if false, limelight code will run instead
 
     public Vision() {
         limelight = new LimeLight();
@@ -45,6 +48,19 @@ public class Vision extends SubsystemBase {
         pixyLight.setDirection(Direction.kForward);
         laser.setDirection(Direction.kForward);
         pixy.AddCameraServer(10);
+    }
+
+    /**
+     * finds the current accuracy of a shot, based on the distance to the target
+     *
+     * @return the distance from the current position to the currect position
+     */
+    public double checkAcc() {
+        if (!pixyIn) {
+            return limelight.getx();
+        } else {
+            return 9999;
+        }
     }
 
     public void setHorizontal(final double pos) {
@@ -78,8 +94,13 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        getBlocks();
+        // getBlocks();
         // System.out.println("hello world");
+        SmartDashboard.putNumber("acc", checkAcc());
+    }
+
+    public boolean chechTargets() {
+        return limelight.checkTargets();
     }
 
 }

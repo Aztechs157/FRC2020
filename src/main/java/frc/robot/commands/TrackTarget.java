@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.Pixy2Controller.Target;
 import frc.robot.util.controllers.Controller;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
@@ -23,14 +24,16 @@ public class TrackTarget extends CommandBase {
     private final Turret turret;
     private final Vision vision;
     private final Controller controller;
+    private final Intake intake;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(final Turret turret, final Vision vision, final Controller controller) {
+    public TrackTarget(final Turret turret, final Vision vision, final Controller controller, final Intake intake) {
         this.turret = turret;
         this.vision = vision;
         this.controller = controller;
+        this.intake = intake;
         addRequirements(turret);
         addRequirements(vision);
     }
@@ -38,30 +41,40 @@ public class TrackTarget extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        vision.turnLight(true);
+        // vision.turnLight(true);
         importantCounter = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        final Target[] targets = vision.getBlocks();
-        // System.out.println("Target length" + targets.length);
-        if (targets.length == 1) {
-            importantCounter = 0;
-            unimportantCounter++;
-            // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
-            turret.moveShooter(vision.pid.pidCalculate(LRTARGET, targets[0].x) * 0.1);
-            // vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
-            if (unimportantCounter >= 100) {
-                System.out.println("pos: (" + targets[0].x + ", " + targets[0].y + ")");
-                System.out.println("siz: (" + targets[0].width + ", " + targets[0].height + ")");
-                unimportantCounter = 0;
-            }
+        if (vision.pixyIn) {
+            final Target[] targets = vision.getBlocks();
+            // System.out.println("Target length" + targets.length);
+            if (targets.length == 1) {
+                importantCounter = 0;
+                // unimportantCounter++;
+                // System.out.println(vision.LR+(-(LRTARGET-targets[0].x))*LRMUL);
+                turret.moveShooter(vision.pixyPID.pidCalculate(LRTARGET, targets[0].x) * 0.1);
+                // vision.setVertical(map(targets[0].y, 0, 207, 0.65, 0.4));
+                if (unimportantCounter >= 100) {
+                    System.out.println("pos: (" + targets[0].x + ", " + targets[0].y + ")");
+                    System.out.println("siz: (" + targets[0].width + ", " + targets[0].height + ")");
+                    unimportantCounter = 0;
+                }
 
+            } else {
+                importantCounter++;
+                // vision.setHorizontal(0);
+            }
         } else {
-            importantCounter++;
-            // vision.setHorizontal(0);
+            if (vision.limelight.checkTargets()) {
+                importantCounter = 0;
+                turret.moveShooter(vision.limeLightPID.pidCalculate(0, vision.limelight.getx()));
+            } else {
+                importantCounter++;
+
+            }
         }
     }
 
@@ -75,8 +88,8 @@ public class TrackTarget extends CommandBase {
 
     public void end(final boolean interrupted) {
 
-        vision.setHorizontal(0);
-        vision.turnLight(false);
+        turret.MoveTurret(0);
+        // vision.turnLight(false);
     }
 
     // Returns true when the command should end.
@@ -91,6 +104,9 @@ public class TrackTarget extends CommandBase {
             retVal = false;
         }
         if (importantCounter >= 40) {
+            retVal = true;
+        }
+        if (intake.ballCount() == 0) {
             retVal = true;
         }
         return retVal;

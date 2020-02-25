@@ -8,9 +8,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.NEO;
+import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;
 import frc.robot.Constants;
 import frc.robot.commands.ConveyerControl;
@@ -30,12 +34,20 @@ public class Conveyor extends SubsystemBase {
     private int maxBalls = 4;
     private double maxSpeed = 0.40;
     private double outPos = 38;
+    private double rpm = 1700;
+    public double currentSpeed = 0;
+    public double temp = 0;;
+    public PID conveyorPID = new PID(0.000000003, 0, 0.00000000003, 0, 0, 100, 0, 0, 0);
 
     private enum STATEMACHINE {
         WAIT, STARTCONVEYOR, SHIFT, INTOKICKER, STOP, CLEARKICKER, PANICSTOP
     };
 
     private STATEMACHINE state = STATEMACHINE.WAIT;
+
+    public NetworkTableEntry pVal;
+
+    public NetworkTableEntry dVal;
 
     /**
      * Creates a new Conveyer.
@@ -47,6 +59,21 @@ public class Conveyor extends SubsystemBase {
         this.controller = controller;
         this.intakearm = intakearm;
         setDefaultCommand(new ConveyerControl(this, controller));
+        Shuffleboard.getTab("Test").addNumber("Speed", this::getMaxSpeed);
+        Shuffleboard.getTab("Test").addNumber("Pval conveyor real", () -> {
+            return conveyorPID.optionSets[0].kP * 1000000;
+        });
+        pVal = Shuffleboard.getTab("Test").add("Pval conveyorF", conveyorPID.optionSets[0].kP * 1000000).getEntry();
+        dVal = Shuffleboard.getTab("Test").add("Dval conveyor", conveyorPID.optionSets[0].kD * 1000000).getEntry();
+    }
+
+    public void setSpeed(double speed) {
+        currentSpeed += conveyorPID.pidCalculate(speed, conveyorMotor.getVelocity());
+        if (currentSpeed > 1)
+            currentSpeed = 1;
+        else if (currentSpeed < -1)
+            currentSpeed = -1;
+        conveyorMotor.set(currentSpeed);
     }
 
     @Override
@@ -54,6 +81,13 @@ public class Conveyor extends SubsystemBase {
         // stateMachine();
         // shift();
         // This method will be called once per scheduler run
+    }
+
+    public double getMaxSpeed() {
+        if (getVelocityMotor() > temp) {
+            temp = getVelocityMotor();
+        }
+        return temp;
     }
 
     public boolean getBottom() {
@@ -78,7 +112,7 @@ public class Conveyor extends SubsystemBase {
             }
             break;
         case STARTCONVEYOR:
-            run();
+            setSpeed(rpm);
             intake.allowIntake = false;
             intake.run();
             kicker.stop();
@@ -88,7 +122,7 @@ public class Conveyor extends SubsystemBase {
             break;
         case SHIFT:
             if (conveyorBottom.get()) {
-                run();
+                setSpeed(rpm);
                 kicker.stop();
                 intake.run();
             } else {
@@ -107,7 +141,7 @@ public class Conveyor extends SubsystemBase {
         case INTOKICKER:
 
             kicker.halfRun();
-            run();
+            setSpeed(rpm);
             intake.allowIntake = false;
             intake.run();
             if (kicker.get()) {
@@ -147,7 +181,7 @@ public class Conveyor extends SubsystemBase {
     public void shift() {
         if (intake.ballCount() < 1 && intake.get()) {
             intake.run();
-            run();
+            setSpeed(rpm);
             kicker.halfRun();
         } else {
             if (kicker.get()) {

@@ -43,6 +43,7 @@ public class AutoGroup extends SequentialCommandGroup {
         case StartShootClose:
             // Start facing backwards
             // add shoot code before drive foward
+            /* addCommands(new DriveForward(-16.2, true, drive), */// new AutoShootAndDrive(drive);
             System.out.println("Close done");
             break;
 

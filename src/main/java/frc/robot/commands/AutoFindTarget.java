@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,51 +9,44 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.util.controllers.Controller;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
-public class ShooterControl extends CommandBase {
+public class AutoFindTarget extends CommandBase {
+    private Turret turret;
+
+    private Vision vision;
 
     /**
-     * Creates a new ShooterControl.
+     * Creates a new AutoFindtTarget.
      */
-    private Shooter shooter;
-    private Controller controller;
-    private Intake intake;
-
-    public ShooterControl(Shooter shooter, Controller controller, Intake intake) {
-        this.shooter = shooter;
-        this.controller = controller;
-        this.intake = intake;
-        addRequirements(this.shooter);
+    public AutoFindTarget(Turret turret, Vision vision) {
+        this.turret = turret;
+        this.vision = vision;
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        shooter.resetStateMachine();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // System.out.println("Running: " + shooter.shooter.getPosition());
-        // System.out.println("ShooterControl.Execute");
-        // shooter.SingleAction();
-        shooter.automatic();
+        turret.moveShooter(-0.2);
 
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        shooter.stopAll();
+        turret.LeftRight.set(0);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return intake.ballCount() == 0;
+        return vision.limelight.checkTargets();
     }
 }
