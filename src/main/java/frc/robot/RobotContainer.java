@@ -19,16 +19,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoShootAndDrive;
+import frc.robot.commands.ColorWheelPos;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoLeft;
 import frc.robot.commands.AutoMid;
 import frc.robot.commands.AutoMinimal;
-import frc.robot.commands.ColorWheelSpin;
 import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
+import frc.robot.commands.SpinColorWheel;
 import frc.robot.commands.TrackTarget;
 import frc.robot.commands.AutoGroup.AutoOptions;
 
@@ -91,6 +92,8 @@ public class RobotContainer {
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController, intake));
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
+        operatorController.LeftButton().whenPressed(new SpinColorWheel(colorWheel));
+        driveController.RightButton().whenPressed(new ColorWheelPos(colorWheel));
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
         // shooter.setSpeed(3300);
@@ -99,12 +102,6 @@ public class RobotContainer {
         // operatorController.LeftButton().whenReleased(() -> {
         // shooter.stop();
         // });
-        driveController.LeftButton().whileHeld(() -> {
-            colorWheel.spin();
-        });
-        driveController.LeftButton().whenReleased(() -> {
-            colorWheel.stop();
-        });
 
         driveController.Back().whenPressed(() -> {
             conveyor.conveyorPID.optionSets[0].kP = conveyor.pVal.getDouble(conveyor.conveyorPID.optionSets[0].kP)
@@ -128,7 +125,7 @@ public class RobotContainer {
                     entry(AutoOptions.AutoLeft, new AutoLeft(drive)), entry(AutoOptions.AutoMid, new AutoMid(drive))),
             autoChooser::getSelected);
 
-    /**
+    /*
      * Put Autonomus command here
      */
     public Command getAutonomousCommand() {

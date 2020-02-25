@@ -10,13 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ColorWheel;
 
-public class ColorWheelSpin extends CommandBase {
+public class ColorWheelPos extends CommandBase {
     private ColorWheel colorWheel;
 
     /**
      * Creates a new ColorWheelSpin.
      */
-    public ColorWheelSpin(ColorWheel colorWheel) {
+    public ColorWheelPos(ColorWheel colorWheel) {
         this.colorWheel = colorWheel;
         // Use addRequirements() here to declare subsystem dependencies.
     }

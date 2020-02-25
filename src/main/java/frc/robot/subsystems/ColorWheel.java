@@ -43,10 +43,15 @@ public class ColorWheel extends SubsystemBase {
     private boolean firstTime = true;
 
     private enum COLORWHEEL {
-        MOVETURRET, LIFTARM, SPINCOLORWHEEL, ONBLUE, DROPARM, END
+        MOVETURRET, LIFTARM, END
+    };
+
+    private enum SPINWHEEL {
+        SPINCOLORWHEEL, ONBLUE, MOVETURRET, DROPARM, END
     };
 
     COLORWHEEL colorWheelState = COLORWHEEL.MOVETURRET;
+    SPINWHEEL spinWheelState = SPINWHEEL.SPINCOLORWHEEL;
     Counter encoder;
 
     private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
@@ -145,41 +150,46 @@ public class ColorWheel extends SubsystemBase {
         switch (colorWheelState) {
         case MOVETURRET:
             turret.MoveTurret();
-            if (firstTime) {
-                colorWheelState = COLORWHEEL.LIFTARM;
-                firstTime = false;
-            } else {
-                colorWheelState = COLORWHEEL.DROPARM;
-            }
+            colorWheelState = COLORWHEEL.LIFTARM;
             break;
         case LIFTARM:
             // MoveArm();
-            colorWheelState = COLORWHEEL.SPINCOLORWHEEL;
+            colorWheelState = COLORWHEEL.END;
             break;
+
+        default:
+            break;
+        }
+    }
+
+    public void spinWheelState() {
+        switch (spinWheelState) {
         case SPINCOLORWHEEL:
             spin();
             if (getColor() == ColorResult.Blue) {
-                // System.out.println("Blue");
-
                 count++;
                 if (count >= 7) {
                     stop();
-                    colorWheelState = COLORWHEEL.MOVETURRET;
+                    spinWheelState = SPINWHEEL.MOVETURRET;
                 } else {
                     // System.out.println("Not Blue");
-                    colorWheelState = COLORWHEEL.ONBLUE;
+                    spinWheelState = SPINWHEEL.ONBLUE;
                 }
             }
             break;
         case ONBLUE:
             spin();
             if (getColor() != ColorResult.Blue) {
-                colorWheelState = COLORWHEEL.SPINCOLORWHEEL;
+                spinWheelState = SPINWHEEL.SPINCOLORWHEEL;
             }
+            break;
+        case MOVETURRET:
+            turret.MoveTurret();
+            spinWheelState = SPINWHEEL.DROPARM;
             break;
         case DROPARM:
             // MoveArm();
-            colorWheelState = COLORWHEEL.END;
+            spinWheelState = SPINWHEEL.END;
             break;
         case END:
 
