@@ -11,10 +11,12 @@ package frc.robot.subsystems;
 
 import com.revrobotics.ColorMatch;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Counter.Mode;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -28,7 +30,7 @@ import frc.robot.util.PID;
 
 public class ColorWheel extends SubsystemBase {
 
-    private final ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+    private final ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
     private final ColorMatch colorMatcher = new ColorMatch();
 
@@ -52,6 +54,8 @@ public class ColorWheel extends SubsystemBase {
 
     private Turret turret;
 
+    public NetworkTableEntry pVal;
+
     /**
      * Creates a new ColorWheel.
      */
@@ -67,17 +71,22 @@ public class ColorWheel extends SubsystemBase {
         encoder.setUpSource(9);
         // encoder.setDistancePerPulse();
         encoder.reset();
+        Shuffleboard.getTab("Test").addString("Color Sensed", () -> {
+            return getColor().toString();
+        });
+        pVal = Shuffleboard.getTab("Test").add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
+
     }
 
     public double position = 98;
-    private PID colorWheelPID = new PID(0.0001, 0, 0, 0, 0, 0, 0, 0, 0);
+    public PID colorWheelPID = new PID(0.1, 0, 0, 0, 0, 0, 0, 0, 0);
 
     public void stop() {
         spinMotor.set(0);
     }
 
     public void spin() {
-        spinMotor.set(1);
+        spinMotor.set(0.5);
     }
 
     public void run(double s) {
@@ -85,7 +94,7 @@ public class ColorWheel extends SubsystemBase {
     }
 
     public double getPos() {
-        return encoder.getPeriod() * ((double) 360 / 1024) * 1000000;
+        return encoder.getPeriod() * ((double) 360 / 1024) * 1000000;// equation for degree/tic converted to seconds.
     }
 
     public enum ColorResult {
@@ -95,6 +104,21 @@ public class ColorWheel extends SubsystemBase {
 
         private ColorResult(final int value) {
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            if (this.value == 0) {
+                return "Red";
+            } else if (this.value == 1) {
+                return "Green";
+            } else if (this.value == 2) {
+                return "Blue";
+            } else if (this.value == 3) {
+                return "Yellow";
+            } else {
+                return "unknown";
+            }
         }
     }
 
@@ -129,7 +153,7 @@ public class ColorWheel extends SubsystemBase {
             }
             break;
         case LIFTARM:
-            MoveArm();
+            // MoveArm();
             colorWheelState = COLORWHEEL.SPINCOLORWHEEL;
             break;
         case SPINCOLORWHEEL:
@@ -154,7 +178,7 @@ public class ColorWheel extends SubsystemBase {
             }
             break;
         case DROPARM:
-            MoveArm();
+            // MoveArm();
             colorWheelState = COLORWHEEL.END;
             break;
         case END:
@@ -166,10 +190,11 @@ public class ColorWheel extends SubsystemBase {
         }
     }
 
-    public void MoveArm() {
-        run(0.20);
-        SmartDashboard.putNumber("amps", liftMotor.getOutputCurrent());
-        // run(colorWheelPID.pidCalculate(position, getPos()) * 0.05);
+    public void MoveArm(double pos) {
+        SmartDashboard.putNumber("amps", liftMotor.getOutputCurrent());// have someone push back to measure current.
+                                                                       // slowly back robot up autonomously untill
+                                                                       // contact is amde with color wheel ?
+        run(colorWheelPID.pidCalculate(pos, getPos()));
     }
 
     public void stopArm() {
