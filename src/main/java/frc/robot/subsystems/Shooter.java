@@ -194,7 +194,7 @@ public class Shooter extends SubsystemBase {
         case SHOOT:
             setSpeed(targetRPM);
             if (first) {
-                System.out.println("Decrementing ball count");
+
                 intake.ballCountDecrement();
                 first = false;
             }
@@ -246,7 +246,6 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-
     }
 
     public double getPosMotor() {

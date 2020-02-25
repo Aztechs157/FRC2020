@@ -6,11 +6,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight {
     NetworkTable camera;
-    NetworkTableEntry x, y, a, targetsAvail;
+    NetworkTableEntry x, y, a;
 
     public LimeLight() {
         camera = NetworkTableInstance.getDefault().getTable("limelight");
-        targetsAvail = camera.getEntry("tv");
         x = camera.getEntry("tx");
         y = camera.getEntry("ty");
         a = camera.getEntry("ta");
@@ -39,10 +38,6 @@ public class LimeLight {
 
     public double gety() {
         return y.getDouble(0.0);
-    }
-
-    public boolean checkTargets() {
-        return targetsAvail.getDouble(0.0) == 1;
     }
 
     public static class LimeLightTarget {

@@ -80,7 +80,6 @@ public class Robot extends TimedRobot {
         autonomousCommand = robotContainer.getAutonomousCommand();
         robotContainer.drive.setAllBrakeMode();
         robotContainer.vision.turnLight(true);
-        robotContainer.intake.ballCountSet(3);
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }

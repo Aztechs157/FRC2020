@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.util.PIDParameters;
 
 public class PID {
-    public PIDParameters[] optionSets;
+    private final PIDParameters[] optionSets;
     private double lastTime;
     private double lastPosition; // Last position input
     public double sigma; // Integrator state
@@ -101,5 +101,4 @@ public class PID {
 
         return powerOutput;
     }
-
 }

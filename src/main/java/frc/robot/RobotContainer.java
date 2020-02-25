@@ -49,7 +49,7 @@ public class RobotContainer {
     // private static final Conveyor conveyor = new Conveyor(driveController);
     // private static final Drive drive = new Drive(driveController);
     private final IntakeArm intakearm = new IntakeArm();
-    public final Intake intake = new Intake(driveController, intakearm);
+    private final Intake intake = new Intake(driveController, intakearm);
     public final Vision vision = new Vision();
     private final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
@@ -82,15 +82,15 @@ public class RobotContainer {
      * Put button controls here
      */
     private void configureButtonBindings() {
-        operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
+        operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController));
         operatorController.B().whenPressed(new LaserFire(true, vision));
         operatorController.B().whenReleased(new LaserFire(false, vision));
         /*
          * driveController.Y().whenPressed(() -> { intake.zeroBallCount(); }, intake);
          */
-        operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController, intake));
+        operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController));
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
-        operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
+        operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController));
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
         // shooter.setSpeed(3300);
@@ -100,29 +100,23 @@ public class RobotContainer {
         // shooter.stop();
         // });
         driveController.LeftButton().whileHeld(() -> {
-            colorWheel.spin();
+            colorWheel.run(0.2);
         });
         driveController.LeftButton().whenReleased(() -> {
-            colorWheel.stop();
+            colorWheel.stopArm();
+        });
+        driveController.RightButton().whileHeld(() -> {
+            colorWheel.run(-0.50);
+        });
+        driveController.RightButton().whenReleased(() -> {
+            colorWheel.stopArm();
         });
 
-        driveController.Back().whenPressed(() -> {
-            conveyor.conveyorPID.optionSets[0].kP = conveyor.pVal.getDouble(conveyor.conveyorPID.optionSets[0].kP)
-                    / 1000000;
-            conveyor.conveyorPID.optionSets[0].kD = conveyor.dVal.getDouble(conveyor.conveyorPID.optionSets[0].kD)
-                    / 1000000;
-            conveyor.currentSpeed = 0;
-        });
-
-        driveController.Start().whenPressed(() -> {
-            conveyor.temp = 0;
-        });
     }
 
     private Command autoCommand = new SelectCommand(
             Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
-                    entry(AutoOptions.DriveAndShoot,
-                            new AutoShootAndDrive(drive, shooter, operatorController, turret, vision, intake)),
+                    entry(AutoOptions.DriveAndShoot, new AutoShootAndDrive(drive, shooter, operatorController)),
                     entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive)),
                     entry(AutoOptions.AutoRight, new AutoRight(drive)),
                     entry(AutoOptions.AutoLeft, new AutoLeft(drive)), entry(AutoOptions.AutoMid, new AutoMid(drive))),
