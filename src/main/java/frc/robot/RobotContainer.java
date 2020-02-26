@@ -92,7 +92,7 @@ public class RobotContainer {
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
         driveController.LeftButton().whenPressed(new SpinColorWheel(colorWheel));
-        driveController.RightButton().whenPressed(new ColorWheelPos(colorWheel));
+        driveController.RightButton().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
         // shooter.setSpeed(3300);
@@ -101,6 +101,7 @@ public class RobotContainer {
         // operatorController.LeftButton().whenReleased(() -> {
         // shooter.stop();
         // });
+        driveController.A().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
         driveController.Back().whenPressed(() -> {
             conveyor.conveyorPID.optionSets[0].kP = conveyor.pVal.getDouble(conveyor.conveyorPID.optionSets[0].kP)
                     / 1000000;

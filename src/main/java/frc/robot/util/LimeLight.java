@@ -26,7 +26,7 @@ public class LimeLight {
     }
 
     public void LEDoff() {
-        camera.getEntry("ledMode").setNumber(1);
+        camera.getEntry("ledMode").setNumber(0);
     }
 
     public LimeLightTarget read() {

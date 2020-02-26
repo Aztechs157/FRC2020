@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
      * @param operatorcontroller
      */
     // var entry;
-    private double targetRPM = 4700;
+    private double targetRPM = 4500;
     public NEO LeftRight;
     public NEO UpDown;
     private Controller controller;
@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
     private final Conveyor conveyor;
     private boolean motorUpToSpeed = false;
     private int count = 0;
-    private final int SHOOTTIME = 100;
+    private final int SHOOTTIME = 12;
     private boolean first = true;
     private double currentPower = 0;
     private PID shootPid = new PID(0.00001, 0, 0.000003, 0, 0, 0, 0, 0, 0);

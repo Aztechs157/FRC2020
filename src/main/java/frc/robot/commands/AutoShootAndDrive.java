@@ -29,9 +29,9 @@ public class AutoShootAndDrive extends SequentialCommandGroup {
         addCommands(new AutoFindTarget(turret, vision));
 
         addCommands(shoot.alongWith(trackTarget));
+        addCommands(new NewWaitCommand(25));
         commandForward.drivepower = .1;
         addCommands(commandForward);
-
         System.out.println("DriveAndShoot");
 
     }

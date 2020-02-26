@@ -51,8 +51,8 @@ public class ColorWheel extends SubsystemBase {
         SpinColorWheel, OnBlue, MoveTurret, DropArm, Done
     };
 
-    private enum ArmPosition {
-        Up(90), Down(180);
+    public enum ArmPosition {
+        Up(88), Down(185);
 
         public double pos;
 
@@ -92,8 +92,8 @@ public class ColorWheel extends SubsystemBase {
 
     private final Turret turret;
 
-    private ArmState curretArmState = ArmState.MoveTurret;
-    private SpinWheelState currentSpinState = SpinWheelState.SpinColorWheel;
+    public ArmState currentArmState = ArmState.MoveTurret;
+    public SpinWheelState currentSpinState = SpinWheelState.SpinColorWheel;
     private int blueCount = 0;
 
     public NetworkTableEntry pVal;
@@ -120,7 +120,7 @@ public class ColorWheel extends SubsystemBase {
         tab.addString("Color Sensed", () -> getColor().toString());
         tab.addNumber("Arm Pos", this::getArmPos);
         tab.addNumber("Amps", liftMotor::getOutputCurrent);
-        tab.addString("Arm State", () -> this.curretArmState.toString());
+        tab.addString("Arm State", () -> this.currentArmState.toString());
         tab.addString("Spin State", () -> this.currentSpinState.toString());
 
         pVal = tab.add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
@@ -161,27 +161,51 @@ public class ColorWheel extends SubsystemBase {
         }
     }
 
-    public void colorWheelState() {
-        switch (curretArmState) {
-        case MoveTurret:
-            if (turret.LeftRight.getPosition() < 45) {
-                turret.moveShooter(.5);
-            } else {
-                turret.moveShooter(0);
-                curretArmState = ArmState.LiftArm;
+    public boolean colorWheelState(ArmPosition pos) {
+        if (pos == ArmPosition.Up) {
+            switch (currentArmState) {
+            case MoveTurret:
+                if (turret.LeftRight.getPosition() < 43) {
+                    turret.moveShooter(.5);
+                } else {
+                    turret.moveShooter(0);
+                    currentArmState = ArmState.LiftArm;
+                }
+                break;
+            case LiftArm:
+                if (getArmPos() > 98) {
+                    moveArm(pos);
+                } else {
+                    stopArm();
+                    currentArmState = ArmState.Done;
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        case LiftArm:
-            if (getArmPos() > 100) {
-                moveArm(ArmPosition.Up);
-            } else {
-                stopArm();
-                curretArmState = ArmState.Done;
+        } else {
+            switch (currentArmState) {
+            case MoveTurret:
+                if (turret.LeftRight.getPosition() < 43) {
+                    turret.moveShooter(.5);
+                } else {
+                    turret.moveShooter(0);
+                    currentArmState = ArmState.LiftArm;
+                }
+                break;
+            case LiftArm:
+                if (getArmPos() < 180) {
+                    moveArm(pos);
+                } else {
+                    stopArm();
+                    currentArmState = ArmState.Done;
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        default:
-            break;
         }
+        return currentArmState == ArmState.Done;
     }
 
     public void spinWheelState() {
@@ -214,7 +238,7 @@ public class ColorWheel extends SubsystemBase {
             }
             break;
         case DropArm:
-            if (getArmPos() < 170) {
+            if (getArmPos() < 180) {
                 moveArm(ArmPosition.Down);
             } else {
                 stopArm();
@@ -233,5 +257,13 @@ public class ColorWheel extends SubsystemBase {
 
     public void stopArm() {
         runLift(0);
+    }
+
+    public void resetArmState() {
+        currentArmState = ArmState.MoveTurret;
+    }
+
+    public void resetSpinState() {
+        currentSpinState = SpinWheelState.SpinColorWheel;
     }
 }
