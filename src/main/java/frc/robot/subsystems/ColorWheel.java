@@ -118,10 +118,11 @@ public class ColorWheel extends SubsystemBase {
 
         final ShuffleboardTab tab = Shuffleboard.getTab("Test");
         tab.addString("Color Sensed", () -> getColor().toString());
-        tab.addNumber("Arm Pos", this::getArmPos);
-        tab.addNumber("Amps", liftMotor::getOutputCurrent);
-        tab.addString("Arm State", () -> this.currentArmState.toString());
+        // tab.addNumber("Arm Pos", this::getArmPos);
+        // tab.addNumber("Amps", liftMotor::getOutputCurrent);
+        // tab.addString("Arm State", () -> this.curretArmState.toString());
         tab.addString("Spin State", () -> this.currentSpinState.toString());
+        tab.addNumber("Blue Count", () -> this.blueCount);
 
         pVal = tab.add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
     }

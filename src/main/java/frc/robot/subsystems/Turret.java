@@ -35,7 +35,7 @@ public class Turret extends SubsystemBase {
         LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
         setDefaultCommand(new TurretControl(this, controller));
-        Shuffleboard.getTab("Test").addNumber("TurretPos", LeftRight::getPosition);
+        // Shuffleboard.getTab("Test").addNumber("TurretPos", LeftRight::getPosition);
     }
 
     public void moveShooter(final double Speed) {
@@ -89,7 +89,7 @@ public class Turret extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         // getBlocks();
-        System.out.println();
+        // System.out.println();
 
     }
 }

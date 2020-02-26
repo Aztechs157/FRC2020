@@ -45,10 +45,6 @@ public class Conveyor extends SubsystemBase {
 
     private STATEMACHINE state = STATEMACHINE.WAIT;
 
-    public NetworkTableEntry pVal;
-
-    public NetworkTableEntry dVal;
-
     /**
      * Creates a new Conveyer.
      */
@@ -59,12 +55,14 @@ public class Conveyor extends SubsystemBase {
         this.controller = controller;
         this.intakearm = intakearm;
         setDefaultCommand(new ConveyerControl(this, controller));
-        Shuffleboard.getTab("Test").addNumber("Speed", this::getVelocityMotor);
-        Shuffleboard.getTab("Test").addNumber("Pval conveyor real", () -> {
-            return conveyorPID.optionSets[0].kP * 1000000;
-        });
-        pVal = Shuffleboard.getTab("Test").add("Pval conveyorF", conveyorPID.optionSets[0].kP * 1000000).getEntry();
-        dVal = Shuffleboard.getTab("Test").add("Dval conveyor", conveyorPID.optionSets[0].kD * 1000000).getEntry();
+        // Shuffleboard.getTab("Test").addNumber("Speed", this::getVelocityMotor);
+        // Shuffleboard.getTab("Test").addNumber("Pval conveyor real", () -> {
+        // return conveyorPID.optionSets[0].kP * 1000000;
+        // // });
+        // pVal = Shuffleboard.getTab("Test").add("Pval conveyorF",
+        // conveyorPID.optionSets[0].kP * 1000000).getEntry();
+        // dVal = Shuffleboard.getTab("Test").add("Dval conveyor",
+        // conveyorPID.optionSets[0].kD * 1000000).getEntry();
     }
 
     public void setSpeed(double speed) {

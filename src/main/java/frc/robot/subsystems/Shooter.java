@@ -66,7 +66,8 @@ public class Shooter extends SubsystemBase {
         this.intake = intake;
         this.conveyor.addshooter(this);
         // entry = Shuffleboard.getTab("Test").addNumber("target RPM", valueSupplier)
-        Shuffleboard.getTab("Test").addNumber("shooter speed", this::getVelocityMotor);
+        // Shuffleboard.getTab("Test").addNumber("shooter speed",
+        // this::getVelocityMotor);
     }
 
     public void stopAll() {
@@ -196,7 +197,7 @@ public class Shooter extends SubsystemBase {
         case SHOOT:
             setSpeed(targetRPM);
             if (first) {
-                System.out.println("Decrementing ball count");
+                // System.out.println("Decrementing ball count");
                 intake.ballCountDecrement();
                 first = false;
             }

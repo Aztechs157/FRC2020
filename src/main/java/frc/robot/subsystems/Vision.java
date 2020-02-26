@@ -45,10 +45,10 @@ public class Vision extends SubsystemBase {
         UDServo = new Servo(2);
         laser = new Relay(1);
         pixyLight = new Relay(0);
-        Shuffleboard.getTab("Test").addNumber("x", limelight::getx);
-        Shuffleboard.getTab("Test").addNumber("y", () -> {
-            return limelight.gety();
-        });
+        // Shuffleboard.getTab("Test").addNumber("x", limelight::getx);
+        // Shuffleboard.getTab("Test").addNumber("y", () -> {
+        // return limelight.gety();
+        // });
         pixyLight.setDirection(Direction.kForward);
         laser.setDirection(Direction.kForward);
         pixy.AddCameraServer(10);
