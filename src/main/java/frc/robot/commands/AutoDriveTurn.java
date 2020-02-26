@@ -18,7 +18,7 @@ public class AutoDriveTurn extends SequentialCommandGroup {
         DriveTurn command = new DriveTurn(360, drive);
         command.drivepower = .5;
         addCommands(command);
-        System.out.println("DriveTurn");
+        // System.out.println("DriveTurn");
     }
 
 }

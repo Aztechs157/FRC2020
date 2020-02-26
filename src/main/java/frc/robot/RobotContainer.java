@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoShootAndDrive;
+import frc.robot.commands.AutoShootAndDriveBack;
 import frc.robot.commands.ColorWheelPos;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoLeft;
@@ -61,7 +62,7 @@ public class RobotContainer {
     // #endregion
 
     private enum AutoOptions {
-        Minimal, DriveAndShoot, AutoDriveTurn, AutoLeft, AutoRight, AutoMid
+        Minimal, DriveAndShoot, AutoDriveTurn, AutoLeft, AutoRight, AutoMid, ShootAndDriveBack
     }
 
     private SendableChooser<AutoOptions> autoChooser = new SendableChooser<>();
@@ -73,6 +74,7 @@ public class RobotContainer {
         autoChooser.addOption("Auto Left", AutoOptions.AutoLeft);
         autoChooser.setDefaultOption("Auto Right", AutoOptions.AutoRight);
         autoChooser.addOption("Auto Mid", AutoOptions.AutoMid);
+        autoChooser.addOption("shoot and drive back", AutoOptions.ShootAndDriveBack);
         Shuffleboard.getTab("SmartDashboard").add("Auto Type", autoChooser)
                 .withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
@@ -101,13 +103,6 @@ public class RobotContainer {
         // operatorController.LeftButton().whenReleased(() -> {
         // shooter.stop();
         // });
-        driveController.Back().whenPressed(() -> {
-            conveyor.conveyorPID.optionSets[0].kP = conveyor.pVal.getDouble(conveyor.conveyorPID.optionSets[0].kP)
-                    / 1000000;
-            conveyor.conveyorPID.optionSets[0].kD = conveyor.dVal.getDouble(conveyor.conveyorPID.optionSets[0].kD)
-                    / 1000000;
-            conveyor.currentSpeed = 0;
-        });
 
         driveController.Start().whenPressed(() -> {
             conveyor.temp = 0;
@@ -116,6 +111,8 @@ public class RobotContainer {
 
     private Command autoCommand = new SelectCommand(
             Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
+                    entry(AutoOptions.ShootAndDriveBack,
+                            new AutoShootAndDriveBack(drive, shooter, operatorController, turret, vision, intake)),
                     entry(AutoOptions.DriveAndShoot,
                             new AutoShootAndDrive(drive, shooter, operatorController, turret, vision, intake)),
                     entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive)),

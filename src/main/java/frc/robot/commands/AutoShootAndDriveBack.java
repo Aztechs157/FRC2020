@@ -16,15 +16,15 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 import frc.robot.util.controllers.Controller;
 
-public class AutoShootAndDrive extends SequentialCommandGroup {
+public class AutoShootAndDriveBack extends SequentialCommandGroup {
     /**
      * Creates a new AutoDriveAndShoot.
      */
-    public AutoShootAndDrive(Drive drive, Shooter shooter, Controller controller, Turret turret, Vision vision,
+    public AutoShootAndDriveBack(Drive drive, Shooter shooter, Controller controller, Turret turret, Vision vision,
             Intake intake) {
 
         ShooterControl shoot = new ShooterControl(shooter, controller, intake);
-        DriveForward commandForward = new DriveForward(1, true, drive);
+        DriveForward commandForward = new DriveForward(-1, true, drive);
         TrackTarget trackTarget = new TrackTarget(turret, vision, controller, intake);
         addCommands(new AutoFindTarget(turret, vision));
 

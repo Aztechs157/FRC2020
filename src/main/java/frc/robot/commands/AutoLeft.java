@@ -17,7 +17,7 @@ public class AutoLeft extends SequentialCommandGroup {
     public AutoLeft(Drive drive) {
         DriveTurn command = new DriveTurn(45, drive);
         addCommands(command);
-        System.out.println("Left");
+        // System.out.println("Left");
 
     }
 }

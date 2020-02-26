@@ -28,7 +28,7 @@ public class AutoGroup extends SequentialCommandGroup {
             // add shoot code
             addCommands(new DriveForward(16.2, true, drive), new DriveTurn(-90, drive),
                     new DriveForward(32.4, true, drive)/* , new DriveTurn(-90, drive), new AutoDriveAndShoot(drive) */);
-            System.out.println("Far done");
+            // System.out.println("Far done");
 
             break;
 
@@ -36,7 +36,7 @@ public class AutoGroup extends SequentialCommandGroup {
             // add shoot code
             addCommands(new DriveForward(16.2, true, drive), new DriveTurn(-90, drive),
                     new DriveForward(21.6, true, drive), new DriveTurn(-90, drive));
-            System.out.println("Mid close");
+            // System.out.println("Mid close");
 
             break;
 
@@ -44,7 +44,7 @@ public class AutoGroup extends SequentialCommandGroup {
             // Start facing backwards
             // add shoot code before drive foward
             /* addCommands(new DriveForward(-16.2, true, drive), */// new AutoShootAndDrive(drive);
-            System.out.println("Close done");
+            // System.out.println("Close done");
             break;
 
         }

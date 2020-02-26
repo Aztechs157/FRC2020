@@ -19,7 +19,7 @@ public class AutoRight extends SequentialCommandGroup {
         DriveTurn command = new DriveTurn(45, drive);
         command.drivepower = .1;
         addCommands(command);
-        System.out.println("Right");
+        // System.out.println("Right");
 
     }
 }

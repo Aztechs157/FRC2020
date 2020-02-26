@@ -42,7 +42,8 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Test").addNumber("ball count", () -> {
             return (double) ballCount();
         });
-        ballCountEntry = Shuffleboard.getTab("Test").add("ballCountSet", ballCount).getEntry();
+        // ballCountEntry = Shuffleboard.getTab("Test").add("ballCountSet",
+        // ballCount).getEntry();
         // Shuffleboard.putNumber();
 
     }

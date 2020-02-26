@@ -22,6 +22,7 @@ public class DriveForward extends CommandBase {
     public double gyropower;
     private final double units;
     double kP = .1;
+    double range = 0.1;
     double heading;
     private boolean gyroEnabled;
 
@@ -58,11 +59,12 @@ public class DriveForward extends CommandBase {
     public void execute() {
         // System.out.println("execute driveforward");
         double angleChange = heading - drive.getAngle();
-        SmartDashboard.putNumber("angleChange", angleChange);
-        SmartDashboard.putNumber("frontLeftEncoder", drive.frontLeft.getPosition());
-        SmartDashboard.putNumber("frontRightEncoder", drive.frontRight.getPosition());
-        SmartDashboard.putNumber("backLeftEncoder", drive.backLeft.getPosition());
-        SmartDashboard.putNumber("backRightEncoder", drive.backRight.getPosition());
+        // SmartDashboard.putNumber("angleChange", angleChange);
+        // SmartDashboard.putNumber("frontLeftEncoder", drive.frontLeft.getPosition());
+        // SmartDashboard.putNumber("frontRightEncoder",
+        // drive.frontRight.getPosition());
+        // SmartDashboard.putNumber("backLeftEncoder", drive.backLeft.getPosition());
+        // SmartDashboard.putNumber("backRightEncoder", drive.backRight.getPosition());
 
         // SmartDashboard.putNumber("encoder", drive.frontLeft.getPosition());
         // 81.83 is 12 feet
@@ -164,7 +166,7 @@ public class DriveForward extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (drive.frontRight.getPosition() > units);
+        return (drive.frontRight.getPosition() > units - range && drive.frontRight.getPosition() < units + range);
         //
         // return false;
     }
