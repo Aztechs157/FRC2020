@@ -51,7 +51,7 @@ public class RobotContainer {
     // private static final Drive drive = new Drive(driveController);
     private final IntakeArm intakearm = new IntakeArm();
     public final Intake intake = new Intake(driveController, intakearm);
-    public final Vision vision = new Vision();
+    public final Vision vision = new Vision(intake);
     private final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
     private final Conveyor conveyor = new Conveyor(driveController, intake, kicker, intakearm);
@@ -101,7 +101,6 @@ public class RobotContainer {
         // operatorController.LeftButton().whenReleased(() -> {
         // shooter.stop();
         // });
-
         driveController.Back().whenPressed(() -> {
             conveyor.conveyorPID.optionSets[0].kP = conveyor.pVal.getDouble(conveyor.conveyorPID.optionSets[0].kP)
                     / 1000000;

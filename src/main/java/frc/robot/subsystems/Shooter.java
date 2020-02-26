@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.LEDControl;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;
@@ -57,6 +58,7 @@ public class Shooter extends SubsystemBase {
     // testTalon = new AnalogPotentiometer(1);
     // }
     public Shooter(Controller controller, Kicker kicker, Conveyor conveyor, Intake intake) {
+
         shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless).inverted();
         this.controller = controller;
         this.kicker = kicker;

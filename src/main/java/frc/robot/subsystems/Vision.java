@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.commands.LEDControl;
 import frc.robot.util.LimeLight;
 import frc.robot.util.PID;
 import frc.robot.util.Pixy2Controller;
@@ -35,7 +37,9 @@ public class Vision extends SubsystemBase {
     private double UD = 0.5;
     public final boolean pixyIn = false; // if false, limelight code will run instead
 
-    public Vision() {
+    public Vision(Intake intake) {
+
+        setDefaultCommand(new LEDControl(intake, this));
         limelight = new LimeLight();
         pixy = new Pixy2Controller(Port.kOnboard, 0x55);
         UDServo = new Servo(2);
@@ -48,6 +52,10 @@ public class Vision extends SubsystemBase {
         pixyLight.setDirection(Direction.kForward);
         laser.setDirection(Direction.kForward);
         pixy.AddCameraServer(10);
+    }
+
+    public boolean checkLED() {
+        return limelight.checkLED();
     }
 
     /**
@@ -96,7 +104,8 @@ public class Vision extends SubsystemBase {
         // This method will be called once per scheduler run
         // getBlocks();
         // System.out.println("hello world");
-        SmartDashboard.putNumber("acc", checkAcc());
+        // SmartDashboard.putNumber("acc", checkAcc());
+
     }
 
     public boolean chechTargets() {

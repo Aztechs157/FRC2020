@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.NEO;
@@ -34,6 +35,7 @@ public class Turret extends SubsystemBase {
         LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
         setDefaultCommand(new TurretControl(this, controller));
+        Shuffleboard.getTab("Test").addNumber("TurretPos", LeftRight::getPosition);
     }
 
     public void moveShooter(final double Speed) {

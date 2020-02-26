@@ -9,6 +9,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -85,7 +87,7 @@ public class ColorWheel extends SubsystemBase {
     }
 
     private final Counter encoder = new Counter(Mode.kSemiperiod);
-    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
+    private final TalonSRX liftMotor = new TalonSRX(ColorWheelConstants.colorWheelLiftMotorId);
     private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
 
     private final Turret turret;
@@ -102,6 +104,7 @@ public class ColorWheel extends SubsystemBase {
      * Creates a new ColorWheel.
      */
     public ColorWheel(final Turret turret) {
+        liftMotor.setInverted(true);
         this.turret = turret;
 
         colorMatcher.addColorMatch(redTarget);
@@ -131,8 +134,8 @@ public class ColorWheel extends SubsystemBase {
         spinMotor.set(0.5);
     }
 
-    public void runLift(final double s) {
-        liftMotor.set(s);
+    public void runLift(double s) {
+        liftMotor.set(ControlMode.PercentOutput, s);
     }
 
     public double getArmPos() {
