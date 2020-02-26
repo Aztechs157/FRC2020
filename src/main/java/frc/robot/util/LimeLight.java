@@ -17,6 +17,10 @@ public class LimeLight {
 
     }
 
+    public boolean checkLED() {
+        return camera.getEntry("ledMode").getDouble(0.0) == 3;
+    }
+
     public void LEDon() {
         camera.getEntry("ledMode").setNumber(3);
     }

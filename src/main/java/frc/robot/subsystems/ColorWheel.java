@@ -9,6 +9,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -49,7 +51,7 @@ public class ColorWheel extends SubsystemBase {
     COLORWHEEL colorWheelState = COLORWHEEL.MOVETURRET;
     Counter encoder;
 
-    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
+    private final TalonSRX liftMotor = new TalonSRX(ColorWheelConstants.colorWheelLiftMotorId);
     private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
 
     private Turret turret;
@@ -60,6 +62,7 @@ public class ColorWheel extends SubsystemBase {
      * Creates a new ColorWheel.
      */
     public ColorWheel(Turret turret) {
+        liftMotor.setInverted(true);
         this.turret = turret;
         colorMatcher.addColorMatch(redTarget);
         colorMatcher.addColorMatch(greenTarget);
@@ -90,7 +93,7 @@ public class ColorWheel extends SubsystemBase {
     }
 
     public void run(double s) {
-        liftMotor.set(s);
+        liftMotor.set(ControlMode.PercentOutput, s);
     }
 
     public double getPos() {
@@ -191,9 +194,10 @@ public class ColorWheel extends SubsystemBase {
     }
 
     public void MoveArm(double pos) {
-        SmartDashboard.putNumber("amps", liftMotor.getOutputCurrent());// have someone push back to measure current.
-                                                                       // slowly back robot up autonomously untill
-                                                                       // contact is amde with color wheel ?
+        // SmartDashboard.putNumber("amps", liftMotor.getOutputCurrent());// have
+        // someone push back to measure current.
+        // slowly back robot up autonomously untill
+        // contact is amde with color wheel ?
         run(colorWheelPID.pidCalculate(pos, getPos()));
     }
 

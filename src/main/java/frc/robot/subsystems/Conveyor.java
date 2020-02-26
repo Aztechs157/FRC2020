@@ -34,10 +34,10 @@ public class Conveyor extends SubsystemBase {
     private int maxBalls = 4;
     private double maxSpeed = 0.40;
     private double outPos = 38;
-    private double rpm = 1700;
+    private double rpm = 1750;
     public double currentSpeed = 0;
     public double temp = 0;;
-    public PID conveyorPID = new PID(0.000000003, 0, 0.00000000003, 0, 0, 100, 0, 0, 0);
+    public PID conveyorPID = new PID(0.00003, 0, 0, 0, 0, 100, 0, 0, 0);
 
     private enum STATEMACHINE {
         WAIT, STARTCONVEYOR, SHIFT, INTOKICKER, STOP, CLEARKICKER, PANICSTOP
@@ -59,7 +59,7 @@ public class Conveyor extends SubsystemBase {
         this.controller = controller;
         this.intakearm = intakearm;
         setDefaultCommand(new ConveyerControl(this, controller));
-        Shuffleboard.getTab("Test").addNumber("Speed", this::getMaxSpeed);
+        Shuffleboard.getTab("Test").addNumber("Speed", this::getVelocityMotor);
         Shuffleboard.getTab("Test").addNumber("Pval conveyor real", () -> {
             return conveyorPID.optionSets[0].kP * 1000000;
         });
@@ -102,6 +102,7 @@ public class Conveyor extends SubsystemBase {
         switch (state) {
         case WAIT:
             if (intake.get()) {
+                currentSpeed = 0;
                 intake.ballCountIncrement();
                 intake.allowIntake = true;
                 if (intake.ballCount() <= maxBalls - 1) {
@@ -112,7 +113,8 @@ public class Conveyor extends SubsystemBase {
             }
             break;
         case STARTCONVEYOR:
-            setSpeed(rpm);
+
+            run();
             intake.allowIntake = false;
             intake.run();
             kicker.stop();
@@ -122,7 +124,7 @@ public class Conveyor extends SubsystemBase {
             break;
         case SHIFT:
             if (conveyorBottom.get()) {
-                setSpeed(rpm);
+                run();
                 kicker.stop();
                 intake.run();
             } else {
@@ -141,7 +143,7 @@ public class Conveyor extends SubsystemBase {
         case INTOKICKER:
 
             kicker.halfRun();
-            setSpeed(rpm);
+            run();
             intake.allowIntake = false;
             intake.run();
             if (kicker.get()) {
@@ -181,7 +183,7 @@ public class Conveyor extends SubsystemBase {
     public void shift() {
         if (intake.ballCount() < 1 && intake.get()) {
             intake.run();
-            setSpeed(rpm);
+            run();
             kicker.halfRun();
         } else {
             if (kicker.get()) {
