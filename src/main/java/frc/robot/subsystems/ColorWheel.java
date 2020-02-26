@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Counter.Mode;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -39,67 +40,23 @@ public class ColorWheel extends SubsystemBase {
     private final Color greenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     private final Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-    private int count = 0;
-    private boolean firstTime = true;
 
-    private enum COLORWHEEL {
-        MOVETURRET, LIFTARM, END
+    private enum ArmState {
+        MoveTurret, LiftArm, Done
     };
 
-    private enum SPINWHEEL {
-        SPINCOLORWHEEL, ONBLUE, MOVETURRET, DROPARM, END
+    private enum SpinWheelState {
+        SpinColorWheel, OnBlue, MoveTurret, DropArm, Done
     };
 
-    COLORWHEEL colorWheelState = COLORWHEEL.MOVETURRET;
-    SPINWHEEL spinWheelState = SPINWHEEL.SPINCOLORWHEEL;
-    Counter encoder;
+    private enum ArmPosition {
+        Up(90), Down(180);
 
-    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
-    private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
+        public double pos;
 
-    private Turret turret;
-
-    public NetworkTableEntry pVal;
-
-    /**
-     * Creates a new ColorWheel.
-     */
-    public ColorWheel(Turret turret) {
-        this.turret = turret;
-        colorMatcher.addColorMatch(redTarget);
-        colorMatcher.addColorMatch(greenTarget);
-        colorMatcher.addColorMatch(blueTarget);
-        colorMatcher.addColorMatch(yellowTarget);
-        encoder = new Counter(Mode.kSemiperiod);
-        encoder.setSemiPeriodMode(true);
-        // encoder.setDownSource(9);
-        encoder.setUpSource(9);
-        // encoder.setDistancePerPulse();
-        encoder.reset();
-        Shuffleboard.getTab("Test").addString("Color Sensed", () -> {
-            return getColor().toString();
-        });
-        pVal = Shuffleboard.getTab("Test").add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
-
-    }
-
-    public double position = 98;
-    public PID colorWheelPID = new PID(0.1, 0, 0, 0, 0, 0, 0, 0, 0);
-
-    public void stop() {
-        spinMotor.set(0);
-    }
-
-    public void spin() {
-        spinMotor.set(0.5);
-    }
-
-    public void run(double s) {
-        liftMotor.set(s);
-    }
-
-    public double getPos() {
-        return encoder.getPeriod() * ((double) 360 / 1024) * 1000000;// equation for degree/tic converted to seconds.
+        private ArmPosition(final double pos) {
+            this.pos = pos;
+        }
     }
 
     public enum ColorResult {
@@ -122,9 +79,64 @@ public class ColorWheel extends SubsystemBase {
             } else if (this.value == 3) {
                 return "Yellow";
             } else {
-                return "unknown";
+                return "Unknown";
             }
         }
+    }
+
+    private final Counter encoder = new Counter(Mode.kSemiperiod);
+    private final NEO liftMotor = new NEO(ColorWheelConstants.colorWheelLiftMotorId, MotorType.kBrushed);
+    private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
+
+    private final Turret turret;
+
+    private ArmState curretArmState = ArmState.MoveTurret;
+    private SpinWheelState currentSpinState = SpinWheelState.SpinColorWheel;
+    private int blueCount = 0;
+
+    public NetworkTableEntry pVal;
+
+    public PID colorWheelPID = new PID(0.1, 0, 0, 0, 0, 0, 0, 0, 0);
+
+    /**
+     * Creates a new ColorWheel.
+     */
+    public ColorWheel(final Turret turret) {
+        this.turret = turret;
+
+        colorMatcher.addColorMatch(redTarget);
+        colorMatcher.addColorMatch(greenTarget);
+        colorMatcher.addColorMatch(blueTarget);
+        colorMatcher.addColorMatch(yellowTarget);
+
+        encoder.setSemiPeriodMode(true);
+        encoder.setUpSource(9);
+        encoder.reset();
+
+        final ShuffleboardTab tab = Shuffleboard.getTab("Test");
+        tab.addString("Color Sensed", () -> getColor().toString());
+        tab.addNumber("Arm Pos", this::getArmPos);
+        tab.addNumber("Amps", liftMotor::getOutputCurrent);
+        tab.addString("Arm State", () -> this.curretArmState.toString());
+        tab.addString("Spin State", () -> this.currentSpinState.toString());
+
+        pVal = tab.add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
+    }
+
+    public void stopSpinning() {
+        spinMotor.set(0);
+    }
+
+    public void startSpinning() {
+        spinMotor.set(0.5);
+    }
+
+    public void runLift(final double s) {
+        liftMotor.set(s);
+    }
+
+    public double getArmPos() {
+        return encoder.getPeriod() * (360.0 / 1024.0) * 1000000;// equation for degree/tic converted to seconds.
     }
 
     public ColorResult getColor() {
@@ -147,74 +159,76 @@ public class ColorWheel extends SubsystemBase {
     }
 
     public void colorWheelState() {
-        switch (colorWheelState) {
-        case MOVETURRET:
-            turret.MoveTurret();
-            colorWheelState = COLORWHEEL.LIFTARM;
+        switch (curretArmState) {
+        case MoveTurret:
+            if (turret.LeftRight.getPosition() < 45) {
+                turret.moveShooter(.5);
+            } else {
+                turret.moveShooter(0);
+                curretArmState = ArmState.LiftArm;
+            }
             break;
-        case LIFTARM:
-            // MoveArm();
-            colorWheelState = COLORWHEEL.END;
+        case LiftArm:
+            if (getArmPos() > 100) {
+                moveArm(ArmPosition.Up);
+            } else {
+                stopArm();
+                curretArmState = ArmState.Done;
+            }
             break;
-
         default:
             break;
         }
     }
 
     public void spinWheelState() {
-        switch (spinWheelState) {
-        case SPINCOLORWHEEL:
-            spin();
+        switch (currentSpinState) {
+        case SpinColorWheel:
+            startSpinning();
             if (getColor() == ColorResult.Blue) {
-                count++;
-                if (count >= 7) {
-                    stop();
-                    spinWheelState = SPINWHEEL.MOVETURRET;
+                blueCount++;
+                if (blueCount >= 7) {
+                    stopSpinning();
+                    currentSpinState = SpinWheelState.MoveTurret;
                 } else {
                     // System.out.println("Not Blue");
-                    spinWheelState = SPINWHEEL.ONBLUE;
+                    currentSpinState = SpinWheelState.OnBlue;
                 }
             }
             break;
-        case ONBLUE:
-            spin();
+        case OnBlue:
+            startSpinning();
             if (getColor() != ColorResult.Blue) {
-                spinWheelState = SPINWHEEL.SPINCOLORWHEEL;
+                currentSpinState = SpinWheelState.SpinColorWheel;
             }
             break;
-        case MOVETURRET:
-            turret.MoveTurret();
-            spinWheelState = SPINWHEEL.DROPARM;
+        case MoveTurret:
+            if (turret.LeftRight.getPosition() < 45) {
+                turret.moveShooter(0.5);
+            } else {
+                turret.moveShooter(0);
+                currentSpinState = SpinWheelState.DropArm;
+            }
             break;
-        case DROPARM:
-            // MoveArm();
-            spinWheelState = SPINWHEEL.END;
+        case DropArm:
+            if (getArmPos() < 170) {
+                moveArm(ArmPosition.Down);
+            } else {
+                stopArm();
+                currentSpinState = SpinWheelState.Done;
+            }
             break;
-        case END:
-
-            break;
-
+        case Done:
         default:
             break;
         }
     }
 
-    public void MoveArm(double pos) {
-        SmartDashboard.putNumber("amps", liftMotor.getOutputCurrent());// have someone push back to measure current.
-                                                                       // slowly back robot up autonomously untill
-                                                                       // contact is amde with color wheel ?
-        run(colorWheelPID.pidCalculate(pos, getPos()));
+    public void moveArm(final ArmPosition pos) {
+        runLift(colorWheelPID.pidCalculate(pos.pos, getArmPos()));
     }
 
     public void stopArm() {
-        run(0);
-    }
-
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        SmartDashboard.putNumber("value", getPos());
-
+        runLift(0);
     }
 }

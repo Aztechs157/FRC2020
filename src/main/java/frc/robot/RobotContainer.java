@@ -76,7 +76,6 @@ public class RobotContainer {
         Shuffleboard.getTab("SmartDashboard").add("Auto Type", autoChooser)
                 .withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
-
     }
 
     /**
@@ -92,7 +91,7 @@ public class RobotContainer {
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController, intake));
         operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
-        operatorController.LeftButton().whenPressed(new SpinColorWheel(colorWheel));
+        driveController.LeftButton().whenPressed(new SpinColorWheel(colorWheel));
         driveController.RightButton().whenPressed(new ColorWheelPos(colorWheel));
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
