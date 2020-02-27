@@ -32,6 +32,7 @@ import frc.robot.commands.LaserFire;
 // import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.SpinColorWheel;
+import frc.robot.commands.SpinToColor;
 import frc.robot.commands.TrackTarget;
 // import frc.robot.commands.AutoGroup.AutoOptions;
 
@@ -96,6 +97,7 @@ public class RobotContainer {
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
         if (!useFlightSticks) {
             driveController.X().whenPressed(new SpinColorWheel(colorWheel));
+            driveController.B().whenPressed(new SpinToColor(colorWheel));
             driveController.Y().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             driveController.A().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
             driveController.RightButton().whileHeld(new IntakeButton(intake));

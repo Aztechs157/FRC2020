@@ -15,6 +15,7 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Counter.Mode;
@@ -48,7 +49,7 @@ public class ColorWheel extends SubsystemBase {
     };
 
     private enum SpinWheelState {
-        SpinColorWheel, OnBlue, MoveTurret, DropArm, Done, SpinBack
+        NotOnBlue, OnBlue, SpinToColor, MoveTurret, DropArm, Done, SpinBack
     };
 
     public enum ArmPosition {
@@ -93,9 +94,10 @@ public class ColorWheel extends SubsystemBase {
     private final Turret turret;
 
     public ArmState currentArmState = ArmState.MoveTurret;
-    public SpinWheelState currentSpinState = SpinWheelState.SpinColorWheel;
+    public SpinWheelState currentSpinState = SpinWheelState.NotOnBlue;
     private int blueCount = 0;
     private int waitCount = 0;
+    private int ticksOnColor = 0;
 
     public NetworkTableEntry pVal;
 
@@ -163,6 +165,26 @@ public class ColorWheel extends SubsystemBase {
         }
     }
 
+    public ColorResult getRequiredColor() {
+        final var gamedata = DriverStation.getInstance().getGameSpecificMessage();
+
+        if (gamedata.length() == 0)
+            return ColorResult.Unknown;
+
+        switch (gamedata.charAt(0)) {
+        case 'R':
+            return ColorResult.Red;
+        case 'G':
+            return ColorResult.Green;
+        case 'B':
+            return ColorResult.Blue;
+        case 'Y':
+            return ColorResult.Yellow;
+        default:
+            return ColorResult.Unknown;
+        }
+    }
+
     public boolean colorWheelState(ArmPosition pos) {
         if (pos == ArmPosition.Up) {
             switch (currentArmState) {
@@ -212,7 +234,7 @@ public class ColorWheel extends SubsystemBase {
 
     public void spinWheelState() {
         switch (currentSpinState) {
-        case SpinColorWheel:
+        case NotOnBlue:
             startSpinning();
             if (getColor() == ColorResult.Blue) {
                 blueCount++;
@@ -228,7 +250,16 @@ public class ColorWheel extends SubsystemBase {
         case OnBlue:
             startSpinning();
             if (getColor() != ColorResult.Blue) {
-                currentSpinState = SpinWheelState.SpinColorWheel;
+                currentSpinState = SpinWheelState.NotOnBlue;
+            }
+            break;
+        case SpinToColor:
+            startSpinning();
+            if (getColor() == getRequiredColor()) {
+                ticksOnColor++;
+            }
+            if (ticksOnColor > 4) {
+                currentSpinState = SpinWheelState.SpinBack;
             }
             break;
         case SpinBack:
@@ -274,7 +305,11 @@ public class ColorWheel extends SubsystemBase {
         currentArmState = ArmState.MoveTurret;
     }
 
-    public void resetSpinState() {
-        currentSpinState = SpinWheelState.SpinColorWheel;
+    public void resetStage2State() {
+        currentSpinState = SpinWheelState.NotOnBlue;
+    }
+
+    public void resetStage3State() {
+        currentSpinState = SpinWheelState.SpinToColor;
     }
 }
