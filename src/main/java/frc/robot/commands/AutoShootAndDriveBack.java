@@ -32,7 +32,7 @@ public class AutoShootAndDriveBack extends SequentialCommandGroup {
         commandForward.drivepower = .1;
         addCommands(commandForward);
 
-        // System.out.println("DriveAndShoot");
+        // System.out.println("DriveAndShootBackwards");
 
     }
 
