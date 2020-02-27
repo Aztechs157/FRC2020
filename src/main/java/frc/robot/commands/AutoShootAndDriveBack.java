@@ -8,9 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakeArm;
+// import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -24,13 +25,15 @@ public class AutoShootAndDriveBack extends SequentialCommandGroup {
             Intake intake) {
 
         ShooterControl shoot = new ShooterControl(shooter, controller, intake);
-        DriveForward commandForward = new DriveForward(-1, true, drive);
+        DriveBackward commandBackward = new DriveBackward(3, true, drive);
         TrackTarget trackTarget = new TrackTarget(turret, vision, controller, intake);
         addCommands(new AutoFindTarget(turret, vision));
 
         addCommands(shoot.alongWith(trackTarget));
-        commandForward.drivepower = .1;
-        addCommands(commandForward);
+        addCommands(new WaitCommand(0.5));
+
+        commandBackward.drivepower = .1;
+        addCommands(commandBackward);
 
         // System.out.println("DriveAndShoot");
 

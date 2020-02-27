@@ -14,13 +14,13 @@ import frc.robot.util.controllers.Controller;
 public class ConveyerControl extends CommandBase {
 
     private final Conveyor conveyor;
-    private final Controller controller;
+    // private final Controller controller;
 
     /**
      * Creates a new ConveyerControl.
      */
     public ConveyerControl(final Conveyor conveyor, Controller controller) {
-        this.controller = controller;
+        // this.controller = controller;
         this.conveyor = conveyor;
 
         addRequirements(conveyor);

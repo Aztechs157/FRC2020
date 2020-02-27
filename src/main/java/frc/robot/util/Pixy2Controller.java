@@ -10,15 +10,12 @@ package frc.robot.util;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import edu.wpi.cscore.CvSource;
@@ -332,7 +329,6 @@ public class Pixy2Controller {
 
         @Override
         public int compareTo(Target o) {
-            // TODO Auto-generated method stub
             return ((Double) (this.x * this.y)).compareTo((Double) (o.x * o.y));
         }
 

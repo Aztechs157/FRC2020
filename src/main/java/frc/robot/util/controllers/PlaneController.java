@@ -33,7 +33,7 @@ public class PlaneController implements Controller {
      *
      * Make sure number of nulls matches number of button ids
      */
-    private final JoystickButton[] buttons = { null, null, null, null, null, null, null, null, null, null, null };
+    private final JoystickButton[] buttons = { null, null, null, null, null, null, null, null, null, null, null, null };
 
     /**
      * @param rightPort Please just pick 0
@@ -166,5 +166,17 @@ public class PlaneController implements Controller {
             buttons[ButtonIDMap.BottomRight.value] = new JoystickButton(joystickRight, ButtonIDMap.BottomRight.value);
         }
         return buttons[ButtonIDMap.BottomRight.value];
+    }
+
+    public JoystickButton stick2button6() {
+        return new JoystickButton(joystickLeft, ButtonIDMap.TopLeft.value);
+    }
+
+    public JoystickButton stick2button7() {
+        return new JoystickButton(joystickLeft, ButtonIDMap.BottomLeft.value);
+    }
+
+    public JoystickButton stick2Button10() {
+        return new JoystickButton(joystickLeft, ButtonIDMap.BottomRight.value);
     }
 }

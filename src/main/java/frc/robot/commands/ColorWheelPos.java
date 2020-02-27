@@ -30,6 +30,7 @@ public class ColorWheelPos extends CommandBase {
         colorWheel.resetArmState();
         if (pos == ColorWheel.ArmPosition.Down) {
             colorWheel.resetSpinState();
+            colorWheel.stopSpinning();
         }
     }
 

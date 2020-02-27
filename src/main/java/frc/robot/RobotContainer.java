@@ -11,11 +11,11 @@ import frc.robot.subsystems.*;
 import frc.robot.util.controllers.Controller;
 import frc.robot.util.controllers.LogitechController;
 import frc.robot.util.controllers.PlaneController;
-import edu.wpi.first.wpilibj.Preferences;
+// import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoShootAndDrive;
@@ -27,12 +27,13 @@ import frc.robot.commands.AutoMid;
 import frc.robot.commands.AutoMinimal;
 import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
+import frc.robot.commands.IntakeButton;
 import frc.robot.commands.LaserFire;
-import frc.robot.commands.SetArm;
+// import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.SpinColorWheel;
 import frc.robot.commands.TrackTarget;
-import frc.robot.commands.AutoGroup.AutoOptions;
+// import frc.robot.commands.AutoGroup.AutoOptions;
 
 import java.util.Map;
 import static java.util.Map.entry;
@@ -42,16 +43,16 @@ import static java.util.Map.entry;
  */
 public class RobotContainer {
 
-    private final Controller driveController = Preferences.getInstance().getBoolean("usePlaneController", false)
-            ? new PlaneController(0, 2)
-            : new LogitechController(0);
+    private final boolean useFlightSticks = false;
+
+    private final Controller driveController = useFlightSticks ? new PlaneController(0, 2) : new LogitechController(0);
     private final Controller operatorController = new LogitechController(1);
 
     // #region Subsystems
     // private static final Conveyor conveyor = new Conveyor(driveController);
     // private static final Drive drive = new Drive(driveController);
     private final IntakeArm intakearm = new IntakeArm();
-    public final Intake intake = new Intake(driveController, intakearm);
+    public final Intake intake = new Intake(operatorController, intakearm);
     public final Vision vision = new Vision(intake);
     private final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
@@ -91,10 +92,23 @@ public class RobotContainer {
          * driveController.Y().whenPressed(() -> { intake.zeroBallCount(); }, intake);
          */
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController, intake));
-        operatorController.X().whileHeld(new Dump(intake, conveyor, kicker));
+        operatorController.X().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
-        driveController.LeftButton().whenPressed(new SpinColorWheel(colorWheel));
-        driveController.RightButton().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
+        if (!useFlightSticks) {
+            driveController.X().whenPressed(new SpinColorWheel(colorWheel));
+            driveController.Y().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
+            driveController.A().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
+            driveController.RightButton().whileHeld(new IntakeButton(intake));
+        } else {
+            ((PlaneController) driveController).stick2button6()
+                    .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
+            ((PlaneController) driveController).stick2button7()
+                    .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
+            // ((PlaneController) driveController).stick2Button10().whenPressed(new
+            // SpinColorWheel(colorWheel));
+            ((PlaneController) driveController).RightButton().whileHeld(new IntakeButton(intake));
+
+        }
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
         // shooter.setSpeed(3300);

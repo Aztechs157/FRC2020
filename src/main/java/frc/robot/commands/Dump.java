@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Shooter;
 
 public class Dump extends CommandBase {
     /**
@@ -19,11 +20,13 @@ public class Dump extends CommandBase {
     private Intake intake;
     private Conveyor conveyor;
     private Kicker kicker;
+    private Shooter shooter;
 
-    public Dump(Intake intake, Conveyor conveyor, Kicker kicker) {
+    public Dump(Intake intake, Conveyor conveyor, Kicker kicker, Shooter shooter) {
         this.intake = intake;
         this.conveyor = conveyor;
         this.kicker = kicker;
+        this.shooter = shooter;
         addRequirements(conveyor);
     }
 
@@ -40,7 +43,8 @@ public class Dump extends CommandBase {
         intake.allowIntake = false;
         intake.runSpeed(-0.60);
         conveyor.runSpeed(-0.20);
-        kicker.runSpeed(-0.05);
+        kicker.runSpeed(-0.0625);
+        shooter.runSpeed(-0.075);
     }
 
     // Called once the command ends or is interrupted.
@@ -50,6 +54,7 @@ public class Dump extends CommandBase {
         intake.stop();
         conveyor.stop();
         kicker.stop();
+        shooter.stop();
     }
 
     // Returns true when the command should end.

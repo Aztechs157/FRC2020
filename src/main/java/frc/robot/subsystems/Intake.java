@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.IntakeTrigger;
 import frc.robot.util.NEO;
 //import sun.font.TrueTypeFont;
 import frc.robot.util.controllers.Controller;
@@ -38,7 +37,7 @@ public class Intake extends SubsystemBase {
         this.controller = controller;
         this.intakearm = intakearm;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
-        setDefaultCommand(new IntakeTrigger(this));
+        // setDefaultCommand(new IntakeTrigger(this));
         Shuffleboard.getTab("Test").addNumber("ball count", () -> {
             return (double) ballCount();
         });
@@ -112,6 +111,19 @@ public class Intake extends SubsystemBase {
         return intakeSensor.get();
     }
 
+    public void buttonIntake() {
+        if (allowIntake) {
+            if (ballCount() < 4) {
+                intakearm.position = intakearm.outPos;
+                intakeMotor.set(intakeSpeed);
+            } else {
+                intakeMotor.set(0);
+                intakearm.position = 0;
+            }
+
+        }
+    }
+
     // // private int printCount;
     public void runIntake() {
         // System.out.println(controller.getLeftTrigger());
@@ -123,6 +135,10 @@ public class Intake extends SubsystemBase {
                 intakearm.position = 0;
             }
         }
+    }
+
+    public void intakeArmUp() {
+        intakearm.position = 0;
     }
 
     // printCount++;

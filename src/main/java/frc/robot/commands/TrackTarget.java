@@ -100,7 +100,7 @@ public class TrackTarget extends CommandBase {
 
         joyValx = controller.getRightStickX();
 
-        if (joyValx > -0.01 && joyValx < 0.01) {
+        if (joyValx > -0.05 && joyValx < 0.05) {
             retVal = false;
         }
         if (importantCounter >= 40) {

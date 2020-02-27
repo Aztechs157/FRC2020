@@ -26,7 +26,9 @@ public class IntakeArm extends SubsystemBase {
      * Creates a new IntakeArm.
      */
     public IntakeArm() {
-        intakeArmMotor = new NEO(Constants.ShooterConstants.intakeArmMotorID, MotorType.kBrushless).inverted();
+        intakeArmMotor = new NEO(Constants.ShooterConstants.intakeArmMotorID, MotorType.kBrushless);
+        intakeArmMotor.inverted();
+        intakeArmMotor.setBrakeMode();
         setDefaultCommand(new IntakeArmControl(this));
     }
 

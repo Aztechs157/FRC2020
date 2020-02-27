@@ -9,11 +9,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.LEDControl;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;
@@ -59,7 +56,8 @@ public class Shooter extends SubsystemBase {
     // }
     public Shooter(Controller controller, Kicker kicker, Conveyor conveyor, Intake intake) {
 
-        shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless).inverted();
+        shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
+        shooterMotor.inverted();
         this.controller = controller;
         this.kicker = kicker;
         this.conveyor = conveyor;
@@ -198,7 +196,6 @@ public class Shooter extends SubsystemBase {
             setSpeed(targetRPM);
             if (first) {
                 // System.out.println("Decrementing ball count");
-                intake.ballCountDecrement();
                 first = false;
             }
             kicker.halfRun();
@@ -208,6 +205,7 @@ public class Shooter extends SubsystemBase {
                 count = 0;
             }
             if (count > SHOOTTIME) {
+                intake.ballCountDecrement();
                 first = true;
                 count = 0;
                 if (intake.ballCount() > 0) {

@@ -15,12 +15,12 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Counter.Mode;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
@@ -48,7 +48,7 @@ public class ColorWheel extends SubsystemBase {
     };
 
     private enum SpinWheelState {
-        SpinColorWheel, OnBlue, MoveTurret, DropArm, Done
+        SpinColorWheel, OnBlue, MoveTurret, DropArm, Done, SpinBack
     };
 
     public enum ArmPosition {
@@ -95,6 +95,7 @@ public class ColorWheel extends SubsystemBase {
     public ArmState currentArmState = ArmState.MoveTurret;
     public SpinWheelState currentSpinState = SpinWheelState.SpinColorWheel;
     private int blueCount = 0;
+    private int waitCount = 0;
 
     public NetworkTableEntry pVal;
 
@@ -215,9 +216,9 @@ public class ColorWheel extends SubsystemBase {
             startSpinning();
             if (getColor() == ColorResult.Blue) {
                 blueCount++;
-                if (blueCount >= 7) {
-                    stopSpinning();
-                    currentSpinState = SpinWheelState.MoveTurret;
+                if (blueCount >= 8) {
+                    // stopSpinning();
+                    currentSpinState = SpinWheelState.SpinBack;
                 } else {
                     // System.out.println("Not Blue");
                     currentSpinState = SpinWheelState.OnBlue;
@@ -228,6 +229,15 @@ public class ColorWheel extends SubsystemBase {
             startSpinning();
             if (getColor() != ColorResult.Blue) {
                 currentSpinState = SpinWheelState.SpinColorWheel;
+            }
+            break;
+        case SpinBack:
+            spinMotor.set(-0.20);
+            waitCount++;
+            if (waitCount >= 25) {
+                currentSpinState = SpinWheelState.MoveTurret;
+                waitCount = 0;
+                stopSpinning();
             }
             break;
         case MoveTurret:

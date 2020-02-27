@@ -8,45 +8,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-// import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Intake;
 
-public class AutoFindTarget extends CommandBase {
-    private Turret turret;
-
-    private Vision vision;
+public class IntakeButton extends CommandBase {
+    private Intake intake;
 
     /**
-     * Creates a new AutoFindtTarget.
+     * Creates a new IntakeButton.
      */
-    public AutoFindTarget(Turret turret, Vision vision) {
-        this.turret = turret;
-        this.vision = vision;
+    public IntakeButton(Intake intake) {
+        this.intake = intake;
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        // System.out.println("intaking from attack stick");
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        turret.moveShooter(-0.2);
-
+        intake.buttonIntake();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        turret.LeftRight.set(0);
+        intake.intakeArmUp();
+        intake.stop();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return vision.limelight.checkTargets();
+        return false;
     }
 }
