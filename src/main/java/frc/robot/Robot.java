@@ -63,7 +63,13 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         robotContainer.drive.setAllCoastMode();
+        robotContainer.turret.LeftRight.setCoastMode();
         robotContainer.vision.turnLight(false);
+        robotContainer.conveyor.resetStateMachine();
+        robotContainer.shooter.resetStateMachine();
+        robotContainer.colorWheel.resetArmState();
+        robotContainer.colorWheel.stopSpinState();
+        robotContainer.shooter.stopAll();
     }
 
     @Override
@@ -79,7 +85,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
         robotContainer.drive.setAllBrakeMode();
-        robotContainer.vision.turnLight(true);
+        robotContainer.turret.LeftRight.setBrakeMode();
         robotContainer.intake.ballCountSet(3);
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -104,8 +110,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        robotContainer.vision.turnLight(true);
         robotContainer.drive.setAllBrakeMode();
+        robotContainer.turret.LeftRight.setBrakeMode();
     }
 
     /**
@@ -119,6 +125,8 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
+        robotContainer.drive.setAllBrakeMode();
+        robotContainer.turret.LeftRight.setBrakeMode();
     }
 
     /**

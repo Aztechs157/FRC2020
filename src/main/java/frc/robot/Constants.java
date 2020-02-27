@@ -25,6 +25,7 @@ public final class Constants {
         public static final int BackLeft = 4;
         public static final int BackRight = 3;
         public static final double compensationRate = 0.25;
+        public static final double speedInPercent = .70;
     }
 
     public final class ShooterConstants {

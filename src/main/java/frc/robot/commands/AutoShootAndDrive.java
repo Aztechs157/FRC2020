@@ -24,7 +24,7 @@ public class AutoShootAndDrive extends SequentialCommandGroup {
             Intake intake) {
 
         ShooterControl shoot = new ShooterControl(shooter, controller, intake);
-        DriveForward commandForward = new DriveForward(1, true, drive);
+        DriveForward commandForward = new DriveForward(10, true, drive);
         TrackTarget trackTarget = new TrackTarget(turret, vision, controller, intake);
         addCommands(new AutoFindTarget(turret, vision));
 

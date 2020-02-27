@@ -8,35 +8,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ColorWheel;
-import frc.robot.subsystems.ColorWheel.ArmPosition;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class ColorWheelPos extends CommandBase {
-    private ColorWheel colorWheel;
-    private ArmPosition pos;
+public class PanicButton extends CommandBase {
+    public Shooter shooter;
+    public Conveyor conveyor;
+    public Intake intake;
 
     /**
-     * Creates a new ColorWheelSpin.
+     * Creates a new PanicButton.
      */
-    public ColorWheelPos(ColorWheel colorWheel, ColorWheel.ArmPosition pos) {
-        this.colorWheel = colorWheel;
-        this.pos = pos;
+    public PanicButton(Shooter shooter, Conveyor conveyor, Intake intake) {
+        this.shooter = shooter;
+        this.conveyor = conveyor;
+        this.intake = intake;
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        colorWheel.resetArmState();
-        if (pos == ColorWheel.ArmPosition.Down) {
-            colorWheel.stopSpinState();
-            colorWheel.stopSpinning();
-        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        shooter.stopAll();
+        conveyor.resetStateMachine();
+        shooter.resetStateMachine();
     }
 
     // Called once the command ends or is interrupted.
@@ -47,6 +49,6 @@ public class ColorWheelPos extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return colorWheel.colorWheelState(pos);
+        return true;
     }
 }
