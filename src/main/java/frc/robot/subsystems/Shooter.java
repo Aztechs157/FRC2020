@@ -72,6 +72,7 @@ public class Shooter extends SubsystemBase {
         kicker.stop();
         conveyor.stop();
         stop();
+        intake.stop();
     }
 
     public void setSpeed(double speed) {

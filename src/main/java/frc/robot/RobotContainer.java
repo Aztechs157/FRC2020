@@ -29,6 +29,7 @@ import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
 import frc.robot.commands.IntakeButton;
 import frc.robot.commands.LaserFire;
+import frc.robot.commands.PanicButton;
 // import frc.robot.commands.SetArm;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.SpinColorWheel;
@@ -55,12 +56,12 @@ public class RobotContainer {
     private final IntakeArm intakearm = new IntakeArm();
     public final Intake intake = new Intake(operatorController, intakearm);
     public final Vision vision = new Vision(intake);
-    private final Turret turret = new Turret(operatorController);
+    public final Turret turret = new Turret(operatorController);
     private final Kicker kicker = new Kicker(driveController, intake);
-    private final Conveyor conveyor = new Conveyor(driveController, intake, kicker, intakearm);
-    private final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
+    public final Conveyor conveyor = new Conveyor(driveController, intake, kicker, intakearm);
+    public final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
     public final Drive drive = new Drive(driveController);
-    private final ColorWheel colorWheel = new ColorWheel(turret);
+    public final ColorWheel colorWheel = new ColorWheel(turret);
     // #endregion
 
     private enum AutoOptions {
@@ -93,8 +94,9 @@ public class RobotContainer {
          * driveController.Y().whenPressed(() -> { intake.zeroBallCount(); }, intake);
          */
         operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController, intake));
-        operatorController.X().whileHeld(new Dump(intake, conveyor, kicker, shooter));
+        operatorController.Back().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
+        operatorController.Start().whenPressed(new PanicButton(shooter, conveyor, intake));
         if (!useFlightSticks) {
             driveController.X().whenPressed(new SpinColorWheel(colorWheel));
             driveController.B().whenPressed(new SpinToColor(colorWheel));

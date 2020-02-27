@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 // import frc.robot.commands.DriveForward;
 // import frc.robot.commands.DriveTurn;
 import frc.robot.commands.TeleopDrive;
@@ -121,8 +122,8 @@ public class Drive extends SubsystemBase {
 
     public void tankdrive() {
 
-        var leftVal = -controller.getLeftStickY();
-        var rightVal = -controller.getRightStickY();
+        var leftVal = -controller.getLeftStickY() * DriveConstants.speedInPercent;
+        var rightVal = -controller.getRightStickY() * DriveConstants.speedInPercent;
         // left y axis= 1, right y axis= 5
         frontLeft.set(leftSlew.rateCalculate(leftVal));
         frontRight.set(rightSlew.rateCalculate(rightVal));
@@ -143,10 +144,11 @@ public class Drive extends SubsystemBase {
 
     public void arcadedrive(boolean isSingleStick) {
         // Y is inverted auto by driverstation so have it uninverted
-        var yVal = -controller.getLeftStickY();
+        var yVal = -controller.getLeftStickY() * DriveConstants.speedInPercent;
 
         // Use rightX in dual, leftX in single
         var xVal = (isSingleStick) ? controller.getLeftStickX() : controller.getRightStickX();
+        xVal *= DriveConstants.speedInPercent;
 
         // Calculate into tank drive form
         var leftVal = minmax(-1, yVal + xVal, 1);

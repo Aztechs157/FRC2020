@@ -232,7 +232,7 @@ public class ColorWheel extends SubsystemBase {
         return currentArmState == ArmState.Done;
     }
 
-    public void spinWheelState() {
+    public boolean spinWheelState() {
         switch (currentSpinState) {
         case NotOnBlue:
             startSpinning();
@@ -288,9 +288,12 @@ public class ColorWheel extends SubsystemBase {
             }
             break;
         case Done:
+            stopSpinning();
+            blueCount = 0;
         default:
             break;
         }
+        return currentSpinState == SpinWheelState.Done;
     }
 
     public void moveArm(final ArmPosition pos) {
@@ -311,5 +314,10 @@ public class ColorWheel extends SubsystemBase {
 
     public void resetStage3State() {
         currentSpinState = SpinWheelState.SpinToColor;
+    }
+
+    public void stopSpinState() {
+        currentSpinState = SpinWheelState.Done;
+        blueCount = 0;
     }
 }
