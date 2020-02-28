@@ -90,4 +90,19 @@ public class Turret extends SubsystemBase {
         // System.out.println();
 
     }
+
+    public double driveMap(double in, double deadZone) {
+        if (in <= deadZone && in >= -deadZone) {
+            return 0;
+        } else if (in < deadZone) {
+            return map(in, -1, -deadZone, -1, 0);
+        } else {
+            return map(in, deadZone, 1, 0, 1);
+        }
+    }
+
+    private double map(final double x, final double in_min, final double in_max, final double out_min,
+            final double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
 }

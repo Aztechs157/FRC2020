@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
      * @param operatorcontroller
      */
     // var entry;
-    private double targetRPM = 4500;
+    private double targetRPM = 4300;
     public NEO LeftRight;
     public NEO UpDown;
     private Controller controller;
@@ -184,7 +184,12 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SPINSHOOTER:
-            setSpeed(targetRPM);
+            if (intake.ballCount() >= 4) {
+
+                setSpeed(targetRPM + 400);
+            } else {
+                setSpeed(targetRPM);
+            }
             if (shooterMotor.getVelocity() >= targetRPM - 50 && shooterMotor.getVelocity() <= targetRPM + 50) {
                 if (kicker.get()) {
                     autoState = AUTOMATIC.SHOOT;

@@ -44,6 +44,7 @@ public class Drive extends SubsystemBase {
     public final ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(kGyroPort);
     public static SlewRate leftSlew = new SlewRate(1.2);
     public static SlewRate rightSlew = new SlewRate(1.2);
+    public static double globalDeadZone = 0.1;
 
     public boolean isArcade = Preferences.getInstance().getBoolean("useArcade", false);
 
@@ -122,8 +123,10 @@ public class Drive extends SubsystemBase {
 
     public void tankdrive() {
 
-        var leftVal = -controller.getLeftStickY() * DriveConstants.speedInPercent;
-        var rightVal = -controller.getRightStickY() * DriveConstants.speedInPercent;
+        var leftVal = -controller.getLeftStickY();
+        var rightVal = -controller.getRightStickY();
+        leftVal = driveMap(leftVal, globalDeadZone);
+        rightVal = driveMap(rightVal, globalDeadZone);
         // left y axis= 1, right y axis= 5
         frontLeft.set(leftSlew.rateCalculate(leftVal));
         frontRight.set(rightSlew.rateCalculate(rightVal));
@@ -144,11 +147,11 @@ public class Drive extends SubsystemBase {
 
     public void arcadedrive(boolean isSingleStick) {
         // Y is inverted auto by driverstation so have it uninverted
-        var yVal = -controller.getLeftStickY() * DriveConstants.speedInPercent;
-
+        var yVal = -controller.getLeftStickY();
+        yVal = driveMap(yVal, globalDeadZone);
         // Use rightX in dual, leftX in single
         var xVal = (isSingleStick) ? controller.getLeftStickX() : controller.getRightStickX();
-        xVal *= DriveConstants.speedInPercent;
+        xVal = driveMap(xVal, globalDeadZone);
 
         // Calculate into tank drive form
         var leftVal = minmax(-1, yVal + xVal, 1);
@@ -167,6 +170,21 @@ public class Drive extends SubsystemBase {
         if (mid > max)
             return max;
         return mid;
+    }
+
+    public double driveMap(double in, double deadZone) {
+        if (in <= deadZone && in >= -deadZone) {
+            return 0;
+        } else if (in < deadZone) {
+            return map(in, -1, -deadZone, -1, 0);
+        } else {
+            return map(in, deadZone, 1, 0, 1);
+        }
+    }
+
+    private double map(final double x, final double in_min, final double in_max, final double out_min,
+            final double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     // public void arcadedrive() {

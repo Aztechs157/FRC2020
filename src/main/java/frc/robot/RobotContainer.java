@@ -45,7 +45,7 @@ import static java.util.Map.entry;
  */
 public class RobotContainer {
 
-    private final boolean useFlightSticks = false;
+    private final boolean useFlightSticks = true;
 
     private final Controller driveController = useFlightSticks ? new PlaneController(0, 2) : new LogitechController(0);
     private final Controller operatorController = new LogitechController(1);
@@ -103,13 +103,13 @@ public class RobotContainer {
             driveController.Y().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             driveController.A().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
             driveController.RightButton().whileHeld(new IntakeButton(intake));
+            driveController.Back().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         } else {
             ((PlaneController) driveController).stick2button6()
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             ((PlaneController) driveController).stick2button7()
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
-            // ((PlaneController) driveController).stick2Button10().whenPressed(new
-            // SpinColorWheel(colorWheel));
+            ((PlaneController) driveController).stick2Button10().whenPressed(new SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().whileHeld(new IntakeButton(intake));
 
         }

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ColorSensorV3.RawColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ColorWheelConstants;
@@ -85,6 +86,13 @@ public class ColorWheel extends SubsystemBase {
                 return "Unknown";
             }
         }
+
+    }
+
+    public String getRawColor() {
+        // final RawColor rawcolor = colorSensor.getRawColor();
+
+        return "R:" + colorSensor.getRed() + "  G:" + colorSensor.getGreen() + "  B:" + colorSensor.getBlue();
     }
 
     private final Counter encoder = new Counter(Mode.kSemiperiod);
@@ -97,7 +105,7 @@ public class ColorWheel extends SubsystemBase {
     public SpinWheelState currentSpinState = SpinWheelState.NotOnBlue;
     private int blueCount = 0;
     private int waitCount = 0;
-    private int ticksOnColor = 0;
+    public int ticksOnColor = 0;
 
     public NetworkTableEntry pVal;
 
@@ -107,6 +115,7 @@ public class ColorWheel extends SubsystemBase {
      * Creates a new ColorWheel.
      */
     public ColorWheel(final Turret turret) {
+
         liftMotor.setInverted(true);
         this.turret = turret;
 
@@ -126,6 +135,11 @@ public class ColorWheel extends SubsystemBase {
         // tab.addString("Arm State", () -> this.curretArmState.toString());
         tab.addString("Spin State", () -> this.currentSpinState.toString());
         tab.addNumber("Blue Count", () -> this.blueCount);
+        tab.addString("Color Desired", () -> {
+            return getRequiredColor().toString();
+        });
+        tab.addNumber("ticks on color", () -> this.ticksOnColor);
+        tab.addString("Raw Color", this::getRawColor);
 
         pVal = tab.add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
     }
@@ -135,7 +149,7 @@ public class ColorWheel extends SubsystemBase {
     }
 
     public void startSpinning() {
-        spinMotor.set(0.5);
+        spinMotor.set(0.2);// TODO change to seperate for other spinning
     }
 
     public void runLift(double s) {
@@ -257,8 +271,10 @@ public class ColorWheel extends SubsystemBase {
             startSpinning();
             if (getColor() == getRequiredColor()) {
                 ticksOnColor++;
+            } else {
+                ticksOnColor = 0;
             }
-            if (ticksOnColor > 4) {
+            if (ticksOnColor > 10) {
                 currentSpinState = SpinWheelState.SpinBack;
             }
             break;
@@ -290,6 +306,7 @@ public class ColorWheel extends SubsystemBase {
         case Done:
             stopSpinning();
             blueCount = 0;
+            ticksOnColor = 0;
         default:
             break;
         }
@@ -319,5 +336,6 @@ public class ColorWheel extends SubsystemBase {
     public void stopSpinState() {
         currentSpinState = SpinWheelState.Done;
         blueCount = 0;
+        ticksOnColor = 0;
     }
 }
