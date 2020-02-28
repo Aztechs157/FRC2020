@@ -78,8 +78,7 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Auto Right", AutoOptions.AutoRight);
         autoChooser.addOption("Auto Mid", AutoOptions.AutoMid);
         autoChooser.addOption("shoot and drive back", AutoOptions.ShootAndDriveBack);
-        Shuffleboard.getTab("SmartDashboard").add("Auto Type", autoChooser)
-                .withWidget(BuiltInWidgets.kSplitButtonChooser);
+        Shuffleboard.getTab("Driver").add("Auto Type", autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
     }
 
@@ -87,9 +86,10 @@ public class RobotContainer {
      * Put button controls here
      */
     private void configureButtonBindings() {
-        operatorController.A().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
-        operatorController.B().whenPressed(new LaserFire(true, vision));
-        operatorController.B().whenReleased(new LaserFire(false, vision));
+        // operatorController.A().whenPressed(new TrackTarget(turret, vision,
+        // operatorController, intake));
+        // operatorController.B().whenPressed(new LaserFire(true, vision));
+        // operatorController.B().whenReleased(new LaserFire(false, vision));
         /*
          * driveController.Y().whenPressed(() -> { intake.zeroBallCount(); }, intake);
          */
@@ -97,9 +97,11 @@ public class RobotContainer {
         operatorController.Back().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
         operatorController.Start().whenPressed(new PanicButton(shooter, conveyor, intake));
+        operatorController.A().whenPressed(new SpinColorWheel(colorWheel));
+        operatorController.X().whenPressed(new SpinToColor(colorWheel));
         if (!useFlightSticks) {
-            driveController.X().whenPressed(new SpinColorWheel(colorWheel));
-            driveController.B().whenPressed(new SpinToColor(colorWheel));
+            // driveController.X().whenPressed(new SpinColorWheel(colorWheel));
+            // driveController.B().whenPressed(new SpinToColor(colorWheel));
             driveController.Y().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             driveController.A().whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
             driveController.RightButton().toggleWhenPressed(new IntakeButton(intake));
@@ -109,9 +111,10 @@ public class RobotContainer {
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             ((PlaneController) driveController).stick2button7()
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
-            ((PlaneController) driveController).stick2Button10().whenPressed(new SpinColorWheel(colorWheel));
+            // ((PlaneController) driveController).stick2Button10().whenPressed(new
+            // SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().toggleWhenPressed(new IntakeButton(intake));
-
+            ((PlaneController) driveController).RightStickPush().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         }
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {

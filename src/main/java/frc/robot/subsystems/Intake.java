@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
         this.intakearm = intakearm;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         // setDefaultCommand(new IntakeTrigger(this));
-        Shuffleboard.getTab("Test").addNumber("ball count", () -> {
+        Shuffleboard.getTab("Driver").addNumber("ball count", () -> {
             return (double) ballCount();
         });
         // ballCountEntry = Shuffleboard.getTab("Test").add("ballCountSet",
