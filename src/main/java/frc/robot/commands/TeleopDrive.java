@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
 
 public class TeleopDrive extends CommandBase {
@@ -28,8 +29,12 @@ public class TeleopDrive extends CommandBase {
         chooser.addOption("Tank Drive", TANK);
         chooser.addOption("Arcade Drive", ARCADE_DUAL);
         chooser.addOption("Arcade (Single Stick)", ARCADE_SOLO);
-        chooser.setDefaultOption("Default", ARCADE_DUAL);
-        SmartDashboard.putData("Drive Switch", chooser);
+        if (!RobotContainer.useFlightSticks) {
+            chooser.setDefaultOption("Default", ARCADE_DUAL);
+            SmartDashboard.putData("Drive Switch", chooser);
+        } else {
+            chooser.setDefaultOption("Default", TANK);
+        }
     }
 
     // Called when the command is initially scheduled.

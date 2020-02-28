@@ -102,7 +102,7 @@ public class Conveyor extends SubsystemBase {
             if (intake.get()) {
                 currentSpeed = 0;
                 intake.ballCountIncrement();
-                intake.allowIntake = true;
+                // intake.allowIntake = true;
                 if (intake.ballCount() <= maxBalls - 1) {
                     state = STATEMACHINE.STARTCONVEYOR;
                 } else {
@@ -142,7 +142,7 @@ public class Conveyor extends SubsystemBase {
 
             kicker.halfRun();
             run();
-            intake.allowIntake = false;
+            // intake.allowIntake = false;
             intake.run();
             if (kicker.get()) {
                 kicker.stop();
@@ -154,8 +154,10 @@ public class Conveyor extends SubsystemBase {
             break;
         case CLEARKICKER:
             conveyorMotor.set(-maxSpeed / 2);
+            kicker.runSpeed(-0.05);
             if (intake.get()) {
                 stop();
+                kicker.stop();
                 state = STATEMACHINE.STOP;
             }
             break;

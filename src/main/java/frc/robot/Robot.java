@@ -65,8 +65,8 @@ public class Robot extends TimedRobot {
         robotContainer.drive.setAllCoastMode();
         robotContainer.turret.LeftRight.setCoastMode();
         robotContainer.vision.turnLight(false);
-        robotContainer.conveyor.resetStateMachine();
-        robotContainer.shooter.resetStateMachine();
+        // robotContainer.conveyor.resetStateMachine();
+        // robotContainer.shooter.resetStateMachine();
         robotContainer.colorWheel.resetArmState();
         robotContainer.colorWheel.stopSpinState();
         robotContainer.shooter.stopAll();

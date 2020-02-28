@@ -20,7 +20,7 @@ public class IntakeArm extends SubsystemBase {
     private final NEO intakeArmMotor;
     public double position = 0;
     private PID intakePID = new PID(0.05, 0, 0.002, 0, 0, 0, 0, 0, 0);
-    public final double outPos = 38;
+    public final double outPos = 34;// 38
 
     /**
      * Creates a new IntakeArm.

@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
     private DigitalInput intakeSensor = new DigitalInput(2);
     private Controller controller;
     public boolean allowIntake = true;
-    private double intakeSpeed = 0.80;
+    private double intakeSpeed = 0.83;
     private IntakeArm intakearm;
     private NetworkTableEntry ballCountEntry;
 
