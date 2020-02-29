@@ -45,7 +45,7 @@ import static java.util.Map.entry;
  */
 public class RobotContainer {
 
-    public static final boolean useFlightSticks = false;
+    public static final boolean useFlightSticks = true;
 
     private final Controller driveController = useFlightSticks ? new PlaneController(0, 2) : new LogitechController(0);
     private final Controller operatorController = new LogitechController(1);
@@ -97,8 +97,8 @@ public class RobotContainer {
         operatorController.Back().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
         operatorController.Start().whenPressed(new PanicButton(shooter, conveyor, intake));
-        operatorController.A().whenPressed(new SpinColorWheel(colorWheel));
-        operatorController.X().whenPressed(new SpinToColor(colorWheel));
+        operatorController.X().whenPressed(new SpinColorWheel(colorWheel));
+        operatorController.B().whenPressed(new SpinToColor(colorWheel));
         if (!useFlightSticks) {
             // driveController.X().whenPressed(new SpinColorWheel(colorWheel));
             // driveController.B().whenPressed(new SpinToColor(colorWheel));
@@ -114,7 +114,7 @@ public class RobotContainer {
             // ((PlaneController) driveController).stick2Button10().whenPressed(new
             // SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().toggleWhenPressed(new IntakeButton(intake));
-            ((PlaneController) driveController).RightStickPush().whileHeld(new Dump(intake, conveyor, kicker, shooter));
+            ((PlaneController) driveController).Start().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         }
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
