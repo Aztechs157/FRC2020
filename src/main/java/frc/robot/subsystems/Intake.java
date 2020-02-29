@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeUnjam;
 import frc.robot.util.NEO;
+import frc.robot.util.SlewRate;
 //import sun.font.TrueTypeFont;
 import frc.robot.util.controllers.Controller;
 
@@ -32,21 +34,38 @@ public class Intake extends SubsystemBase {
     private double intakeSpeed = 0.83;
     private IntakeArm intakearm;
     private NetworkTableEntry ballCountEntry;
+    public boolean jam = false;
+    private final double nominalCurrent = 10;
+    private STATEMACHINE currentState = STATEMACHINE.INTAKE;
+    private double temp = 0;
+    private SlewRate rate = new SlewRate(1.0);
+
+    private enum STATEMACHINE {
+        INTAKE, UNJAMSTART, TESTJAM, DONE
+    };
 
     public Intake(Controller controller, IntakeArm intakearm) {
         this.controller = controller;
         this.intakearm = intakearm;
         intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         // setDefaultCommand(new IntakeTrigger(this));
-        Shuffleboard.getTab("Driver").addNumber("ball count", () -> {
-            return (double) ballCount();
+        // setDefaultCommand(new IntakeUnjam(this));
+        Shuffleboard.getTab("Driver").addString("ball count", () -> {
+            return "" + ballCount();
         });
+        Shuffleboard.getTab("Test").addNumber("Intake current", this::tempMaxCurr);
         // ballCountEntry = Shuffleboard.getTab("Test").add("ballCountSet",
         // ballCount).getEntry();
         // Shuffleboard.putNumber();
 
     }
 
+    public double tempMaxCurr() {
+        if (intakeMotor.getOutputCurrent() > temp) {
+            temp = intakeMotor.getOutputCurrent();
+        }
+        return temp;
+    }
     // public ConveyerSensors( Controller controller) {
 
     // }
@@ -62,8 +81,46 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(s);
     }
 
+    public boolean intakeResistance() {
+        if (intakeMotor.getOutputCurrent() >= nominalCurrent) {
+            jam = true;
+        }
+
+        return jam;
+    }
+
+    public boolean StateMachine() {
+        switch (currentState) {
+        case INTAKE:
+            if (intakeResistance()) {
+                currentState = STATEMACHINE.UNJAMSTART;
+            }
+            break;
+        case UNJAMSTART:
+            allowIntake = false;
+            runSpeed(-0.5);
+            if (getVelocityMotor() < 0) {
+                currentState = STATEMACHINE.TESTJAM;
+            }
+            break;
+        case TESTJAM:
+            if (intakeResistance()) {
+                runSpeed(-0.5);
+            } else {
+                allowIntake = true;
+                currentState = STATEMACHINE.DONE;
+            }
+            break;
+        case DONE:
+            break;
+        default:
+            break;
+        }
+        return currentState == STATEMACHINE.DONE;
+    }
+
     public void run() {
-        intakeMotor.set(intakeSpeed);
+        intakeMotor.set(rate.rateCalculate(intakeSpeed));
     }
 
     public void stop() {

@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeArmControl;
@@ -18,9 +20,10 @@ import frc.robot.util.PID;
 public class IntakeArm extends SubsystemBase {
 
     private final NEO intakeArmMotor;
+    public NetworkTableEntry pVal, dVal;
     public double position = 0;
-    private PID intakePID = new PID(0.05, 0, 0.002, 0, 0, 0, 0, 0, 0);
-    public final double outPos = 34;// 38
+    public PID intakePID = new PID(0.03, 0, 0.003, 0, 0, 0, 0, 0, 0);
+    public final double outPos = 27;// 38
 
     /**
      * Creates a new IntakeArm.
@@ -30,6 +33,8 @@ public class IntakeArm extends SubsystemBase {
         intakeArmMotor.inverted();
         intakeArmMotor.setBrakeMode();
         setDefaultCommand(new IntakeArmControl(this));
+        pVal = Shuffleboard.getTab("Test").add("P Val but really cool", intakePID.optionSets[0].kP).getEntry();
+        dVal = Shuffleboard.getTab("Test").add("D Val but cool", intakePID.optionSets[0].kP).getEntry();
     }
 
     public void run(double speed) {

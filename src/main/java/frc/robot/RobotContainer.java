@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoShootAndDrive;
-import frc.robot.commands.AutoShootAndDriveBack;
 import frc.robot.commands.ColorWheelPos;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoLeft;
@@ -28,6 +27,7 @@ import frc.robot.commands.AutoMinimal;
 import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
 import frc.robot.commands.IntakeButton;
+import frc.robot.commands.IntakeUnjam;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.PanicButton;
 // import frc.robot.commands.SetArm;
@@ -71,14 +71,11 @@ public class RobotContainer {
     private SendableChooser<AutoOptions> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
-        autoChooser.addOption("Minimal", AutoOptions.Minimal);
-        autoChooser.addOption("Drive and Shoot", AutoOptions.DriveAndShoot);
-        autoChooser.addOption("Auto Turn", AutoOptions.AutoDriveTurn);
-        autoChooser.addOption("Auto Left", AutoOptions.AutoLeft);
-        autoChooser.setDefaultOption("Auto Right", AutoOptions.AutoRight);
-        autoChooser.addOption("Auto Mid", AutoOptions.AutoMid);
-        autoChooser.addOption("shoot and drive back", AutoOptions.ShootAndDriveBack);
+        autoChooser.setDefaultOption("noShoot drive F", AutoOptions.Minimal);
+        autoChooser.addOption("Shoot drive F", AutoOptions.DriveAndShoot);
+        autoChooser.addOption("Shoot drive B", AutoOptions.ShootAndDriveBack);
         Shuffleboard.getTab("Driver").add("Auto Type", autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
+        Shuffleboard.getTab("Driver").addString("Auto Selected", () -> autoChooser.getSelected().toString());
         configureButtonBindings();
     }
 
@@ -107,6 +104,8 @@ public class RobotContainer {
             driveController.RightButton().toggleWhenPressed(new IntakeButton(intake));
             driveController.Back().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         } else {
+            // ((PlaneController) driveController).RightStickPush().whenPressed(new
+            // IntakeUnjam(intake));
             ((PlaneController) driveController).stick2button6()
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             ((PlaneController) driveController).stick2button7()
@@ -114,7 +113,11 @@ public class RobotContainer {
             // ((PlaneController) driveController).stick2Button10().whenPressed(new
             // SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().toggleWhenPressed(new IntakeButton(intake));
-            ((PlaneController) driveController).Start().whileHeld(new Dump(intake, conveyor, kicker, shooter));
+            ((PlaneController) driveController).LeftStickPush().whileHeld(new Dump(intake, conveyor, kicker, shooter));
+            driveController.Start().whenPressed(() -> {
+                intakearm.intakePID.optionSets[0].kP = intakearm.pVal.getDouble(intakearm.intakePID.optionSets[0].kP);
+                intakearm.intakePID.optionSets[0].kD = intakearm.dVal.getDouble(intakearm.intakePID.optionSets[0].kD);
+            });
         }
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
@@ -133,7 +136,7 @@ public class RobotContainer {
     private Command autoCommand = new SelectCommand(
             Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
                     entry(AutoOptions.ShootAndDriveBack,
-                            new AutoShootAndDriveBack(drive, shooter, operatorController, turret, vision, intake)),
+                            new AutoShootAndDrive(drive, shooter, operatorController, turret, vision, intake)),
                     entry(AutoOptions.DriveAndShoot,
                             new AutoShootAndDrive(drive, shooter, operatorController, turret, vision, intake)),
                     entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive)),
