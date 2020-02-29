@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.IntakeArm;
@@ -26,10 +27,8 @@ public class AutoShootAndDrive extends SequentialCommandGroup {
         ShooterControl shoot = new ShooterControl(shooter, controller, intake);
         DriveForward commandForward = new DriveForward(10, true, drive);
         TrackTarget trackTarget = new TrackTarget(turret, vision, controller, intake);
-        addCommands(new AutoFindTarget(turret, vision));
-
-        addCommands(shoot.alongWith(trackTarget));
-        addCommands(new NewWaitCommand(25));
+        addCommands(race(new WaitCommand(10),
+                sequence(new AutoFindTarget(turret, vision), shoot.alongWith(trackTarget), new WaitCommand(.5))));
         commandForward.drivepower = .1;
         addCommands(commandForward);
 
