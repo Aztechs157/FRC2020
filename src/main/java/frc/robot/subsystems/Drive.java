@@ -44,7 +44,7 @@ public class Drive extends SubsystemBase {
     public final ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(kGyroPort);
     public static SlewRate leftSlew = new SlewRate(1.2);
     public static SlewRate rightSlew = new SlewRate(1.2);
-    public static double globalDeadZone = 0.1;
+    public static double globalDeadZone = 0.07;
 
     public boolean isArcade = Preferences.getInstance().getBoolean("useArcade", false);
 

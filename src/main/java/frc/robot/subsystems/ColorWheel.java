@@ -149,7 +149,7 @@ public class ColorWheel extends SubsystemBase {
     }
 
     public void startSpinning() {
-        spinMotor.set(0.2);// TODO change to seperate for other spinning
+        spinMotor.set(0.5);// TODO change to seperate for other spinning
     }
 
     public void runLift(double s) {
