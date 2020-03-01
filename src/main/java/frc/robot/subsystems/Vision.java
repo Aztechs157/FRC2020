@@ -47,7 +47,7 @@ public class Vision extends SubsystemBase {
         // });
         pixyLight.setDirection(Direction.kForward);
         laser.setDirection(Direction.kForward);
-        pixy.AddCameraServer(10);
+        // pixy.AddCameraServer(10);
     }
 
     public boolean checkLED() {

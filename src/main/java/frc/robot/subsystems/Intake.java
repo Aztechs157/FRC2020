@@ -53,7 +53,7 @@ public class Intake extends SubsystemBase {
         Shuffleboard.getTab("Driver").addString("ball count", () -> {
             return "" + ballCount();
         });
-        Shuffleboard.getTab("Test").addNumber("Intake current", this::tempMaxCurr);
+        // Shuffleboard.getTab("Test").addNumber("Intake current", this::tempMaxCurr);
         // ballCountEntry = Shuffleboard.getTab("Test").add("ballCountSet",
         // ballCount).getEntry();
         // Shuffleboard.putNumber();

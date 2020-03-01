@@ -20,7 +20,7 @@ import frc.robot.util.PID;
 public class IntakeArm extends SubsystemBase {
 
     private final NEO intakeArmMotor;
-    public NetworkTableEntry pVal, dVal;
+    // public NetworkTableEntry pVal, dVal;
     public double position = 0;
     public PID intakePID = new PID(0.03, 0, 0.003, 0, 0, 0, 0, 0, 0);
     public final double outPos = 27;// 38
@@ -33,8 +33,10 @@ public class IntakeArm extends SubsystemBase {
         intakeArmMotor.inverted();
         intakeArmMotor.setBrakeMode();
         setDefaultCommand(new IntakeArmControl(this));
-        pVal = Shuffleboard.getTab("Test").add("P Val but really cool", intakePID.optionSets[0].kP).getEntry();
-        dVal = Shuffleboard.getTab("Test").add("D Val but cool", intakePID.optionSets[0].kP).getEntry();
+        // pVal = Shuffleboard.getTab("Test").add("P Val but really cool",
+        // intakePID.optionSets[0].kP).getEntry();
+        // dVal = Shuffleboard.getTab("Test").add("D Val but cool",
+        // intakePID.optionSets[0].kP).getEntry();
     }
 
     public void run(double speed) {

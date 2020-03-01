@@ -128,20 +128,20 @@ public class ColorWheel extends SubsystemBase {
         encoder.setUpSource(9);
         encoder.reset();
 
-        final ShuffleboardTab tab = Shuffleboard.getTab("Test");
+        // final ShuffleboardTab tab = Shuffleboard.getTab("Test");
         Shuffleboard.getTab("Driver").addString("Color Sensed", () -> getColor().toString());
         // tab.addNumber("Arm Pos", this::getArmPos);
         // tab.addNumber("Amps", liftMotor::getOutputCurrent);
         // tab.addString("Arm State", () -> this.curretArmState.toString());
-        tab.addString("Spin State", () -> this.currentSpinState.toString());
-        tab.addNumber("Blue Count", () -> this.blueCount);
+        // tab.addString("Spin State", () -> this.currentSpinState.toString());
+        // tab.addNumber("Blue Count", () -> this.blueCount);
         Shuffleboard.getTab("Driver").addString("Color Desired", () -> {
             return getRequiredColor().toString();
         });
-        tab.addNumber("ticks on color", () -> this.ticksOnColor);
-        tab.addString("Raw Color", this::getRawColor);
+        // tab.addNumber("ticks on color", () -> this.ticksOnColor);
+        // tab.addString("Raw Color", this::getRawColor);
 
-        pVal = tab.add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
+        // pVal = tab.add("P Val", colorWheelPID.optionSets[0].kP).getEntry();
     }
 
     public void stopSpinning() {

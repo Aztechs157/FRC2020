@@ -66,7 +66,7 @@ public class Drive extends SubsystemBase {
         frontRight.setPositionConversionFactor(2.105);
         backLeft.setPositionConversionFactor(2.105);
         backRight.setPositionConversionFactor(2.105);
-        Shuffleboard.getTab("Test").add("Gyro", driveGyro);
+        // Shuffleboard.getTab("Test").add("Gyro", driveGyro);
         // frontRight.setInverted(InvertType.InvertMotorOutput);
         // 1backRight.setInverted(InvertType.FollowMaster);
     }

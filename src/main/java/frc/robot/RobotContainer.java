@@ -114,10 +114,12 @@ public class RobotContainer {
             // SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().toggleWhenPressed(new IntakeButton(intake));
             ((PlaneController) driveController).LeftStickPush().whileHeld(new Dump(intake, conveyor, kicker, shooter));
-            driveController.Start().whenPressed(() -> {
-                intakearm.intakePID.optionSets[0].kP = intakearm.pVal.getDouble(intakearm.intakePID.optionSets[0].kP);
-                intakearm.intakePID.optionSets[0].kD = intakearm.dVal.getDouble(intakearm.intakePID.optionSets[0].kD);
-            });
+            // driveController.Start().whenPressed(() -> {
+            // intakearm.intakePID.optionSets[0].kP =
+            // intakearm.pVal.getDouble(intakearm.intakePID.optionSets[0].kP);
+            // intakearm.intakePID.optionSets[0].kD =
+            // intakearm.dVal.getDouble(intakearm.intakePID.optionSets[0].kD);
+            // });
         }
         // driveController.X().whenPressed(new SetArm(intakearm));
         // operatorController.LeftButton().whileHeld(() -> {
