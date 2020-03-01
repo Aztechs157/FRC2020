@@ -25,14 +25,13 @@ public class AutoShootAndDriveBack extends SequentialCommandGroup {
             Intake intake) {
 
         ShooterControl shoot = new ShooterControl(shooter, controller, intake);
-        DriveBackward commandBackward = new DriveBackward(70, true, drive);
+        DriveBackward commandBackward = new DriveBackward(70, true, drive, .1);
         TrackTarget trackTarget = new TrackTarget(turret, vision, controller, intake);
         addCommands(new AutoFindTarget(turret, vision));
 
         addCommands(shoot.alongWith(trackTarget));
         addCommands(new WaitCommand(0.5));
 
-        commandBackward.drivepower = .1;
         addCommands(commandBackward);
 
         // System.out.println("DriveAndShootBackwards");

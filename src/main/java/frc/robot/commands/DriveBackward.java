@@ -25,17 +25,21 @@ public class DriveBackward extends CommandBase {
     double heading;
     private boolean gyroEnabled;
 
+    public DriveBackward(final double units, final boolean gyroEnabled, final Drive drive) {
+        this(units, gyroEnabled, drive, drive.drivePID.pidCalculate(units, drive.frontLeft.getPosition()));
+    }
+
     /**
      * Creates a new DriveBackward.
      */
-    public DriveBackward(final double units, final boolean gyroEnabled, final Drive drive) {
+    public DriveBackward(final double units, final boolean gyroEnabled, final Drive drive, final double drivepower) {
         this.units = -units;
         this.gyroEnabled = gyroEnabled;
         this.drive = drive;
+        this.drivepower = drivepower;
 
         addRequirements(drive);
         // Use addRequirements() here to declare subsystem dependencies.
-        drivepower = drive.drivePID.pidCalculate(units, drive.frontLeft.getPosition());
         // drivepower = drive.slew.rateCalculate(drivepower, 1125); // 1125
         // gyropower = drive.gyroDrivePID.pidCalculate(0, drive.getAngle());
 

@@ -25,11 +25,10 @@ public class AutoShootAndDrive extends SequentialCommandGroup {
             Intake intake) {
 
         ShooterControl shoot = new ShooterControl(shooter, controller, intake);
-        DriveForward commandForward = new DriveForward(10, true, drive);
+        DriveForward commandForward = new DriveForward(10, true, drive, .1);
         TrackTarget trackTarget = new TrackTarget(turret, vision, controller, intake);
         addCommands(race(new WaitCommand(10),
                 sequence(new AutoFindTarget(turret, vision), shoot.alongWith(trackTarget), new WaitCommand(.5))));
-        commandForward.drivepower = .1;
         addCommands(commandForward);
 
         // System.out.println("DriveAndShoot");
