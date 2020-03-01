@@ -171,7 +171,7 @@ public class Intake extends SubsystemBase {
     public void buttonIntake() {
         if (allowIntake) {
             if (ballCount() < 4) {
-                intakearm.position = intakearm.outPos;
+                // intakearm.position = intakearm.outPos;
                 intakeMotor.set(intakeSpeed);
             } else {
                 intakeMotor.set(0);
@@ -196,6 +196,10 @@ public class Intake extends SubsystemBase {
 
     public void intakeArmUp() {
         intakearm.position = 0;
+    }
+
+    public void intakeArmDown() {
+        intakearm.position = intakearm.outPos;
     }
 
     // printCount++;

@@ -7,9 +7,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+
 // import java.util.Set;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -72,9 +75,16 @@ public class Robot extends TimedRobot {
         robotContainer.shooter.stopAll();
     }
 
+    private final NetworkTableEntry selectedAutoEntry = Shuffleboard.getTab("Driver")
+            .add("Auto Selected", "No Selection Received").getEntry();
+    private int selectedAutoCount = 0;
+
     @Override
     public void disabledPeriodic() {
-
+        if (selectedAutoCount++ > 25) {
+            selectedAutoCount = 0;
+            selectedAutoEntry.setString(robotContainer.getSelectedAutoString());
+        }
     }
 
     /**

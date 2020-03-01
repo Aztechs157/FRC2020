@@ -20,12 +20,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoShootAndDrive;
 import frc.robot.commands.ColorWheelPos;
+import frc.robot.commands.AutoDelayShootAndDrive;
 import frc.robot.commands.AutoDriveTurn;
 import frc.robot.commands.AutoLeft;
 import frc.robot.commands.AutoMid;
 import frc.robot.commands.AutoMinimal;
 import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
+import frc.robot.commands.IntakeArmToggle;
 import frc.robot.commands.IntakeButton;
 import frc.robot.commands.IntakeUnjam;
 import frc.robot.commands.LaserFire;
@@ -36,6 +38,7 @@ import frc.robot.commands.SpinColorWheel;
 import frc.robot.commands.SpinToColor;
 import frc.robot.commands.TrackTarget;
 // import frc.robot.commands.AutoGroup.AutoOptions;
+import frc.robot.commands.AutoGroup.AutoOptions;
 
 import java.util.Map;
 import static java.util.Map.entry;
@@ -65,17 +68,17 @@ public class RobotContainer {
     // #endregion
 
     private enum AutoOptions {
-        Minimal, DriveAndShoot, AutoDriveTurn, AutoLeft, AutoRight, AutoMid, ShootAndDriveBack
+        Minimal, DriveAndShoot, AutoDriveTurn, AutoLeft, AutoRight, AutoMid, ShootAndDriveBack, DelayedDriveAndShoot
     }
 
-    private SendableChooser<AutoOptions> autoChooser = new SendableChooser<>();
+    private final SendableChooser<AutoOptions> autoChooser = new SendableChooser<>();
 
     public RobotContainer() {
         autoChooser.setDefaultOption("noShoot drive F", AutoOptions.Minimal);
         autoChooser.addOption("Shoot drive F", AutoOptions.DriveAndShoot);
         autoChooser.addOption("Shoot drive B", AutoOptions.ShootAndDriveBack);
+        autoChooser.addOption("Delay shoot drive F", AutoOptions.DelayedDriveAndShoot);
         Shuffleboard.getTab("Driver").add("Auto Type", autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
-        Shuffleboard.getTab("Driver").addString("Auto Selected", () -> autoChooser.getSelected().toString());
         configureButtonBindings();
     }
 
@@ -110,6 +113,7 @@ public class RobotContainer {
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Up));
             ((PlaneController) driveController).stick2button7()
                     .whenPressed(new ColorWheelPos(colorWheel, ColorWheel.ArmPosition.Down));
+            ((PlaneController) driveController).LeftButton().toggleWhenPressed(new IntakeArmToggle(intakearm));
             // ((PlaneController) driveController).stick2Button10().whenPressed(new
             // SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().toggleWhenPressed(new IntakeButton(intake));
@@ -135,7 +139,7 @@ public class RobotContainer {
         });
     }
 
-    private Command autoCommand = new SelectCommand(
+    private final Command autoCommand = new SelectCommand(
             Map.ofEntries(entry(AutoOptions.Minimal, new AutoMinimal(drive)),
                     entry(AutoOptions.ShootAndDriveBack,
                             new AutoShootAndDrive(drive, shooter, operatorController, turret, vision, intake)),
@@ -143,7 +147,9 @@ public class RobotContainer {
                             new AutoShootAndDrive(drive, shooter, operatorController, turret, vision, intake)),
                     entry(AutoOptions.AutoDriveTurn, new AutoDriveTurn(drive)),
                     entry(AutoOptions.AutoRight, new AutoRight(drive)),
-                    entry(AutoOptions.AutoLeft, new AutoLeft(drive)), entry(AutoOptions.AutoMid, new AutoMid(drive))),
+                    entry(AutoOptions.AutoLeft, new AutoLeft(drive)), entry(AutoOptions.AutoMid, new AutoMid(drive)),
+                    entry(AutoOptions.DelayedDriveAndShoot,
+                            new AutoDelayShootAndDrive(drive, shooter, operatorController, turret, vision, intake))),
             autoChooser::getSelected);
 
     /*
@@ -151,5 +157,9 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoCommand;
+    }
+
+    public String getSelectedAutoString() {
+        return autoChooser.getSelected().toString();
     }
 }
