@@ -33,7 +33,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public void halfRun() {
-        kicker.set(0.25);
+        kicker.set(0.29);
     }
 
     public void run() {

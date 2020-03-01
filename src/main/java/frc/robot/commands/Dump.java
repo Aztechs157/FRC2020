@@ -42,7 +42,7 @@ public class Dump extends CommandBase {
     @Override
     public void execute() {
         intake.allowIntake = false;
-        intake.runSpeed(-0.60);
+        intake.runSpeed(-0.65);
         conveyor.runSpeed(-0.20);
         kicker.runSpeed(-0.0625);
         shooter.runSpeed(-0.075);
