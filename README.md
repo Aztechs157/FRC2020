@@ -12,9 +12,10 @@ Person                                                  | Title                 
 [**Wallaby14**](https://github.com/Wallaby14)           | _Lead Interdepartmental Developer_ | Intake, Conveyor, Vision, Turret, Shooter, Conveyer Sensor, Misc
 [**Eric-157**](https://github.com/Eric-157)             | _Developer_                        | Drive, Auto,
 [**jcoleman157**](https://github.com/jcoleman157)       | _Developer_                        | Drive, Auto,
-[**RyanCulkin4**](https://github.com/RyanCulkin4)       | _Developer_                        | Some Drive, Some Auto, Conveyer Sensor
+[**RyanCulkin4**](https://github.com/RyanCulkin4)       | _Developer_                        | Some Drive, Some Auto, Some Conveyer Sensor
 [**JD2313**](https://github.com/JD2313)                 | _Developer_                        | Website
 [**arepentingswan**](https://github.com/arepentingswan) | _Developer_                        | Shooter, Conveyer, Conveyer Sensor, Color Wheel
+[**tntpizzatnt**](https://github.com/tntpizzatnt)       | _Developer_                        | Learning
 
 Also, check the list of [contributors](https://github.com/Aztechs157/FRC2020/contributors) who made minor contributions.
 

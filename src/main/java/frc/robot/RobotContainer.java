@@ -29,6 +29,7 @@ import frc.robot.commands.AutoRight;
 import frc.robot.commands.Dump;
 import frc.robot.commands.IntakeArmToggle;
 import frc.robot.commands.IntakeButton;
+import frc.robot.commands.IntakeButtonMove;
 import frc.robot.commands.IntakeUnjam;
 import frc.robot.commands.LaserFire;
 import frc.robot.commands.PanicButton;
@@ -118,6 +119,7 @@ public class RobotContainer {
             // SpinColorWheel(colorWheel));
             ((PlaneController) driveController).RightButton().toggleWhenPressed(new IntakeButton(intake));
             ((PlaneController) driveController).LeftStickPush().whileHeld(new Dump(intake, conveyor, kicker, shooter));
+            ((PlaneController) driveController).RightStickPush().whileHeld(new IntakeButtonMove(intake, conveyor));
             // driveController.Start().whenPressed(() -> {
             // intakearm.intakePID.optionSets[0].kP =
             // intakearm.pVal.getDouble(intakearm.intakePID.optionSets[0].kP);
@@ -134,9 +136,9 @@ public class RobotContainer {
         // shooter.stop();
         // });
 
-        driveController.Start().whenPressed(() -> {
-            conveyor.temp = 0;
-        });
+        // driveController.Start().whenPressed(() -> {
+        // conveyor.temp = 0;
+        // });
     }
 
     private final Command autoCommand = new SelectCommand(
