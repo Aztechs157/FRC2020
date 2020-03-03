@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.controllers.Controller;
 
 public class ShooterControl extends CommandBase {
 
@@ -18,12 +17,10 @@ public class ShooterControl extends CommandBase {
      * Creates a new ShooterControl.
      */
     private Shooter shooter;
-    private Controller controller;
     private Intake intake;
 
-    public ShooterControl(Shooter shooter, Controller controller, Intake intake) {
+    public ShooterControl(Shooter shooter, Intake intake) {
         this.shooter = shooter;
-        this.controller = controller;
         this.intake = intake;
         addRequirements(this.shooter);
         // Use addRequirements() here to declare subsystem dependencies.

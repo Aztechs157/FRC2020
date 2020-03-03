@@ -61,9 +61,9 @@ public class RobotContainer {
     public final Intake intake = new Intake(operatorController, intakearm);
     public final Vision vision = new Vision(intake);
     public final Turret turret = new Turret(operatorController);
-    private final Kicker kicker = new Kicker(driveController, intake);
+    private final Kicker kicker = new Kicker();
     public final Conveyor conveyor = new Conveyor(driveController, intake, kicker, intakearm);
-    public final Shooter shooter = new Shooter(operatorController, kicker, conveyor, intake);
+    public final Shooter shooter = new Shooter(kicker, conveyor, intake);
     public final Drive drive = new Drive(driveController);
     public final ColorWheel colorWheel = new ColorWheel(turret);
     // #endregion
@@ -94,7 +94,7 @@ public class RobotContainer {
         /*
          * driveController.Y().whenPressed(() -> { intake.zeroBallCount(); }, intake);
          */
-        operatorController.RightButton().whileHeld(new ShooterControl(shooter, operatorController, intake));
+        operatorController.RightButton().whileHeld(new ShooterControl(shooter, intake));
         operatorController.Back().whileHeld(new Dump(intake, conveyor, kicker, shooter));
         operatorController.Y().whenPressed(new TrackTarget(turret, vision, operatorController, intake));
         operatorController.Start().whenPressed(new PanicButton(shooter, conveyor, intake));

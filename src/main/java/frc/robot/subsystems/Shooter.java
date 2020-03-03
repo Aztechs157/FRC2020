@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
-import frc.robot.util.controllers.Controller;
 
 public class Shooter extends SubsystemBase {
     private final NEO shooterMotor;
@@ -27,11 +26,9 @@ public class Shooter extends SubsystemBase {
     private double targetRPM = 4300;
     public NEO LeftRight;
     public NEO UpDown;
-    private Controller controller;
     private Intake intake;
     private final Kicker kicker;
     private final Conveyor conveyor;
-    private boolean motorUpToSpeed = false;
     private int count = 0;
     private final int SHOOTTIME = 12;
     private boolean first = true;
@@ -54,11 +51,10 @@ public class Shooter extends SubsystemBase {
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
-    public Shooter(Controller controller, Kicker kicker, Conveyor conveyor, Intake intake) {
+    public Shooter(Kicker kicker, Conveyor conveyor, Intake intake) {
 
         shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
         shooterMotor.inverted();
-        this.controller = controller;
         this.kicker = kicker;
         this.conveyor = conveyor;
         this.intake = intake;

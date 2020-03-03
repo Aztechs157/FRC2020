@@ -10,21 +10,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
-// import frc.robot.commands.DriveForward;
-// import frc.robot.commands.DriveTurn;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
 import frc.robot.util.controllers.Controller;
 
-// import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {

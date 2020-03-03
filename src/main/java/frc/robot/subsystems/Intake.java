@@ -9,12 +9,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.IntakeUnjam;
 import frc.robot.util.NEO;
 import frc.robot.util.SlewRate;
 //import sun.font.TrueTypeFont;
@@ -27,13 +25,11 @@ public class Intake extends SubsystemBase {
      */
     private final NEO intakeMotor;
     private int ballCount;
-    private boolean gotBall = false;
     private DigitalInput intakeSensor = new DigitalInput(2);
     private Controller controller;
     public boolean allowIntake = true;
     private double intakeSpeed = 0.83;
     private IntakeArm intakearm;
-    private NetworkTableEntry ballCountEntry;
     public boolean jam = false;
     private final double nominalCurrent = 10;
     private STATEMACHINE currentState = STATEMACHINE.INTAKE;

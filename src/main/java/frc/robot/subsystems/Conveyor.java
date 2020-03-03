@@ -27,14 +27,9 @@ public class Conveyor extends SubsystemBase {
     private IntakeArm intakearm;
     private Kicker kicker;
     private DigitalInput conveyorBottom = new DigitalInput(3);
-    private Controller controller;
-    private double pos;
     private Shooter shooter;
-    private boolean firstTime = false;
     private int maxBalls = 4;
     private double maxSpeed = 0.40;
-    private double outPos = 38;
-    private double rpm = 1750;
     public double currentSpeed = 0;
     public double temp = 0;;
     public PID conveyorPID = new PID(0.00003, 0, 0, 0, 0, 100, 0, 0, 0);
@@ -52,7 +47,6 @@ public class Conveyor extends SubsystemBase {
         conveyorMotor = new NEO(Constants.ShooterConstants.conveyorMotor, MotorType.kBrushless);
         this.intake = intake;
         this.kicker = kicker;
-        this.controller = controller;
         this.intakearm = intakearm;
         setDefaultCommand(new ConveyerControl(this, controller));
         // Shuffleboard.getTab("Test").addNumber("Speed", this::getVelocityMotor);

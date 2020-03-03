@@ -33,19 +33,14 @@ public class DriveTurn extends CommandBase {
         // Shuffleboard.getTab("Test").addNumber("Times Ran", () -> timesRan);
     }
 
-    private int timesRan = 0;
-
     @Override
     public void initialize() {
         drive.driveGyro.reset();
-        timesRan = 0;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // System.out.println("drivepower = ");// + drivepower);
-        timesRan++;
         if (drive.getAngle() <= angle) {
             double power = .5 * gyroTurnPID.pidCalculate(angle, drive.getAngle());
             drive.frontLeft.set(power);

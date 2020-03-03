@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 // import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Turret;
@@ -15,9 +14,7 @@ import frc.robot.subsystems.Vision;
 
 public class AutoFindTarget extends CommandBase {
     private Turret turret;
-    private double startTime;
     private Vision vision;
-    private double currentTime;
 
     /**
      * Creates a new AutoFindtTarget.
@@ -32,7 +29,6 @@ public class AutoFindTarget extends CommandBase {
     @Override
     public void initialize() {
         vision.turnLight(true);
-        startTime = Timer.getFPGATimestamp();
     }
 
     // Called every time the scheduler runs while the command is scheduled.

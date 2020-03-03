@@ -7,14 +7,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-// import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drive;
-// import com.ctre.phoenix.motorcontrol.NeutralMode;
-// import jdk.nashorn.internal.ir.IfNode;
 
 public class DriveForward extends CommandBase {
     private final Drive drive;
