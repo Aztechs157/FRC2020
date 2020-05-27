@@ -12,10 +12,10 @@ public class ControllerSet {
     private final HashMap<Integer, Joystick> joysticks = new HashMap<>();
 
     private final ControllerModel[] controllerModels;
-    private int activeModelIndex = 0; // The first controller in the list gets active by default
+    private int activeModelIndex = 0; // The first controller model in the list gets active by default
 
     public ControllerSet(final ControllerModel... controllerModels) {
-        // It doesn't make sense to make a set with no controller
+        // It doesn't make sense to make a set with no controller models
         // The rest of the code makes use of this assumsion
         if (controllerModels.length < 1) {
             throw new IllegalArgumentException("ControllerSet must have at least one controller!");
@@ -60,7 +60,8 @@ public class ControllerSet {
      * Use multiple ButtonDefs and return the one that's currently active
      *
      * @param defs The ButtonDefs to use
-     * @return A wpilib Button object that dynamicly responds to the current active
+     * @return A wpilib Button object that dynamicly responds to the currently
+     *         active controller model
      */
     public Button useButton(final ButtonDef... defs) {
         return new Button(() -> getRawButton(defs[activeModelIndex]));
@@ -70,22 +71,28 @@ public class ControllerSet {
      * Use multiple AxisDefs and return the one that's currently active
      *
      * @param defs The AxisDefs to use
-     * @return The value of the axis of the currently active controller
+     * @return The value of the axis of the currently active controller model
      */
     public double useAxis(final AxisDef... defs) {
         return getRawAxis(defs[activeModelIndex]);
     }
 
     /**
-     * Change the currently active controller
+     * Change the currently active controller model index
      *
-     * @param newActive The index that the new active controller was passed into
-     *                  ControllerSet's constructor
+     * @param newActive The index that the new active controller model was passed
+     *                  into ControllerSet's constructor
      */
     public void setActiveModelIndex(final int newActive) {
         activeModelIndex = newActive;
     }
 
+    /**
+     * Get the currently active controller model index
+     *
+     * @return The index that the active controller model was passed into
+     *         ControllerSet's constructor
+     */
     public int getActiveModelIndex() {
         return activeModelIndex;
     }

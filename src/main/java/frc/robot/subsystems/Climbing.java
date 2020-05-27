@@ -13,26 +13,30 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import frc.robot.Constants;
 
 public class Climbing extends SubsystemBase {
     /**
      * Creates a new Climbing.
      */
-    public final TalonSRX winch = new TalonSRX(Constants.ClimbingConstants.winchMotorId);
+    public final CANSparkMax winch = new CANSparkMax(Constants.ClimbingConstants.winchMotorId, MotorType.kBrushless);
     public final TalonSRX arm = new TalonSRX(Constants.ClimbingConstants.armMotorId);
 
-    public final Counter Wencoder = new Counter(Mode.kSemiperiod);
-
-    public final Counter Aencoder = new Counter(Mode.kSemiperiod);
+    public final CANEncoder winchEncoder = winch.getEncoder();
+    public final Counter armEncoder = new Counter(Mode.kSemiperiod);
 
     public Climbing() {
 
         // Confirmation of Auto or Manual climbing mechanism
         // button press to posiiton arm verticly
+        // winch and arm extension are manually driven
 
         // telescopic arm run on servo hs-788hb
-        // samre motor and encoder as color wheel
+        // same motor and encoder as color wheel
 
         // arm delivers hook to bar (spring assisted teselscoping,passivre hook
         // release), as delivery mechanism detracts
@@ -41,13 +45,21 @@ public class Climbing extends SubsystemBase {
 
     }
 
-    public void climb(/* controller and other parameters */) {
+    public void winch(/* controller and other parameters */) {
         // assumes winch motor moves at same speed which it may not
-        winch.set(ControlMode.Follower, Constants.ClimbingConstants.armMotorId);
+        winch.set(.5);
 
     }
 
-    public void raiseArm() {
+    public void rotate() {
+
+    }
+
+    public void counterRotate() {
+
+    }
+
+    public void extendArm() {
         arm.set(ControlMode.PercentOutput, .5);
 
         // run motor to raise arm on button press
@@ -56,7 +68,7 @@ public class Climbing extends SubsystemBase {
 
     }
 
-    public void lowerArm() {
+    public void retractArm() {
         arm.set(ControlMode.PercentOutput, -.5);
     }
 
