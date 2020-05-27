@@ -13,21 +13,28 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.TeleopDrive;
-import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
 import frc.robot.util.controllers.Controller;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
 
     private final Controller controller;
 
-    public final NEO frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless).inverted();
-    public final NEO frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
-    public final NEO backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless).inverted();
-    public final NEO backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+    public final CANSparkMax frontLeft = new CANSparkMax(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
+    public final CANSparkMax frontRight = new CANSparkMax(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
+    public final CANSparkMax backLeft = new CANSparkMax(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
+    public final CANSparkMax backRight = new CANSparkMax(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+
+    public final CANEncoder flEncoder = frontLeft.getEncoder();
+    public final CANEncoder frEncoder = frontRight.getEncoder();
+    public final CANEncoder blEncoder = backLeft.getEncoder();
+    public final CANEncoder brEncoder = backRight.getEncoder();
 
     public final PID drivePID = new PID(1.35, 0, 0, 100, 0, 100, 0, 2, -2);
     public final PID gyroDrivePID = new PID(0.055, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
@@ -48,34 +55,38 @@ public class Drive extends SubsystemBase {
     public Drive(final Controller controller) {
         this.controller = controller;
         driveGyro.calibrate();
-        frontRight.tare();
-        frontLeft.tare();
-        backRight.tare();
-        backLeft.tare();
+        flEncoder.setPosition(0);
+        frEncoder.setPosition(0);
+        brEncoder.setPosition(0);
+        blEncoder.setPosition(0);
         driveGyro.reset();
         setDefaultCommand(new TeleopDrive(this));
 
-        frontLeft.setPositionConversionFactor(2.105);
-        frontRight.setPositionConversionFactor(2.105);
-        backLeft.setPositionConversionFactor(2.105);
-        backRight.setPositionConversionFactor(2.105);
+        flEncoder.setPositionConversionFactor(2.105);
+        frEncoder.setPositionConversionFactor(2.105);
+        blEncoder.setPositionConversionFactor(2.105);
+        brEncoder.setPositionConversionFactor(2.105);
         // Shuffleboard.getTab("Test").add("Gyro", driveGyro);
         // frontRight.setInverted(InvertType.InvertMotorOutput);
         // 1backRight.setInverted(InvertType.FollowMaster);
+
+        frontLeft.setInverted(true);
+        backLeft.setInverted(true);
     }
 
-    public void setAllCoastMode() {
-        backRight.setCoastMode();
-        backLeft.setCoastMode();
-        frontLeft.setCoastMode();
-        frontRight.setCoastMode();
+    public void setCoastMode() {
+        frontLeft.setIdleMode(IdleMode.kCoast);
+        frontRight.setIdleMode(IdleMode.kCoast);
+        backLeft.setIdleMode(IdleMode.kCoast);
+        backRight.setIdleMode(IdleMode.kCoast);
+
     }
 
-    public void setAllBrakeMode() {
-        backRight.setBrakeMode();
-        backLeft.setBrakeMode();
-        frontLeft.setBrakeMode();
-        frontRight.setBrakeMode();
+    public void setBrakeMode() {
+        frontLeft.setIdleMode(IdleMode.kBrake);
+        frontRight.setIdleMode(IdleMode.kBrake);
+        backLeft.setIdleMode(IdleMode.kBrake);
+        backRight.setIdleMode(IdleMode.kBrake);
     }
 
     /*
@@ -201,13 +212,13 @@ public class Drive extends SubsystemBase {
 
     public double getLeftEncoder() {
         // return RobotContainer.driveLeftQuad.getDistance();
-        return frontLeft.getPosition();
+        return flEncoder.getPosition();
 
     }
 
     public double getRightEncoder() {
         // return RobotContainer.driveRightQuad.getDistance();
-        return frontLeft.getPosition();
+        return frEncoder.getPosition();
     }
 
     public double getAngle() {

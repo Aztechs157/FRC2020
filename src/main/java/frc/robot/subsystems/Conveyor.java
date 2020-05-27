@@ -13,16 +13,18 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 // import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.controllers.Controller;
 import frc.robot.Constants;
 import frc.robot.commands.ConveyerControl;
 import frc.robot.subsystems.Intake;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
 
 public class Conveyor extends SubsystemBase {
-    public final NEO conveyorMotor;
-
+    public final CANSparkMax conveyorMotor = new CANSparkMax(Constants.ShooterConstants.conveyorMotor,
+            MotorType.kBrushless);
+    public final CANEncoder conveyorEncoder = conveyorMotor.getEncoder();
     private Intake intake;
     private IntakeArm intakearm;
     private Kicker kicker;
@@ -44,7 +46,6 @@ public class Conveyor extends SubsystemBase {
      * Creates a new Conveyer.
      */
     public Conveyor(Controller controller, Intake intake, Kicker kicker, IntakeArm intakearm) {
-        conveyorMotor = new NEO(Constants.ShooterConstants.conveyorMotor, MotorType.kBrushless);
         this.intake = intake;
         this.kicker = kicker;
         this.intakearm = intakearm;
@@ -60,7 +61,7 @@ public class Conveyor extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        currentSpeed += conveyorPID.pidCalculate(speed, conveyorMotor.getVelocity());
+        currentSpeed += conveyorPID.pidCalculate(speed, conveyorEncoder.getVelocity());
         if (currentSpeed > 1)
             currentSpeed = 1;
         else if (currentSpeed < -1)
@@ -206,7 +207,7 @@ public class Conveyor extends SubsystemBase {
     }
 
     public double getVelocityMotor() {
-        return conveyorMotor.getVelocity();
+        return conveyorEncoder.getVelocity();
     }
 
     public void resetStateMachine() {

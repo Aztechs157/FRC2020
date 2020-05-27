@@ -7,15 +7,16 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.NEO;
 import frc.robot.util.PID;
 
 public class Shooter extends SubsystemBase {
-    private final NEO shooterMotor;
+    private final CANSparkMax shooterMotor;
 
     /**
      * Creates a new Shooter.
@@ -24,8 +25,8 @@ public class Shooter extends SubsystemBase {
      */
     // var entry;
     private double targetRPM = 4300;
-    public NEO LeftRight;
-    public NEO UpDown;
+    public CANSparkMax LeftRight;
+    public CANSparkMax UpDown;
     private Intake intake;
     private final Kicker kicker;
     private final Conveyor conveyor;
@@ -34,6 +35,7 @@ public class Shooter extends SubsystemBase {
     private boolean first = true;
     private double currentPower = 0;
     private PID shootPid = new PID(0.00001, 0, 0.000003, 0, 0, 0, 0, 0, 0);
+    private CANEncoder shooterEncoder;
 
     private enum SEMIAUTO {
         END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP, BACKSPIN
@@ -53,12 +55,13 @@ public class Shooter extends SubsystemBase {
     // }
     public Shooter(Kicker kicker, Conveyor conveyor, Intake intake) {
 
-        shooterMotor = new NEO(Constants.ShooterConstants.shooter, MotorType.kBrushless);
-        shooterMotor.inverted();
+        shooterMotor = new CANSparkMax(Constants.ShooterConstants.shooter, MotorType.kBrushless);
+        shooterMotor.setInverted(true);
         this.kicker = kicker;
         this.conveyor = conveyor;
         this.intake = intake;
         this.conveyor.addshooter(this);
+
         // entry = Shuffleboard.getTab("Test").addNumber("target RPM", valueSupplier)
         // Shuffleboard.getTab("Test").addNumber("shooter speed",
         // this::getVelocityMotor);
@@ -72,7 +75,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        currentPower += shootPid.pidCalculate(speed, shooterMotor.getVelocity());
+        currentPower += shootPid.pidCalculate(speed, shooterEncoder.getVelocity());
         if (currentPower > 1)
             currentPower = 1;
         else if (currentPower < -1)
@@ -94,7 +97,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getVelocityMotor() {
-        return shooterMotor.getVelocity();
+        return shooterEncoder.getVelocity();
     }
 
     public void SemiAuto() {
@@ -131,7 +134,7 @@ public class Shooter extends SubsystemBase {
             break;
         case SPINSHOOTER:
             run();
-            if (shooterMotor.getVelocity() >= 3300) {
+            if (shooterEncoder.getVelocity() >= 3300) {
                 semiAutoState = SEMIAUTO.SHOOT;
                 intake.ballCountDecrement();
             }
@@ -186,7 +189,7 @@ public class Shooter extends SubsystemBase {
             } else {
                 setSpeed(targetRPM);
             }
-            if (shooterMotor.getVelocity() >= targetRPM - 50 && shooterMotor.getVelocity() <= targetRPM + 50) {
+            if (shooterEncoder.getVelocity() >= targetRPM - 50 && shooterEncoder.getVelocity() <= targetRPM + 50) {
                 if (kicker.get()) {
                     autoState = AUTOMATIC.SHOOT;
                 } else {
@@ -211,7 +214,7 @@ public class Shooter extends SubsystemBase {
                 first = true;
                 count = 0;
                 if (intake.ballCount() > 0) {
-                    if (shooterMotor.getVelocity() > 0) {
+                    if (shooterEncoder.getVelocity() > 0) {
                         autoState = AUTOMATIC.SPINSHOOTER;
                     } else {
                         autoState = AUTOMATIC.MOVEBALL;
@@ -253,7 +256,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getPosMotor() {
-        return shooterMotor.getPosition();
+        return shooterEncoder.getPosition();
     }
 
     public void runSpeed(double d) {

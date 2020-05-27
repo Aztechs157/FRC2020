@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 // import java.util.Set;
@@ -65,8 +67,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        robotContainer.drive.setAllCoastMode();
-        robotContainer.turret.LeftRight.setCoastMode();
+        robotContainer.drive.setCoastMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kCoast);
         robotContainer.vision.turnLight(false);
         // robotContainer.conveyor.resetStateMachine();
         // robotContainer.shooter.resetStateMachine();
@@ -94,8 +96,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
-        robotContainer.drive.setAllBrakeMode();
-        robotContainer.turret.LeftRight.setBrakeMode();
+        robotContainer.drive.setBrakeMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kBrake);
         robotContainer.intake.ballCountSet(3);
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -120,8 +122,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        robotContainer.drive.setAllBrakeMode();
-        robotContainer.turret.LeftRight.setBrakeMode();
+        robotContainer.drive.setBrakeMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kBrake);
     }
 
     /**
@@ -135,8 +137,8 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
-        robotContainer.drive.setAllBrakeMode();
-        robotContainer.turret.LeftRight.setBrakeMode();
+        robotContainer.drive.setBrakeMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kBrake);
     }
 
     /**

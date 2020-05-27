@@ -13,17 +13,19 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.NEO;
 import frc.robot.util.SlewRate;
 //import sun.font.TrueTypeFont;
 import frc.robot.util.controllers.Controller;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
 
 public class Intake extends SubsystemBase {
     // public final NEO IntakeRight;
     /**
      * Creates a new Intake.
      */
-    private final NEO intakeMotor;
+    public final CANSparkMax intakeMotor = new CANSparkMax(Constants.ShooterConstants.Intake, MotorType.kBrushless);
+    public final CANEncoder intakeEncoder = intakeMotor.getEncoder();
     private int ballCount;
     private DigitalInput intakeSensor = new DigitalInput(2);
     private Controller controller;
@@ -43,7 +45,6 @@ public class Intake extends SubsystemBase {
     public Intake(Controller controller, IntakeArm intakearm) {
         this.controller = controller;
         this.intakearm = intakearm;
-        intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         // setDefaultCommand(new IntakeTrigger(this));
         // setDefaultCommand(new IntakeUnjam(this));
         Shuffleboard.getTab("Driver").addString("ball count", () -> {
@@ -147,7 +148,7 @@ public class Intake extends SubsystemBase {
     }
 
     public double getVelocityMotor() {
-        return intakeMotor.getVelocity();
+        return intakeEncoder.getVelocity();
     }
 
     public boolean get() {
