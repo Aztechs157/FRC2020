@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 // import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.PID;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
 import frc.robot.Constants;
 import frc.robot.commands.ConveyerControl;
 import frc.robot.subsystems.Intake;
@@ -45,7 +45,7 @@ public class Conveyor extends SubsystemBase {
     /**
      * Creates a new Conveyer.
      */
-    public Conveyor(Controller controller, Intake intake, Kicker kicker, IntakeArm intakearm) {
+    public Conveyor(ControllerSet controller, Intake intake, Kicker kicker, IntakeArm intakearm) {
         this.intake = intake;
         this.kicker = kicker;
         this.intakearm = intakearm;

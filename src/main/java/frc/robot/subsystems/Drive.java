@@ -15,7 +15,9 @@ import frc.robot.Constants;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
+import frc.robot.util.controllers.LogitechController;
+import frc.robot.util.controllers.PlaneController;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -24,7 +26,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
 
-    private final Controller controller;
+    private final ControllerSet controller;
 
     public final CANSparkMax frontLeft = new CANSparkMax(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
     public final CANSparkMax frontRight = new CANSparkMax(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
@@ -52,7 +54,7 @@ public class Drive extends SubsystemBase {
     // public final AnalogInput driveGyro = new
     // AnalogInput(Constants.DriveConstants.driveGyro);
 
-    public Drive(final Controller controller) {
+    public Drive(final ControllerSet controller) {
         this.controller = controller;
         driveGyro.calibrate();
         flEncoder.setPosition(0);
@@ -127,8 +129,8 @@ public class Drive extends SubsystemBase {
 
     public void tankdrive() {
 
-        var leftVal = -controller.getLeftStickY();
-        var rightVal = -controller.getRightStickY();
+        var leftVal = -controller.useAxis(LogitechController.LEFT_STICK_Y, PlaneController.LEFT_HAND_STICK_Y);
+        var rightVal = -controller.useAxis(LogitechController.RIGHT_STICK_Y, PlaneController.RIGHT_HAND_STICK_Y);
         leftVal = driveMap(leftVal, globalDeadZone);
         rightVal = driveMap(rightVal, globalDeadZone);
         // left y axis= 1, right y axis= 5
@@ -151,10 +153,12 @@ public class Drive extends SubsystemBase {
 
     public void arcadedrive(boolean isSingleStick) {
         // Y is inverted auto by driverstation so have it uninverted
-        var yVal = -controller.getLeftStickY();
+        var yVal = -controller.useAxis(LogitechController.LEFT_STICK_Y, PlaneController.LEFT_HAND_STICK_Y);
         yVal = driveMap(yVal, globalDeadZone);
         // Use rightX in dual, leftX in single
-        var xVal = (isSingleStick) ? controller.getLeftStickX() : controller.getRightStickX();
+        var xVal = (isSingleStick)
+                ? controller.useAxis(LogitechController.LEFT_STICK_X, PlaneController.LEFT_HAND_STICK_X)
+                : controller.useAxis(LogitechController.RIGHT_STICK_X, PlaneController.RIGHT_HAND_STICK_X);
         xVal = driveMap(xVal, globalDeadZone);
 
         // Calculate into tank drive form

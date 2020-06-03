@@ -9,7 +9,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.Pixy2Controller.Target;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
+import frc.robot.util.controllers.LogitechController;
+import frc.robot.util.controllers.PlaneController;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -23,13 +25,13 @@ public class TrackTarget extends CommandBase {
     private int unimportantCounter = 0;
     private final Turret turret;
     private final Vision vision;
-    private final Controller controller;
+    private final ControllerSet controller;
     private final Intake intake;
 
     /**
      * Creates a new TrackTarget2.
      */
-    public TrackTarget(final Turret turret, final Vision vision, final Controller controller, final Intake intake) {
+    public TrackTarget(final Turret turret, final Vision vision, final ControllerSet controller, final Intake intake) {
         this.turret = turret;
         this.vision = vision;
         this.controller = controller;
@@ -98,7 +100,7 @@ public class TrackTarget extends CommandBase {
         boolean retVal = true;
         double joyValx;
 
-        joyValx = controller.getRightStickX();
+        joyValx = controller.useAxis(LogitechController.RIGHT_STICK_X, PlaneController.RIGHT_HAND_STICK_X);
 
         if (joyValx > -0.05 && joyValx < 0.05) {
             retVal = false;

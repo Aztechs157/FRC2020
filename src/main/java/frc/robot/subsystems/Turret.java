@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.PID;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
 import frc.robot.commands.TurretControl;
 
 public class Turret extends SubsystemBase {
@@ -31,7 +31,7 @@ public class Turret extends SubsystemBase {
         leftright.set(s);
     }
 
-    public Turret(Controller controller) {
+    public Turret(ControllerSet controller) {
         leftright = new CANSparkMax(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
         // UpDown = new NEO(0, MotorType.kBrushless);
         setDefaultCommand(new TurretControl(this, controller));

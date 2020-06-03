@@ -1,4 +1,4 @@
-package frc.robot.util.controllers_test2;
+package frc.robot.util.controllers;
 
 import java.util.function.IntFunction;
 import edu.wpi.first.wpilibj.Joystick;
@@ -30,6 +30,9 @@ public class ControllerModel {
             this.axisId = axisId;
         }
     }
+
+    public static final ButtonDef UNIMPLEMENTED_BUTTON = new ButtonDef(0, 99999);
+    public static final AxisDef UNIMPLEMENTED_AXIS = new AxisDef(0, 99999);
 
     private final int[] joystickIds;
 

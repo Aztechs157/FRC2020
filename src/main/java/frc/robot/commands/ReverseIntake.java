@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 
-public class IntakeButtonMove extends CommandBase {
+public class ReverseIntake extends CommandBase {
     public Intake intake;
 
     /**
      * Creates a new IntakeButtonMove.
      */
-    public IntakeButtonMove(Intake intake, Conveyor conveyor) {
+    public ReverseIntake(Intake intake, Conveyor conveyor) {
         this.intake = intake;
         addRequirements(conveyor);
         // Use addRequirements() here to declare subsystem dependencies.

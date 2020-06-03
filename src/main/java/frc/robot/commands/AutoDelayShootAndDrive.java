@@ -15,14 +15,14 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
 
 public class AutoDelayShootAndDrive extends SequentialCommandGroup {
 
     /**
      * Creates a new AutoDriveAndShoot.
      */
-    public AutoDelayShootAndDrive(Drive drive, Shooter shooter, Controller controller, Turret turret, Vision vision,
+    public AutoDelayShootAndDrive(Drive drive, Shooter shooter, ControllerSet controller, Turret turret, Vision vision,
             Intake intake) {
         System.out.println("Encoder =" + drive.getRightEncoder());
         ShooterControl shoot = new ShooterControl(shooter, intake);

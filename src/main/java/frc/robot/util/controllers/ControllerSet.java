@@ -1,10 +1,10 @@
-package frc.robot.util.controllers_test2;
+package frc.robot.util.controllers;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import java.util.HashMap;
-import frc.robot.util.controllers_test2.ControllerModel.ButtonDef;
-import frc.robot.util.controllers_test2.ControllerModel.AxisDef;
+import frc.robot.util.controllers.ControllerModel.ButtonDef;
+import frc.robot.util.controllers.ControllerModel.AxisDef;
 
 public class ControllerSet {
 

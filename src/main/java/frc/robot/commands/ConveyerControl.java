@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
 
 public class ConveyerControl extends CommandBase {
 
@@ -19,7 +19,7 @@ public class ConveyerControl extends CommandBase {
     /**
      * Creates a new ConveyerControl.
      */
-    public ConveyerControl(final Conveyor conveyor, Controller controller) {
+    public ConveyerControl(final Conveyor conveyor, ControllerSet controller) {
         // this.controller = controller;
         this.conveyor = conveyor;
 
