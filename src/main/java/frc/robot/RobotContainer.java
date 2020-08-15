@@ -11,10 +11,15 @@ import frc.robot.subsystems.*;
 import frc.robot.util.controllers.ControllerSet;
 import frc.robot.util.controllers.LogitechController;
 import frc.robot.util.controllers.PlaneController;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import frc.robot.commands.AutoShootAndDrive;
 import frc.robot.commands.ColorWheelPos;
@@ -36,6 +41,10 @@ import frc.robot.commands.TrackTarget;
 
 import java.util.Map;
 import static java.util.Map.entry;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -72,6 +81,27 @@ public class RobotContainer {
         autoChooser.addOption("Delay shoot drive F", AutoOptions.DelayedDriveAndShoot);
         Shuffleboard.getTab("Driver").add("Auto Type", autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
         configureButtonBindings();
+    }
+
+    private ArrayList<Command> commands = new ArrayList<Command>();
+
+    public void loadConfigs(ArrayList<String> trajectoryPaths) {
+
+        int index = 0;
+        // Makes a string for the pathweaver paths
+        for (String path : trajectoryPaths) {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
+            try {
+                Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+                // This does all the work. Not sure how it works but yes.
+                RamseteCommand command = new RamseteCommand(trajectory, drive::getPosition,
+                        new RamseteController(2.0, .7), drive.getFeedForward(), drive.getDifferntialDriveKinematics(),
+                        drive::getWheelSpeeds, drive.getLeftPIDController(), drive.getRightPIDController(),
+                        drive::setVolts, drive);
+
+            } catch (IOException e) {
+            }
+        }
     }
 
     /**
@@ -118,7 +148,7 @@ public class RobotContainer {
      * Put Autonomus command here
      */
     public Command getAutonomousCommand() {
-        return autoCommand;
+        return loadConfigs(trajectoryPaths).Command;
     }
 
     public String getSelectedAutoString() {

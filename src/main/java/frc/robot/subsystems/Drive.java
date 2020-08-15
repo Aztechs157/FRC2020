@@ -10,6 +10,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.TeleopDrive;
@@ -50,6 +58,12 @@ public class Drive extends SubsystemBase {
 
     public boolean isArcade = Preferences.getInstance().getBoolean("useArcade", false);
 
+    private Pose2d position = new Pose2d(3.636, -2.437, new Rotation2d(Math.toRadians(180)));
+    private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading(), position);
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.413, 1.87, 0.494);
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.61);
+    private PIDController leftPidController = new PIDController(1.35, 0, 0); // .835
+    private PIDController rightPidController = new PIDController(1.35, 0, 0); // .835
     // public final double drivepower = leftSlew.rateCalculate(1);
     // public final AnalogInput driveGyro = new
     // AnalogInput(Constants.DriveConstants.driveGyro);
@@ -231,5 +245,44 @@ public class Drive extends SubsystemBase {
 
     public void autoDrive(final double leftPower, final double rightPower) {
         // System.out.println("frontleft.getposision = " + frontLeft.getPosition());
+    }
+
+    // This is all wack Milford code down here, better not to look.
+    public SimpleMotorFeedforward getFeedForward() {
+        return feedforward;
+    }
+
+    public DifferentialDriveKinematics getDifferntialDriveKinematics() {
+        return kinematics;
+    }
+
+    public PIDController getLeftPIDController() {
+        return leftPidController;
+    }
+
+    public PIDController getRightPIDController() {
+        return rightPidController;
+    }
+
+    public void setVolts(double leftVolts, double rightVolts) {
+
+        frontLeft.set(leftVolts / 12);
+        frontRight.set(rightVolts / 12);
+        backLeft.set(leftVolts / 12);
+        backRight.set(rightVolts / 12);
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                flEncoder.getVelocity() / 7 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
+                frEncoder.getVelocity() / 7 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60);
+    }
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(Math.IEEEremainder(driveGyro.getAngle(), 360) * (true ? -1.0 : 1.0));
+    }
+
+    public Pose2d getPosition() {
+        return position;
     }
 }

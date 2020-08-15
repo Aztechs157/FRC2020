@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -15,6 +17,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -28,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    SendableChooser<String> chooser = new SendableChooser<String>();
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -39,6 +44,21 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+        chooser.addOption("startmidclose3balltrench", "startmidclose3balltrench");
+        SmartDashboard.putData("Auto Mode", chooser);
+
+        String autoSelection = "";
+        ArrayList<String> trajectoryPaths = new ArrayList<String>();
+
+        if (chooser.getSelected() == null || chooser.getSelected().isEmpty()) {
+            System.out.println("dashboard is null!");
+            autoSelection = "startmidfar3balltrench";
+        } else {
+            autoSelection = chooser.getSelected();
+        }
+
+        trajectoryPaths.add("paths/startmidfar3balltrench_trench.wpilib.json");
+        robotContainer.loadConfigs(trajectoryPaths);
     }
 
     /**
