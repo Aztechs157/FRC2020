@@ -57,6 +57,7 @@ public class Shooter extends SubsystemBase {
 
         shooterMotor = new CANSparkMax(Constants.ShooterConstants.shooter, MotorType.kBrushless);
         shooterMotor.setInverted(true);
+        shooterEncoder = shooterMotor.getEncoder();
         this.kicker = kicker;
         this.conveyor = conveyor;
         this.intake = intake;

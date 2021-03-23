@@ -12,6 +12,7 @@ import frc.robot.util.controllers.ControllerSet;
 import frc.robot.util.controllers.LogitechController;
 import frc.robot.util.controllers.PlaneController;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -148,7 +149,23 @@ public class RobotContainer {
      * Put Autonomus command here
      */
     public Command getAutonomousCommand() {
-        return loadConfigs(trajectoryPaths).Command;
+        ArrayList<String> trajectoryPaths = new ArrayList<String>();
+        Command command = new AutoMinimal(drive);
+        int index = 0;
+        // Makes a string for the pathweaver paths
+        for (String path : trajectoryPaths) {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
+            try {
+                Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+                // This does all the work. Not sure how it works but yes.
+                command = new RamseteCommand(trajectory, drive::getPosition, new RamseteController(2.0, .7),
+                        drive.getFeedForward(), drive.getDifferntialDriveKinematics(), drive::getWheelSpeeds,
+                        drive.getLeftPIDController(), drive.getRightPIDController(), drive::setVolts, drive);
+
+            } catch (IOException e) {
+            }
+        }
+        return command;
     }
 
     public String getSelectedAutoString() {

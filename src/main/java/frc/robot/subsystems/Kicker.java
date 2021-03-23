@@ -27,6 +27,7 @@ public class Kicker extends SubsystemBase {
      */
     public Kicker() {
         kicker = new CANSparkMax(Constants.ShooterConstants.kicker, MotorType.kBrushless);
+        kickEncoder = kicker.getEncoder();
     }
 
     public void halfRun() {

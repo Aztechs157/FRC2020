@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
-        chooser.addOption("startmidclose3balltrench", "startmidclose3balltrench");
+        chooser.addOption("forward", "forward");
         SmartDashboard.putData("Auto Mode", chooser);
 
         String autoSelection = "";
@@ -52,12 +52,12 @@ public class Robot extends TimedRobot {
 
         if (chooser.getSelected() == null || chooser.getSelected().isEmpty()) {
             System.out.println("dashboard is null!");
-            autoSelection = "startmidfar3balltrench";
+            autoSelection = "forward";
         } else {
             autoSelection = chooser.getSelected();
         }
 
-        trajectoryPaths.add("paths/startmidfar3balltrench_trench.wpilib.json");
+        trajectoryPaths.add("paths/forward.wpilib.json");
         robotContainer.loadConfigs(trajectoryPaths);
     }
 
@@ -122,6 +122,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
     }
 
     /**
@@ -130,6 +131,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
+        ArrayList<String> trajectoryPaths = new ArrayList<String>();
+        trajectoryPaths.add("paths/forward.wpilib.json");
+        robotContainer.loadConfigs(trajectoryPaths);
 
     }
 

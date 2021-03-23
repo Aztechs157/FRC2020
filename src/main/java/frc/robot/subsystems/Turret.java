@@ -33,6 +33,7 @@ public class Turret extends SubsystemBase {
 
     public Turret(ControllerSet controller) {
         leftright = new CANSparkMax(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
+        lrEncoder = leftright.getEncoder();
         // UpDown = new NEO(0, MotorType.kBrushless);
         setDefaultCommand(new TurretControl(this, controller));
         // Shuffleboard.getTab("Test").addNumber("TurretPos", lrEncoder::getPosition);
