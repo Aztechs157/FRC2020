@@ -13,20 +13,23 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.NEO;
 import frc.robot.util.SlewRate;
-//import sun.font.TrueTypeFont;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
+import frc.robot.util.controllers.LogitechController;
+import frc.robot.util.controllers.PlaneController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
 
 public class Intake extends SubsystemBase {
     // public final NEO IntakeRight;
     /**
      * Creates a new Intake.
      */
-    private final NEO intakeMotor;
+    public final CANSparkMax intakeMotor = new CANSparkMax(Constants.ShooterConstants.Intake, MotorType.kBrushless);
+    public final CANEncoder intakeEncoder = intakeMotor.getEncoder();
     private int ballCount;
     private DigitalInput intakeSensor = new DigitalInput(2);
-    private Controller controller;
+    private ControllerSet controller;
     public boolean allowIntake = true;
     private double intakeSpeed = 0.83;
     private IntakeArm intakearm;
@@ -40,10 +43,9 @@ public class Intake extends SubsystemBase {
         INTAKE, UNJAMSTART, TESTJAM, DONE
     };
 
-    public Intake(Controller controller, IntakeArm intakearm) {
+    public Intake(ControllerSet controller, IntakeArm intakearm) {
         this.controller = controller;
         this.intakearm = intakearm;
-        intakeMotor = new NEO(Constants.ShooterConstants.Intake, MotorType.kBrushless);
         // setDefaultCommand(new IntakeTrigger(this));
         // setDefaultCommand(new IntakeUnjam(this));
         Shuffleboard.getTab("Driver").addString("ball count", () -> {
@@ -147,7 +149,7 @@ public class Intake extends SubsystemBase {
     }
 
     public double getVelocityMotor() {
-        return intakeMotor.getVelocity();
+        return intakeEncoder.getVelocity();
     }
 
     public boolean get() {
@@ -181,8 +183,10 @@ public class Intake extends SubsystemBase {
     public void runIntake() {
         // System.out.println(controller.getLeftTrigger());
         if (allowIntake) {
-            intakeMotor.set(controller.getLeftTrigger() * intakeSpeed);
-            if (controller.getLeftTrigger() > 0.1 && ballCount <= 4) {
+            var leftTrigger = controller.useAxis(LogitechController.LEFT_TRIGGER_HELD,
+                    PlaneController.LEFT_HAND_TRIGGER_HELD);
+            intakeMotor.set(leftTrigger * intakeSpeed);
+            if (leftTrigger > 0.1 && ballCount <= 4) {
                 intakearm.position = intakearm.outPos;
             } else {
                 intakearm.position = 0;

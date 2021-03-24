@@ -40,11 +40,9 @@ public final class Constants {
         // comment
     }
 
-    public final class OIConstants {
-        public static final int RYStick = 5;
-        public static final int LYStick = 1;
-        public static final int RXStick = 4;
-        public static final int LXStick = 0;
+    public final class ClimbingConstants {
+        public static final int winchMotorId = 13;
+        public static final int armMotorId = 14;
     }
 
     public final class ColorWheelConstants {

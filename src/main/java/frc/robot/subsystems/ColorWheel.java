@@ -23,10 +23,10 @@ import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ColorWheelConstants;
-import frc.robot.util.NEO;
 import frc.robot.util.PID;
 
 public class ColorWheel extends SubsystemBase {
@@ -93,7 +93,8 @@ public class ColorWheel extends SubsystemBase {
 
     private final Counter encoder = new Counter(Mode.kSemiperiod);
     private final TalonSRX liftMotor = new TalonSRX(ColorWheelConstants.colorWheelLiftMotorId);
-    private final NEO spinMotor = new NEO(ColorWheelConstants.colorWheelSpinMotorId, MotorType.kBrushless);
+    private final CANSparkMax spinMotor = new CANSparkMax(ColorWheelConstants.colorWheelSpinMotorId,
+            MotorType.kBrushless);
 
     private final Turret turret;
 
@@ -199,7 +200,7 @@ public class ColorWheel extends SubsystemBase {
         if (pos == ArmPosition.Up) {
             switch (currentArmState) {
             case MoveTurret:
-                if (turret.LeftRight.getPosition() < 43) {
+                if (turret.lrEncoder.getPosition() < 43) {
                     turret.moveShooter(.5);
                 } else {
                     turret.moveShooter(0);
@@ -220,7 +221,7 @@ public class ColorWheel extends SubsystemBase {
         } else {
             switch (currentArmState) {
             case MoveTurret:
-                if (turret.LeftRight.getPosition() < 43) {
+                if (turret.lrEncoder.getPosition() < 43) {
                     turret.moveShooter(.5);
                 } else {
                     turret.moveShooter(0);
@@ -284,7 +285,7 @@ public class ColorWheel extends SubsystemBase {
             }
             break;
         case MoveTurret:
-            if (turret.LeftRight.getPosition() < 45) {
+            if (turret.lrEncoder.getPosition() < 45) {
                 turret.moveShooter(0.5);
             } else {
                 turret.moveShooter(0);

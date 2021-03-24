@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
+import com.revrobotics.CANEncoder;
 
 public class DriveForward extends CommandBase {
     private final Drive drive;
@@ -21,7 +22,7 @@ public class DriveForward extends CommandBase {
     private boolean gyroEnabled;
 
     public DriveForward(final double units, final boolean gyroEnabled, final Drive drive) {
-        this(units, gyroEnabled, drive, drive.drivePID.pidCalculate(units, drive.frontLeft.getPosition()));
+        this(units, gyroEnabled, drive, drive.drivePID.pidCalculate(units, drive.flEncoder.getPosition()));
     }
 
     /**
@@ -44,10 +45,10 @@ public class DriveForward extends CommandBase {
     @Override
     public void initialize() {
         heading = drive.getAngle();
-        drive.frontRight.tare();
-        drive.frontLeft.tare();
-        drive.backRight.tare();
-        drive.backLeft.tare();
+        drive.frEncoder.setPosition(0);
+        drive.flEncoder.setPosition(0);
+        drive.brEncoder.setPosition(0);
+        drive.blEncoder.setPosition(0);
     }
 
     double count = 0;
@@ -164,7 +165,7 @@ public class DriveForward extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (drive.frontRight.getPosition() > units);
+        return (drive.frEncoder.getPosition() > units);
         //
         // return false;
     }

@@ -2,18 +2,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
+import frc.robot.util.controllers.LogitechController;
+import frc.robot.util.controllers.PlaneController;
 
 public class TurretControl extends CommandBase {
 
     private double count = 0;
     private final Turret shooter;
-    private final Controller controller;
+    private final ControllerSet controller;
 
     /**
      * Creates a new ShooterControl2.
      */
-    public TurretControl(final Turret shooter, final Controller controller) {
+    public TurretControl(final Turret shooter, final ControllerSet controller) {
         this.shooter = shooter;
         this.controller = controller;
         addRequirements(shooter);
@@ -31,7 +33,8 @@ public class TurretControl extends CommandBase {
             count = 0;
         }
 
-        joyValx = shooter.driveMap(-controller.getRightStickX(), 0.05);
+        joyValx = shooter.driveMap(
+                -controller.useAxis(LogitechController.RIGHT_STICK_X, PlaneController.RIGHT_HAND_STICK_X), 0.05);
         Scale = 0.4;
         shooter.moveShooter(joyValx * Scale);
         // RobotContainer.shooter.UpDown.set(RobotContainer.m_oi.controller2.getRawAxis(5));

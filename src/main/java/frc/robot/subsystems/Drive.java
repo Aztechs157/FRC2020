@@ -10,24 +10,49 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.TeleopDrive;
-import frc.robot.util.NEO;
 import frc.robot.util.PID;
 import frc.robot.util.SlewRate;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
+import frc.robot.util.controllers.LogitechController;
+import frc.robot.util.controllers.PlaneController;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class Drive extends SubsystemBase {
 
-    private final Controller controller;
+    private final ControllerSet controller;
 
-    public final NEO frontLeft = new NEO(Constants.DriveConstants.FrontLeft, MotorType.kBrushless).inverted();
-    public final NEO frontRight = new NEO(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
-    public final NEO backLeft = new NEO(Constants.DriveConstants.BackLeft, MotorType.kBrushless).inverted();
-    public final NEO backRight = new NEO(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+    public final CANSparkMax frontLeft = new CANSparkMax(Constants.DriveConstants.FrontLeft, MotorType.kBrushless);
+    public final CANSparkMax frontRight = new CANSparkMax(Constants.DriveConstants.FrontRight, MotorType.kBrushless);
+    public final CANSparkMax backLeft = new CANSparkMax(Constants.DriveConstants.BackLeft, MotorType.kBrushless);
+    public final CANSparkMax backRight = new CANSparkMax(Constants.DriveConstants.BackRight, MotorType.kBrushless);
+
+    public final CANEncoder flEncoder = frontLeft.getEncoder();
+    public final CANEncoder frEncoder = frontRight.getEncoder();
+    public final CANEncoder blEncoder = backLeft.getEncoder();
+    public final CANEncoder brEncoder = backRight.getEncoder();
 
     public final PID drivePID = new PID(1.35, 0, 0, 100, 0, 100, 0, 2, -2);
     public final PID gyroDrivePID = new PID(0.055, 0, 0.000002, 999999, 0, 999999, 0, 3, -3);
@@ -41,41 +66,51 @@ public class Drive extends SubsystemBase {
 
     public boolean isArcade = Preferences.getInstance().getBoolean("useArcade", false);
 
+    private Pose2d position = new Pose2d(3.636, -2.437, new Rotation2d(Math.toRadians(180)));
+    private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading(), position);
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.413, 1.87, 0.494);
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.61);
+    private PIDController leftPidController = new PIDController(1.35, 0, 0); // .835
+    private PIDController rightPidController = new PIDController(1.35, 0, 0); // .835
     // public final double drivepower = leftSlew.rateCalculate(1);
     // public final AnalogInput driveGyro = new
     // AnalogInput(Constants.DriveConstants.driveGyro);
 
-    public Drive(final Controller controller) {
+    public Drive(final ControllerSet controller) {
         this.controller = controller;
         driveGyro.calibrate();
-        frontRight.tare();
-        frontLeft.tare();
-        backRight.tare();
-        backLeft.tare();
+        flEncoder.setPosition(0);
+        frEncoder.setPosition(0);
+        brEncoder.setPosition(0);
+        blEncoder.setPosition(0);
         driveGyro.reset();
         setDefaultCommand(new TeleopDrive(this));
 
-        frontLeft.setPositionConversionFactor(2.105);
-        frontRight.setPositionConversionFactor(2.105);
-        backLeft.setPositionConversionFactor(2.105);
-        backRight.setPositionConversionFactor(2.105);
+        flEncoder.setPositionConversionFactor(2.105);
+        frEncoder.setPositionConversionFactor(2.105);
+        blEncoder.setPositionConversionFactor(2.105);
+        brEncoder.setPositionConversionFactor(2.105);
         // Shuffleboard.getTab("Test").add("Gyro", driveGyro);
         // frontRight.setInverted(InvertType.InvertMotorOutput);
         // 1backRight.setInverted(InvertType.FollowMaster);
+
+        frontLeft.setInverted(true);
+        backLeft.setInverted(true);
     }
 
-    public void setAllCoastMode() {
-        backRight.setCoastMode();
-        backLeft.setCoastMode();
-        frontLeft.setCoastMode();
-        frontRight.setCoastMode();
+    public void setCoastMode() {
+        frontLeft.setIdleMode(IdleMode.kCoast);
+        frontRight.setIdleMode(IdleMode.kCoast);
+        backLeft.setIdleMode(IdleMode.kCoast);
+        backRight.setIdleMode(IdleMode.kCoast);
+
     }
 
-    public void setAllBrakeMode() {
-        backRight.setBrakeMode();
-        backLeft.setBrakeMode();
-        frontLeft.setBrakeMode();
-        frontRight.setBrakeMode();
+    public void setBrakeMode() {
+        frontLeft.setIdleMode(IdleMode.kBrake);
+        frontRight.setIdleMode(IdleMode.kBrake);
+        backLeft.setIdleMode(IdleMode.kBrake);
+        backRight.setIdleMode(IdleMode.kBrake);
     }
 
     /*
@@ -116,8 +151,8 @@ public class Drive extends SubsystemBase {
 
     public void tankdrive() {
 
-        var leftVal = -controller.getLeftStickY();
-        var rightVal = -controller.getRightStickY();
+        var leftVal = -controller.useAxis(LogitechController.LEFT_STICK_Y, PlaneController.LEFT_HAND_STICK_Y);
+        var rightVal = -controller.useAxis(LogitechController.RIGHT_STICK_Y, PlaneController.RIGHT_HAND_STICK_Y);
         leftVal = driveMap(leftVal, globalDeadZone);
         rightVal = driveMap(rightVal, globalDeadZone);
         // left y axis= 1, right y axis= 5
@@ -140,10 +175,12 @@ public class Drive extends SubsystemBase {
 
     public void arcadedrive(boolean isSingleStick) {
         // Y is inverted auto by driverstation so have it uninverted
-        var yVal = -controller.getLeftStickY();
+        var yVal = -controller.useAxis(LogitechController.LEFT_STICK_Y, PlaneController.LEFT_HAND_STICK_Y);
         yVal = driveMap(yVal, globalDeadZone);
         // Use rightX in dual, leftX in single
-        var xVal = (isSingleStick) ? controller.getLeftStickX() : controller.getRightStickX();
+        var xVal = (isSingleStick)
+                ? controller.useAxis(LogitechController.LEFT_STICK_X, PlaneController.LEFT_HAND_STICK_X)
+                : controller.useAxis(LogitechController.RIGHT_STICK_X, PlaneController.RIGHT_HAND_STICK_X);
         xVal = driveMap(xVal, globalDeadZone);
 
         // Calculate into tank drive form
@@ -201,13 +238,13 @@ public class Drive extends SubsystemBase {
 
     public double getLeftEncoder() {
         // return RobotContainer.driveLeftQuad.getDistance();
-        return frontLeft.getPosition();
+        return flEncoder.getPosition();
 
     }
 
     public double getRightEncoder() {
         // return RobotContainer.driveRightQuad.getDistance();
-        return frontLeft.getPosition();
+        return frEncoder.getPosition();
     }
 
     public double getAngle() {
@@ -217,4 +254,44 @@ public class Drive extends SubsystemBase {
     public void autoDrive(final double leftPower, final double rightPower) {
         // System.out.println("frontleft.getposision = " + frontLeft.getPosition());
     }
+
+    // This is all wack Milford code down here, better not to look.
+    public SimpleMotorFeedforward getFeedForward() {
+        return feedforward;
+    }
+
+    public DifferentialDriveKinematics getDifferntialDriveKinematics() {
+        return kinematics;
+    }
+
+    public PIDController getLeftPIDController() {
+        return leftPidController;
+    }
+
+    public PIDController getRightPIDController() {
+        return rightPidController;
+    }
+
+    public void setVolts(double leftVolts, double rightVolts) {
+
+        frontLeft.set(leftVolts / 12);
+        frontRight.set(rightVolts / 12);
+        backLeft.set(leftVolts / 12);
+        backRight.set(rightVolts / 12);
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+                flEncoder.getVelocity() / 7 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60,
+                frEncoder.getVelocity() / 7 * 2 * Math.PI * Units.inchesToMeters(3.0) / 60);
+    }
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(Math.IEEEremainder(driveGyro.getAngle(), 360) * (true ? -1.0 : 1.0));
+    }
+
+    public Pose2d getPosition() {
+        return position;
+    }
+
 }

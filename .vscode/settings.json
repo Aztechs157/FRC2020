@@ -20,5 +20,6 @@
     "editor.insertSpaces": true,
     "editor.detectIndentation": false,
     "files.insertFinalNewline": true,
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "liveshare.languages.allowGuestCommandControl": true
 }

@@ -7,12 +7,18 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 // import java.util.Set;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -26,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    SendableChooser<String> chooser = new SendableChooser<String>();
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -37,6 +44,21 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+        chooser.addOption("forward", "forward");
+        SmartDashboard.putData("Auto Mode", chooser);
+
+        String autoSelection = "";
+        ArrayList<String> trajectoryPaths = new ArrayList<String>();
+
+        if (chooser.getSelected() == null || chooser.getSelected().isEmpty()) {
+            System.out.println("dashboard is null!");
+            autoSelection = "forward";
+        } else {
+            autoSelection = chooser.getSelected();
+        }
+
+        trajectoryPaths.add("paths/forward.wpilib.json");
+        robotContainer.loadConfigs(trajectoryPaths);
     }
 
     /**
@@ -65,8 +87,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        robotContainer.drive.setAllCoastMode();
-        robotContainer.turret.LeftRight.setCoastMode();
+        robotContainer.drive.setCoastMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kCoast);
         robotContainer.vision.turnLight(false);
         // robotContainer.conveyor.resetStateMachine();
         // robotContainer.shooter.resetStateMachine();
@@ -94,12 +116,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
-        robotContainer.drive.setAllBrakeMode();
-        robotContainer.turret.LeftRight.setBrakeMode();
+        robotContainer.drive.setBrakeMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kBrake);
         robotContainer.intake.ballCountSet(3);
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
     }
 
     /**
@@ -108,6 +131,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         CommandScheduler.getInstance().run();
+        ArrayList<String> trajectoryPaths = new ArrayList<String>();
+        trajectoryPaths.add("paths/forward.wpilib.json");
+        robotContainer.loadConfigs(trajectoryPaths);
 
     }
 
@@ -120,8 +146,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        robotContainer.drive.setAllBrakeMode();
-        robotContainer.turret.LeftRight.setBrakeMode();
+        robotContainer.drive.setBrakeMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kBrake);
     }
 
     /**
@@ -135,8 +161,8 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
-        robotContainer.drive.setAllBrakeMode();
-        robotContainer.turret.LeftRight.setBrakeMode();
+        robotContainer.drive.setBrakeMode();
+        robotContainer.turret.leftright.setIdleMode(IdleMode.kBrake);
     }
 
     /**

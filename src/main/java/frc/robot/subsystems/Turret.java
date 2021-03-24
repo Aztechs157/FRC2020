@@ -1,24 +1,26 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.NEO;
 import frc.robot.util.PID;
-import frc.robot.util.controllers.Controller;
+import frc.robot.util.controllers.ControllerSet;
 import frc.robot.commands.TurretControl;
 
 public class Turret extends SubsystemBase {
     /**
      * Creates a new Shooter2.
      */
-    public NEO LeftRight;
-    public NEO UpDown;
+    public CANSparkMax leftright;
+    public CANSparkMax UpDown;
+
     // private int Count;
 
     // public Shooter() {
-    // LeftRight = new Servo(0);
+    // lrEncoder = new Servo(0);
     // UpDown = new Talon(1);
     // testTalon = new AnalogPotentiometer(1);
     // }
@@ -26,15 +28,18 @@ public class Turret extends SubsystemBase {
     private PID turretPID = new PID(0.0001, 0, 0, 0, 0, 0, 0, 0, 0);
 
     public void run(double s) {
-        LeftRight.set(s);
+        leftright.set(s);
     }
 
-    public Turret(Controller controller) {
-        LeftRight = new NEO(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
+    public Turret(ControllerSet controller) {
+        leftright = new CANSparkMax(Constants.ShooterConstants.TurretMotorID, MotorType.kBrushless);
+        lrEncoder = leftright.getEncoder();
         // UpDown = new NEO(0, MotorType.kBrushless);
         setDefaultCommand(new TurretControl(this, controller));
-        // Shuffleboard.getTab("Test").addNumber("TurretPos", LeftRight::getPosition);
+        // Shuffleboard.getTab("Test").addNumber("TurretPos", lrEncoder::getPosition);
     }
+
+    public CANEncoder lrEncoder;
 
     public void moveShooter(final double Speed) {
 
@@ -56,31 +61,30 @@ public class Turret extends SubsystemBase {
         // }
 
         if (Speed > -0.01 && Speed < 0.01) {
-            LeftRight.set(0.0);
+            leftright.set(0.0);
         } else if (Speed > 0) {
-            if (LeftRight.getPosition() <= 50) {
-                LeftRight.set(1 * Speed);
+            if (lrEncoder.getPosition() <= 50) {
+                leftright.set(1 * Speed);
             } else {
-                LeftRight.set(0.0);
+                leftright.set(0.0);
             }
-        } else if (LeftRight.getPosition() >= -90) {
-            LeftRight.set(1 * Speed);
+        } else if (lrEncoder.getPosition() >= -90) {
+            leftright.set(1 * Speed);
         } else {
-            LeftRight.set(0.0);
+            leftright.set(0.0);
         }
     }
 
     public void MoveTurret() {
-        run(turretPID.pidCalculate(position, LeftRight.getPosition()));
+        run(turretPID.pidCalculate(position, lrEncoder.getPosition()));
     }
 
     public void MoveTurret(double toPosition) {
-        if (toPosition <= LeftRight.getPosition()) {
-            run(turretPID.pidCalculate(position, LeftRight.getPosition()));
+        if (toPosition <= lrEncoder.getPosition()) {
+            run(turretPID.pidCalculate(position, lrEncoder.getPosition()));
         } else {
-            LeftRight.set(0);
+            leftright.set(0);
         }
-
     }
 
     @Override

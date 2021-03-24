@@ -8,23 +8,26 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.NEO;
 
 public class Kicker extends SubsystemBase {
-    public NEO kicker;
+    public CANSparkMax kicker;
     private boolean gotBall = false;
     private DigitalInput kickerSensor = new DigitalInput(5);
     public int printCount;
+    private CANEncoder kickEncoder;
 
     /**
      * Creates a new Kicker.
      */
     public Kicker() {
-        kicker = new NEO(Constants.ShooterConstants.kicker, MotorType.kBrushless);
+        kicker = new CANSparkMax(Constants.ShooterConstants.kicker, MotorType.kBrushless);
+        kickEncoder = kicker.getEncoder();
     }
 
     public void halfRun() {
@@ -40,7 +43,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public double getVelocityMotor() {
-        return kicker.getVelocity();
+        return kickEncoder.getVelocity();
     }
 
     public boolean get() {

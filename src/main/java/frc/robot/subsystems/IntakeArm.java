@@ -12,12 +12,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeArmControl;
-import frc.robot.util.NEO;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANEncoder;
 import frc.robot.util.PID;
 
 public class IntakeArm extends SubsystemBase {
 
-    private final NEO intakeArmMotor;
+    private final CANSparkMax intakeArmMotor = new CANSparkMax(Constants.ShooterConstants.intakeArmMotorID,
+            MotorType.kBrushless);
+    public final CANEncoder intakeArmEncoder = intakeArmMotor.getEncoder();
     // public NetworkTableEntry pVal, dVal;
     public double position = 0;
     public PID intakePID = new PID(0.03, 0, 0.003, 0, 0, 0, 0, 0, 0);
@@ -27,9 +31,8 @@ public class IntakeArm extends SubsystemBase {
      * Creates a new IntakeArm.
      */
     public IntakeArm() {
-        intakeArmMotor = new NEO(Constants.ShooterConstants.intakeArmMotorID, MotorType.kBrushless);
-        intakeArmMotor.inverted();
-        intakeArmMotor.setBrakeMode();
+        intakeArmMotor.setInverted(true);
+        intakeArmMotor.setIdleMode(IdleMode.kBrake);
         setDefaultCommand(new IntakeArmControl(this));
         // pVal = Shuffleboard.getTab("Test").add("P Val but really cool",
         // intakePID.optionSets[0].kP).getEntry();
@@ -42,7 +45,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public void MoveArm() {
-        run(intakePID.pidCalculate(position, intakeArmMotor.getPosition()));
+        run(intakePID.pidCalculate(position, intakeArmEncoder.getPosition()));
     }
 
     @Override
