@@ -33,7 +33,7 @@ public class TeleopDrive extends CommandBase {
             chooser.setDefaultOption("Default", ARCADE_DUAL);
             SmartDashboard.putData("Drive Switch", chooser);
         } else {
-            chooser.setDefaultOption("Default", TANK);
+            chooser.setDefaultOption("Default", ARCADE_SOLO);
         }
     }
 

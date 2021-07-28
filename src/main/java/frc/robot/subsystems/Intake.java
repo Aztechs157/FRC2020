@@ -38,6 +38,7 @@ public class Intake extends SubsystemBase {
     private STATEMACHINE currentState = STATEMACHINE.INTAKE;
     private double temp = 0;
     private SlewRate rate = new SlewRate(1.0);
+    public final double maxBalls = 3;
 
     private enum STATEMACHINE {
         INTAKE, UNJAMSTART, TESTJAM, DONE
@@ -168,7 +169,7 @@ public class Intake extends SubsystemBase {
 
     public void buttonIntake() {
         if (allowIntake) {
-            if (ballCount() < 4) {
+            if (ballCount() < maxBalls) {
                 // intakearm.position = intakearm.outPos;
                 intakeMotor.set(intakeSpeed);
             } else {
@@ -186,7 +187,7 @@ public class Intake extends SubsystemBase {
             var leftTrigger = controller.useAxis(LogitechController.LEFT_TRIGGER_HELD,
                     PlaneController.LEFT_HAND_TRIGGER_HELD);
             intakeMotor.set(leftTrigger * intakeSpeed);
-            if (leftTrigger > 0.1 && ballCount <= 4) {
+            if (leftTrigger > 0.1 && ballCount <= maxBalls) {
                 intakearm.position = intakearm.outPos;
             } else {
                 intakearm.position = 0;

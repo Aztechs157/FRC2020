@@ -184,7 +184,7 @@ public class Shooter extends SubsystemBase {
             }
             break;
         case SPINSHOOTER:
-            if (intake.ballCount() >= 4) {
+            if (intake.ballCount() >= intake.maxBalls) {
 
                 setSpeed(targetRPM + 400);
             } else {

@@ -21,6 +21,7 @@ public class Dump extends CommandBase {
     private Conveyor conveyor;
     private Kicker kicker;
     private Shooter shooter;
+    final double dumpPower = 1.53;
 
     public Dump(Intake intake, Conveyor conveyor, Kicker kicker, Shooter shooter) {
         this.intake = intake;
@@ -41,10 +42,10 @@ public class Dump extends CommandBase {
     @Override
     public void execute() {
         intake.allowIntake = false;
-        intake.runSpeed(-0.65);
-        conveyor.runSpeed(-0.20);
-        kicker.runSpeed(-0.0625);
-        shooter.runSpeed(-0.075);
+        intake.runSpeed(-0.65 * dumpPower);
+        conveyor.runSpeed(-0.20 * dumpPower);
+        kicker.runSpeed(-0.0625 * dumpPower);
+        shooter.runSpeed(-0.075 * dumpPower);
     }
 
     // Called once the command ends or is interrupted.

@@ -63,6 +63,7 @@ public class Drive extends SubsystemBase {
     public static SlewRate leftSlew = new SlewRate(1.2);
     public static SlewRate rightSlew = new SlewRate(1.2);
     public static double globalDeadZone = 0.07;
+    public static double maxSpeed = 0.50;
 
     public boolean isArcade = Preferences.getInstance().getBoolean("useArcade", false);
 
@@ -155,6 +156,9 @@ public class Drive extends SubsystemBase {
         var rightVal = -controller.useAxis(LogitechController.RIGHT_STICK_Y, PlaneController.RIGHT_HAND_STICK_Y);
         leftVal = driveMap(leftVal, globalDeadZone);
         rightVal = driveMap(rightVal, globalDeadZone);
+
+        leftVal = minmax(-maxSpeed, leftVal, maxSpeed);
+        rightVal = minmax(-maxSpeed, rightVal, maxSpeed);
         // left y axis= 1, right y axis= 5
         frontLeft.set(leftSlew.rateCalculate(leftVal));
         frontRight.set(rightSlew.rateCalculate(rightVal));
@@ -184,8 +188,8 @@ public class Drive extends SubsystemBase {
         xVal = driveMap(xVal, globalDeadZone);
 
         // Calculate into tank drive form
-        var leftVal = minmax(-1, yVal + xVal, 1);
-        var rightVal = minmax(-1, yVal - xVal, 1);
+        var leftVal = minmax(-maxSpeed, yVal + xVal, maxSpeed);
+        var rightVal = minmax(-maxSpeed, yVal - xVal, maxSpeed);
 
         // Use the calculated vals
         frontLeft.set(leftSlew.rateCalculate(leftVal));
