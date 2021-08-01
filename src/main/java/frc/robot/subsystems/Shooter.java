@@ -11,6 +11,8 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.PID;
@@ -36,6 +38,9 @@ public class Shooter extends SubsystemBase {
     private double currentPower = 0;
     private PID shootPid = new PID(0.00001, 0, 0.000003, 0, 0, 0, 0, 0, 0);
     private CANEncoder shooterEncoder;
+
+    private DriverStation driverStation;
+    private int printShooterVelocityCount = 0;
 
     private enum SEMIAUTO {
         END, MOVEBALL, STOPMOVE, SPINSHOOTER, SHOOTERUPTOSPEED, SHOOT, PANICSTOP, BACKSPIN
@@ -63,9 +68,9 @@ public class Shooter extends SubsystemBase {
         this.intake = intake;
         this.conveyor.addshooter(this);
 
-        // entry = Shuffleboard.getTab("Test").addNumber("target RPM", valueSupplier)
-        // Shuffleboard.getTab("Test").addNumber("shooter speed",
-        // this::getVelocityMotor);
+        this.driverStation = DriverStation.getInstance();
+
+        Shuffleboard.getTab("Driver").addNumber("Shooter Velocitiy", shooterEncoder::getVelocity);
     }
 
     public void stopAll() {
@@ -82,6 +87,11 @@ public class Shooter extends SubsystemBase {
         else if (currentPower < -1)
             currentPower = -1;
         shooterMotor.set(currentPower);
+        if (driverStation.isAutonomous() && printShooterVelocityCount++ >= 20) {
+            printShooterVelocityCount = 0;
+            System.out.println("Shooter velocitiy: " + shooterEncoder.getVelocity());
+            System.out.println("Shooter SetPoint: " + currentPower);
+        }
     }
 
     public void run() {
@@ -186,7 +196,7 @@ public class Shooter extends SubsystemBase {
         case SPINSHOOTER:
             if (intake.ballCount() >= intake.maxBalls) {
 
-                setSpeed(targetRPM + 400);
+                setSpeed(targetRPM);
             } else {
                 setSpeed(targetRPM);
             }

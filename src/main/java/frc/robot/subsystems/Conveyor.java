@@ -30,7 +30,7 @@ public class Conveyor extends SubsystemBase {
     private Kicker kicker;
     private DigitalInput conveyorBottom = new DigitalInput(3);
     private Shooter shooter;
-    private int maxBalls = 4;
+    private int maxBalls = 3;
     private double maxSpeed = 0.40;
     public double currentSpeed = 0;
     public double temp = 0;;

@@ -149,23 +149,7 @@ public class RobotContainer {
      * Put Autonomus command here
      */
     public Command getAutonomousCommand() {
-        ArrayList<String> trajectoryPaths = new ArrayList<String>();
-        Command command = new AutoMinimal(drive);
-        int index = 0;
-        // Makes a string for the pathweaver paths
-        for (String path : trajectoryPaths) {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path);
-            try {
-                Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-                // This does all the work. Not sure how it works but yes.
-                command = new RamseteCommand(trajectory, drive::getPosition, new RamseteController(2.0, .7),
-                        drive.getFeedForward(), drive.getDifferntialDriveKinematics(), drive::getWheelSpeeds,
-                        drive.getLeftPIDController(), drive.getRightPIDController(), drive::setVolts, drive);
-
-            } catch (IOException e) {
-            }
-        }
-        return command;
+        return autoCommand;
     }
 
     public String getSelectedAutoString() {
