@@ -57,6 +57,7 @@ public class Intake extends SubsystemBase {
         // ballCount).getEntry();
         // Shuffleboard.putNumber();
 
+        Shuffleboard.getTab("Driver").addNumber("Intake Velocity", intakeEncoder::getVelocity);
     }
 
     public double tempMaxCurr() {
